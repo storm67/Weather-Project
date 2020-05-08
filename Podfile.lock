@@ -1,0 +1,24 @@
+PODS:
+  - Alamofire (5.0.2)
+  - SwiftyJSON (4.3.0)
+  - TagListView (1.4.0)
+
+DEPENDENCIES:
+  - Alamofire (~> 5.0)
+  - SwiftyJSON (~> 4.0)
+  - TagListView (~> 1.0)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - SwiftyJSON
+    - TagListView
+
+SPEC CHECKSUMS:
+  Alamofire: 3ba7a4db18b4f62c4a1c0e1cb39d7f3d52e10ada
+  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
+  TagListView: 987b0bdbb16cd9d9e7c0e2ec32aff37ecba8b173
+
+PODFILE CHECKSUM: 58754b43d688e0b850d0f13fce4859447d584744
+
+COCOAPODS: 1.9.1

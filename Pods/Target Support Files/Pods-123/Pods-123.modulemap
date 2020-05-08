@@ -1,0 +1,6 @@
+framework module Pods_123 {
+  umbrella header "Pods-123-umbrella.h"
+
+  export *
+  module * { export * }
+}
