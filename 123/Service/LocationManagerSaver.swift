@@ -9,16 +9,8 @@
 import Foundation
 import CoreLocation
 
-protocol Coordinates: class {
-    func coordinate(completion: [CLLocation])
-}
-
 class LocationManager: NSObject {
     
-    static let locator = LocationManager()
-    var selected = false
-    var access = false
-    var data = false
     // MARK: - Properties
     private lazy var locationManager: CLLocationManager = {
         // Initialize Location Manager
@@ -30,68 +22,50 @@ class LocationManager: NSObject {
         
         return locationManager
     }()
-
-    weak var delegate: getLocation?
     
+    typealias LocationResponse = ((CLLocation) -> ())
+    let locationResponse: LocationResponse
     
+    // MARK: - Init
+    init(locationResponse: @escaping LocationResponse) {
+        self.locationResponse = locationResponse
+        super.init()
+    }
+    
+    // MARK: - Functions
     func requestLocation() {
         locationManager.delegate = self
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             locationManager.requestLocation()
         } else {
             locationManager.requestWhenInUseAuthorization()
-            }
         }
-    
-    
-    fileprivate var locationHandler: (( _ locations: CLLocationCoordinate2D?, _ error: Error?)->())?
-    
-    public func getLocation(onCompletion:@escaping ( _ locations: CLLocationCoordinate2D?, _ error: Error?)->()) {
-        
-        self.locationHandler = onCompletion
-        
-            // Request for Location Authorization
-           requestLocation()
-
     }
-   
+    
 }
 
 extension LocationManager: CLLocationManagerDelegate {
     
     // MARK: - Location Change Authorization
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        switch status {
-        case CLAuthorizationStatus.denied, CLAuthorizationStatus.notDetermined, CLAuthorizationStatus.restricted:
-        break
-        case .authorizedAlways, .authorizedWhenInUse:
-        access = true
-        delegate?.getLocation()
-        manager.requestLocation()
-        @unknown default:
-        break
+        if status == .authorizedWhenInUse {
+            manager.requestLocation()
+        } else {
         }
     }
-        
-    
     
     // MARK: - Location Updates
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let handler = self.locationHandler {
-            if let location = locations.first {
-            handler(location.coordinate, nil)
+        if let location = locations.first {
+            locationResponse(location)
             manager.delegate = nil
             manager.stopUpdatingHeading()
         } else { // Failed to get location
-            handler(Defaults.location,nil)
-            }
         }
     }
     
     // MARK: - Location Did Fail
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        
     }
     
 }

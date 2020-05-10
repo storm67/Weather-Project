@@ -22,17 +22,3 @@ let country: String
     }
 }
 
-class SimpleModel {
-    
-    let name: String
-    let key: Int
-    let lat: Double
-    let lon: Double
-    init(name: String, key: Int, _ lat: Double?, _ lon: Double?) {
-        self.lat = lat ?? 0
-        self.lon = lon ?? 0
-        self.name = name
-        self.key = key
-            
-        }
-}

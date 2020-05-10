@@ -7,23 +7,26 @@
 //
 
 import UIKit
+import CoreLocation
+
 
 final class ViewController: UIViewController, MyViewDelegate {
-   
+    
     fileprivate func view() -> CustomView {
         return view as! CustomView
     }
+    
     fileprivate var simpleModel: SimpleModel?
     fileprivate var weather = [Convertible]()
+    fileprivate let selectionVM = Selected()
     public var viewModel: MainControllerViewModel? = MainControllerViewModel(data: NetworkService())
     
-    lazy var myTableView: UITableView = {
+    fileprivate var myTableView: UITableView! = {
         var myTableView = UITableView()
-        myTableView = UITableView(frame: CGRect(x: 0, y: 365, width: 365, height: 230))
+        myTableView = UITableView(frame: CGRect(x: 0, y: 365, width: 355, height: 230))
+        myTableView.alwaysBounceVertical = false
         myTableView.separatorColor = .white
         myTableView.tableFooterView = UIView(frame: .zero)
-        myTableView.alwaysBounceVertical = false
-        myTableView.isScrollEnabled = false
         myTableView.rowHeight = 57.0
         myTableView.register(CustomCell.self, forCellReuseIdentifier: "cell")
         return myTableView
@@ -31,15 +34,15 @@ final class ViewController: UIViewController, MyViewDelegate {
     
     override func loadView() {
         view = CustomView()
-        location()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view().delegate = self
-        view().addSubview(myTableView)         
+        view().addSubview(myTableView)
         myTableView.dataSource = self
         myTableView.delegate = self
+        location()
         update()
     }
     
@@ -51,7 +54,6 @@ final class ViewController: UIViewController, MyViewDelegate {
     override func viewWillLayoutSubviews() {
         self.navigationController?.isNavigationBarHidden = true
         edgesForExtendedLayout = []
-        
     }
     @IBAction func del(_ sender: Any) {
         switchVC()
@@ -59,15 +61,11 @@ final class ViewController: UIViewController, MyViewDelegate {
     
     fileprivate func update() {
         guard let model = simpleModel else { return }
-        guard LocationManager.locator.selected == false else { return }
-        print("update()")
-        viewModel?.weatherFiveDayRequest(key: model.key) { [unowned self] weather, one in
-            self.view().cityLabel.text = model.name
-            self.weather = weather
-            self.view().updateData(temp: "\(one.temperature)°")
+        viewModel?.weatherFiveDayRequest(key: Int(model.key)) { [weak self] weather, one in
+            self?.view().updateData(temp: "\(one.temperature)°")
             DispatchQueue.main.async {
-                self.weather = weather
-                self.myTableView.reloadData()
+                self?.weather = weather
+                self?.myTableView.reloadData()
             }
         }
     }
@@ -78,18 +76,9 @@ final class ViewController: UIViewController, MyViewDelegate {
     }
     
     fileprivate func location() {
-        guard let model = simpleModel else { return }
-        guard LocationManager.locator.selected else { return }
-        print("location()")
-        self.viewModel?.byLocation(lat: model.lat, lon: model.lon, { [weak self] (first, second) in
-            self?.view().cityLabel.text = model.name
-            print(model.lat)
-            print(first,second)
-            self?.weather = first
-            DispatchQueue.main.async {
-                self?.myTableView.reloadData()
-            }
-        })
+        self.viewModel?.completion = { [weak self] item, one in
+            self?.weather = item
+        }
     }
     
     public func didTapButton() {
@@ -97,6 +86,19 @@ final class ViewController: UIViewController, MyViewDelegate {
     }
 }
 
+extension ViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+        switch status {
+        case CLAuthorizationStatus.denied, CLAuthorizationStatus.notDetermined, CLAuthorizationStatus.restricted:
+            switchVC()
+        default:
+            break
+        }
+        
+    }
+    
+}
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -110,5 +112,5 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-
+    
 }

@@ -10,50 +10,45 @@ import Foundation
 import CoreData
 import UIKit
 
-class Selected: NSObject {
-    
+class Selected {
     var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var city = [City]()
-    
-    func createData(name: String?, key: Int?, _ lat: Double?, _ lon: Double?) {
+
+    func createData(name: String, key: Int) -> Bool {
+        
+      let entity = NSEntityDescription.entity(forEntityName: "City", in: context)
+        let newUser = NSManagedObject(entity: entity!, insertInto: context)
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = City.fetchRequest()
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        let newUser = NSEntityDescription.entity(forEntityName: "City", in: context)!
-        let user = NSManagedObject(entity: newUser, insertInto: context)
-
-        user.setValue(key, forKey: "cityId")
-        user.setValue(lat, forKey: "lat")
-        user.setValue(lon, forKey: "lon")
+        newUser.setValue(name, forKey: "name")
+        newUser.setValue(key, forKey: "cityId")
         do {
-            try context.save()
-            print("saved")
-        }
-        catch {
-            print(error)
-        }
-        
-        
-    }
-   
-    func fetchData(completion:@escaping (City?) -> Void) {
-         do {
-            try self.city = self.context.fetch(City.fetchRequest())
-            for result in self.city {
-                let cityEntity = City(context: self.context)
-                    cityEntity.cityId = Int64(result.cityId)
-                    cityEntity.name = result.name
-                    cityEntity.lat = result.lat
-                    cityEntity.lon = result.lon
-                    completion(cityEntity)
-            }
+        try context.save()
         } catch {
-            print(error)
-            completion(nil)
+            print("Failed saving")
         }
-}
-}
-    
-    
-    
+        return true
+    }
+        func fetchData(completion:@escaping ([SimpleModel]) -> Void) {
+        
+         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "City")
+         //request.predicate = NSPredicate(format: "age = %@", "12")
+         request.returnsObjectsAsFaults = false
 
+         do {
+             let result = try context.fetch(request)
+             var item = [SimpleModel]()
+             for data in result as! [NSManagedObject] {
+             item.append(SimpleModel(name: data.value(forKey: "name") as! String, key: data.value(forKey: "cityId") as! Int))
+             }
+             completion(item)
+             
+         } catch {
+             
+             print("Failed")
+         }
+}
+}
+    
+    
+    
 

@@ -11,11 +11,11 @@ import SwiftyJSON
 
 final class MainControllerViewModel: NSObject, Alias {
     
-    
-    fileprivate var dates = [String]()
-    fileprivate var NetworkService: NetworkService
+    fileprivate var locationManager: LocationManager?
+    private var NetworkService: NetworkService
+    var completion: type?
     private(set) var weather = [Convertible]()
-    weak var delegate: getLocation?
+    var dates = [String]()
     
     private let dateFormatter: DateFormatter = {
         var dateFormatter = DateFormatter()
@@ -23,42 +23,48 @@ final class MainControllerViewModel: NSObject, Alias {
         return dateFormatter
     }()
     
-    func byLocation(lat: Double, lon: Double, _ completion: @escaping (type)) {            
-    let Operator = Init(test: Test(str: nil, key: nil, lat: lat, lon: lon))
-            
-    self.NetworkService.request(router: Operator.geoLocate()) { [weak self] data in
-                if let key = data["Key"].string {
-                    guard let int = Int(key) else { return }
-                    self?.weatherFiveDayRequest(key: int) { [weak self] item, one in
-                        self?.weather = item
-                        completion(item,one)
-                    }
+    func byLocation(lat: Double, lon: Double) {
+        
+        let Operator = Init(test: Test(str: nil, key: nil, lat: lat, lon: lon))
+        
+        NetworkService.request(router: Operator.geoLocate()) { [weak self] data in
+            if let key = data["Key"].string {
+                guard let int = Int(key) else { return }
+                self?.weatherFiveDayRequest(key: int) { item, one in
+                    self?.weather = item
+                    self?.completion?(item,one)
                 }
             }
         }
+    }
+    
+     func weatherFiveDayRequest(key: Int,completion: @escaping (type)) {
+           
+           let Operator = Init(test: Test(str: nil, key: key, lat: nil, lon: nil))
+           
+           NetworkService.request(router: Operator.getWeather()) { [unowned self] data in
+               let array = data["DailyForecasts"].arrayValue
+               let WeatherModel = array.map { DailyForecast(dictionary: $0) }
+               let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
+                   return Convertible(date: self.format(data: first.date),
+                                      temperature: first.temperature.convertToCelsius(),
+                                      dayIcon: first.dayIcon,
+                                      dayIconPhrase: first.dayIconPhrase,
+                                      nightIconPhrase: first.nightIconPhrase,
+                                      realFeel: first.realFeel,
+                                      wind: first.wind,
+                                      standardDate: second)
+                   
+               }
+               self.weather = weatherX
+               completion(weatherX, weatherX[0])
+           }
+       }
     
     
-    func weatherFiveDayRequest(key: Int, completion: @escaping (type)) {
-        
-        let Operator = Init(test: Test(str: nil, key: key, lat: nil, lon: nil))
-        
-        NetworkService.request(router: Operator.getWeather()) { [unowned self] data in
-            let array = data["DailyForecasts"].arrayValue
-            let WeatherModel = array.map { DailyForecast(dictionary: $0) }
-            let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
-                return Convertible(date: self.format(data: first.date),
-                                   temperature: first.temperature.convertToCelsius(),
-                                   dayIcon: first.dayIcon,
-                                   dayIconPhrase: first.dayIconPhrase,
-                                   nightIconPhrase: first.nightIconPhrase,
-                                   realFeel: first.realFeel,
-                                   wind: first.wind,
-                                   standardDate: second)
-                
-            }
-            self.weather = weatherX
-            completion(weatherX, weatherX[0])
-        }
+    
+    func numberOfCities() -> Int {
+        return weather.count
     }
     
     func cellViewModel(index: Int) -> Convertible? {
@@ -66,8 +72,8 @@ final class MainControllerViewModel: NSObject, Alias {
     }
     
     func returnit() {
-        dates.append("Today")
-        dates.append("Tomorrow")
+        dates.append("Сегодня")
+        dates.append("Завтра")
         for item in 2...4 {
             let data = Calendar.current.date(byAdding: .day, value: item, to: Date(), wrappingComponents: .random())!
             let dateFormatterPrint = DateFormatter()
@@ -77,14 +83,13 @@ final class MainControllerViewModel: NSObject, Alias {
         }
     }
     
-    
     init(data: NetworkService) {
         self.NetworkService = data
         super.init()
         returnit()
-    }
-    func newDebug(key: Int, lat: Double, lon: Double) {
-        
+        locationManager = LocationManager(locationResponse: { item in
+            self.byLocation(lat: item.coordinate.latitude, lon: item.coordinate.latitude)
+        })
     }
 }
 

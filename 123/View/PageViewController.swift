@@ -13,6 +13,16 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
     
     let selected = Selected()
     
+    var intArray: [Int] {
+        get {
+            return UserDefaults.standard.array(forKey: "intArray") as? [Int] ?? []
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "intArray")
+        }
+    }
+    
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -35,19 +45,21 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
         self.view.addSubview(pageControl)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupPageControl()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        setUp()
         setViewControllers([pages[0]], direction: .forward, animated: true, completion: nil)
         self.dataSource = self
         self.delegate = self
+        setupPageControl()
     }
     
     func setUp() {
-        selected.fetchData { [unowned self] item in
-            guard let item = item else { return }
-            print(item)
-            self.pages.append(ViewController(model: SimpleModel(name: item.name ?? "", key: Int(item.cityId), item.lat, item.lon)))
+        selected.fetchData { (md) in
+            for item in md {
+                self.pages.append(ViewController(model: SimpleModel(name: item.name, key: item.key)))
+            }
         }
     }
     

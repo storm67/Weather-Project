@@ -12,12 +12,19 @@ import Foundation
 import UIKit
 import TagListView
 
-final class CitySelector: UIViewController, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate , TagListViewDelegate, getLocation {
-    
+final class CitySelector: UIViewController, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate , TagListViewDelegate {
+
+    fileprivate var citySelectorVM = CitySelectorViewModel(manager: NetworkService())
     fileprivate var selectionVM = Selected()
     fileprivate let searchController = UISearchController(searchResultsController: nil)
-    fileprivate var citySelectorVM = CitySelectorViewModel(manager: NetworkService())
+    var array: [Int] = []
     @IBOutlet weak var tableView: UITableView!
+    
+    let locationImage: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "nav")?.imageResize(sizeChange: CGSize(width: 666, height: 666))
+        return view
+    }()
     
     let tagListView: TagListView = {
         let view = TagListView()
@@ -34,15 +41,20 @@ final class CitySelector: UIViewController, UITableViewDelegate, UISearchResults
         button.font = UIFont.init(name: "Arial", size: 16)
         return button
     }()
-    
+  
     override func viewDidLoad() {
-        super.viewDidLoad()        
-        LocationManager.locator.delegate = self
+        super.viewDidLoad()
+        view.addSubview(locationButton)
         addTag()
         reload()
         configureSearchController()
         navigationController?.isNavigationBarHidden = true
         tableView.rowHeight = 52
+        locationButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 76).isActive = true
+        locationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 11).isActive = true
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
     }
 }
 
@@ -63,14 +75,15 @@ extension CitySelector: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selected = citySelectorVM.searchElements[indexPath.row]
-        selectionVM.createData(name:selected.name, key:selected.key,nil,nil)
+        array.append(selected.key)
         searchController.searchBar.text = nil
-        LocationManager.locator.selected = false
-        let pgvc = PageViewController()
-        pgvc.setUp()
-        navigationController?.pushViewController(pgvc, animated: true)
+        if selectionVM.createData(name: selected.name, key: selected.key) {
+            selectionVM.fetchData { (item) in
+                print("\(item) selector")
+            }
+        navigationController?.pushViewController(PageViewController(), animated: true)
+        }
     }
-    
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text else { return }
         checkActive()
@@ -89,10 +102,9 @@ extension CitySelector: UITableViewDataSource {
             tagListView.isHidden = false
         }
     }
-    
-    
     func addTag() {
         guard let image = UIImage(named: "nav")?.imageResize(sizeChange: CGSize(width: 16, height: 16)) else { return }
+        tagListView.addSubview(locationImage)
         tagListView.frame = CGRect(x: 10, y: 100, width: 350, height: 300)
         view.addSubview(tagListView)
         tagListView.delegate = self
@@ -101,9 +113,7 @@ extension CitySelector: UITableViewDataSource {
         tagListView.marginX = 8
         tagListView.cornerRadius = 5
         tagListView.imageEdge = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
-        tagListView.addTagWithImage("  Location  ", image).onTap = { [weak self] _ in
-            self?.getLocation()
-        }
+        tagListView.addTagWithImage("  Location  ", image)
         tagListView.paddingX = 4
         tagListView.imagePaddingX = 0
         tagListView.addTag("Saint Petersburg")
@@ -130,7 +140,6 @@ extension CitySelector: UITableViewDataSource {
         tagListView.addTag("Baku")
         tagListView.addTag("Vilnus")
         tagListView.addTag("Riga")
-        
     }
     
     func configureSearchController() {
@@ -142,31 +151,14 @@ extension CitySelector: UITableViewDataSource {
         definesPresentationContext = true
         searchController.searchBar.searchBarStyle = .minimal
         searchController.searchBar.delegate = self
-        view.addSubview(locationButton)
-        locationButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 76).isActive = true
-        locationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 11).isActive = true
     }
     func reload() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
-    
-    func getLocation() {
-        LocationManager.locator.requestLocation()
-        LocationManager.locator.selected = true
-        LocationManager.locator.getLocation { [weak self] (location, error) in
-        self?.selectionVM.createData(name: nil, key: nil, location?.latitude, location?.longitude)
-        guard location != nil else { return }
-        LocationManager.locator.data = true
-        }
-        let pgvc = PageViewController()
-        guard LocationManager.locator.access else { return }
-        guard LocationManager.locator.data else { return }
-        pgvc.setUp()
-        self.navigationController?.pushViewController(pgvc, animated: true)
-    }
 }
+
 
 
 
