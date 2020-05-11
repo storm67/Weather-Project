@@ -9,13 +9,14 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+
 class NetworkService: DataSend {
-    static let shared = NetworkService()
     func request(router: Router, data: @escaping (JSON) -> Void) {
         Alamofire.AF.request(router.urlRequest).validate().responseJSON { (response) in switch response.result {
             case .success:
                 print("Validation Successful")
                 if let value = response.data {
+
                 let converted = JSON(value)
                 data(converted)
                 }

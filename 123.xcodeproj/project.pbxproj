@@ -150,6 +150,7 @@
 			children = (
 				31324A8C240EF5F50077C339 /* CityModel.swift */,
 				3131CC3B241BAFC2005C9314 /* DailyForecast.swift */,
+				312E37DE24100D65001136A5 /* Details */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -161,7 +162,6 @@
 				31339B1E241BCB3D000D7A88 /* MainControllerViewModel.swift */,
 				312E37DF24100D72001136A5 /* CitySelectorViewModel.swift */,
 				31339B20241C2A74000D7A88 /* CellView.swift */,
-				312E37DE24100D65001136A5 /* Details */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";

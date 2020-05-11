@@ -48,7 +48,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
     func setUp() {
         selected.fetchData { [weak self] (md) in
             for item in md {
-                self?.pages.append(ViewController(model: SimpleModel(name: item.name, key: item.key)))
+                self?.pages.append(ViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon)))
             }
         }
     }

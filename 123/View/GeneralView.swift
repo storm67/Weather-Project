@@ -88,7 +88,8 @@ final class CustomView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setNeedsLayout()
-        layoutIfNeeded()
+        layoutSubviews()
+        setNeedsDisplay()
         layout()
         backgroundColor = .white
     }

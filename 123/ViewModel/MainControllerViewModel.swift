@@ -23,21 +23,6 @@ final class MainControllerViewModel: NSObject, Alias {
         return dateFormatter
     }()
     
-    func byLocation(lat: Double, lon: Double) {
-        
-        let Operator = Init(test: Test(str: nil, key: nil, lat: lat, lon: lon))
-        
-        NetworkService.request(router: Operator.geoLocate()) { [weak self] data in
-            if let key = data["Key"].string {
-                guard let int = Int(key) else { return }
-                self?.weatherFiveDayRequest(key: int) { item, one in
-                    self?.weather = item
-                    self?.completion?(item,one)
-                }
-            }
-        }
-    }
-    
      func weatherFiveDayRequest(key: Int,completion: @escaping (type)) {
            
            let Operator = Init(test: Test(str: nil, key: key, lat: nil, lon: nil))
@@ -82,14 +67,48 @@ final class MainControllerViewModel: NSObject, Alias {
             dates.append(finish)
         }
     }
+        
+        func newDebug(key: Int?, lat: Double?, lon: Double?, completion: @escaping (type)) {
+            if key != nil {
+                
+            let Operator = Init(test: Test(str: nil, key: key, lat: nil, lon: nil))
+                  NetworkService.request(router: Operator.getWeather()) { [unowned self] data in
+                      let array = data["DailyForecasts"].arrayValue
+                      let WeatherModel = array.map { DailyForecast(dictionary: $0) }
+                      let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
+                          return Convertible(date: self.format(data: first.date),
+                                             temperature: first.temperature.convertToCelsius(),
+                                             dayIcon: first.dayIcon,
+                                             dayIconPhrase: first.dayIconPhrase,
+                                             nightIconPhrase: first.nightIconPhrase,
+                                             realFeel: first.realFeel,
+                                             wind: first.wind,
+                                             standardDate: second)
+                          
+                      }
+                      self.weather = weatherX
+                      completion(weatherX, weatherX[0])
+                  }
+            } else {
+                
+                let Operator = Init(test: Test(str: nil, key: nil, lat: lat, lon: lon))
+                           
+                   self.NetworkService.request(router: Operator.geoLocate()) { [weak self] data in
+                               if let key = data["Key"].string {
+                                guard let int = Int(key) else { return }
+                                   self?.weatherFiveDayRequest(key: int) { [weak self] item, one in
+                                       self?.weather = item
+                                       completion(item,one)
+                                   }
+                               }
+                           }
+            }
+        }
     
     init(data: NetworkService) {
         self.NetworkService = data
         super.init()
         returnit()
-        locationManager = LocationManager(locationResponse: { item in
-            self.byLocation(lat: item.coordinate.latitude, lon: item.coordinate.latitude)
-        })
     }
 }
 

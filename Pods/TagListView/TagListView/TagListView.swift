@@ -396,7 +396,11 @@ open class TagListView: UIView {
         defer { rearrangeViews() }
         return addTagView(createNewTagViewWithImage(title, image))
     }
-
+    
+    @discardableResult
+    open func addTags(_ titles: [String]) -> [TagView] {
+        return addTagViews(titles.map(createNewTagView))
+    }
     
     @discardableResult
     open func addTagView(_ tagView: TagView) -> TagView {

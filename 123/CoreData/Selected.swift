@@ -13,7 +13,7 @@ import UIKit
 class Selected {
     var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    func createData(name: String, key: Int) -> Bool {
+    func createData(name: String, key: Int?, lat: Double?, lon: Double?) -> Bool {
         
         let entity = NSEntityDescription.entity(forEntityName: "City", in: context)
         let newUser = NSManagedObject(entity: entity!, insertInto: context)
@@ -21,6 +21,8 @@ class Selected {
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         newUser.setValue(name, forKey: "name")
         newUser.setValue(key, forKey: "cityId")
+        newUser.setValue(lat, forKey: "lat")
+        newUser.setValue(lon, forKey: "lon")
         do {
             try context.execute(deleteRequest)
             try context.save()
@@ -39,7 +41,7 @@ class Selected {
             let result = try context.fetch(request)
             var item = [SimpleModel]()
             for data in result as! [NSManagedObject] {
-                item.append(SimpleModel(name: data.value(forKey: "name") as! String, key: data.value(forKey: "cityId") as! Int))
+                item.append(SimpleModel(name: data.value(forKey: "name") as! String, key: data.value(forKey: "cityId") as? Int, lat: data.value(forKey: "lat") as? Double, lon: data.value(forKey: "lon") as? Double))
             }
             completion(item)
             

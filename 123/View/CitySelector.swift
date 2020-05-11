@@ -13,11 +13,12 @@ import UIKit
 import TagListView
 
 final class CitySelector: UIViewController, UITableViewDelegate,  UISearchBarDelegate , TagListViewDelegate {
-
-    fileprivate var citySelectorVM = CitySelectorViewModel(manager: NetworkService())
-    fileprivate var selectionVM = Selected()
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    
+    fileprivate var citySelectorVM = CitySelectorViewModel(manager: NetworkService())
+    fileprivate var selectionVM = Selected()
     let tagListView: TagListView = {
         let view = TagListView()
         view.tagBackgroundColor = #colorLiteral(red: 0.92261606, green: 0.92261606, blue: 0.92261606, alpha: 1)
@@ -33,19 +34,12 @@ final class CitySelector: UIViewController, UITableViewDelegate,  UISearchBarDel
         button.font = UIFont.init(name: "Arial", size: 16)
         return button
     }()
-  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(locationButton)
+        layout()
         addTag()
         reload()
-        navigationController?.isNavigationBarHidden = true
-        tableView.rowHeight = 52
-        locationButton.topAnchor.constraint(equalTo: searchBar.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
-        locationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 11).isActive = true
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
     }
 }
 
@@ -67,18 +61,15 @@ extension CitySelector: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selected = citySelectorVM.searchElements[indexPath.row]
         searchBar.text = nil
-        if selectionVM.createData(name: selected.name, key: selected.key) {
-            selectionVM.fetchData { (item) in
-                print("\(item) selector")
-            }
-        navigationController?.pushViewController(PageViewController(), animated: true)
+        if selectionVM.createData(name: selected.name, key: selected.key, lat: nil, lon: nil) {
+            navigationController?.pushViewController(PageViewController(), animated: true)
         }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         checkActive()
         citySelectorVM.checkCity(by: searchText, completion: {
-        self.reload()
+            self.reload()
         })
     }
     
@@ -105,35 +96,34 @@ extension CitySelector: UITableViewDataSource {
         tagListView.marginX = 8
         tagListView.cornerRadius = 5
         tagListView.imageEdge = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
-        tagListView.addTagWithImage("  Location  ", image)
+        tagListView.addTagWithImage("  Location  ", image).onTap = { [weak self] _ in
+            self?.getLocation()
+        }
         tagListView.paddingX = 4
         tagListView.imagePaddingX = 0
-        tagListView.addTag("Saint Petersburg")
-        tagListView.addTag("Los Angeles")
-        tagListView.addTag("Tashkent")
-        tagListView.addTag("Tallin")
-        tagListView.addTag("Kiev")
-        tagListView.addTag("Ashkabad")
-        tagListView.addTag("Moscow")
-        tagListView.addTag("Voronezh")
-        tagListView.addTag("Volgograd")
-        tagListView.addTag("Kazan")
-        tagListView.addTag("Ekaterinburg")
-        tagListView.addTag("Rostov-on-Don")
-        tagListView.addTag("Perm")
-        tagListView.addTag("Omsk")
-        tagListView.addTag("Novosibirsk")
-        tagListView.addTag("Nizhniy Novgorod")
-        tagListView.addTag("Krasnoyarsk")
-        tagListView.addTag("Chelyabinsk")
-        tagListView.addTag("Ufa")
-        tagListView.addTag("Samara")
-        tagListView.addTag("Minsk")
-        tagListView.addTag("Baku")
-        tagListView.addTag("Vilnus")
-        tagListView.addTag("Riga")
+        tagListView.addTags(["Saint Petersburg","Los Angeles","Tashkent","Tallin","Kiev","Ashkabad","Moscow","Voronezh","Volgograd","Kazan","Ekaterinburg","Rostov-on-Don","Perm","Omsk","Novosibirsk","Nizhniy Novgorod","Krasnoyarsk","Chelyabinsk","Ufa","Samara","Minsk","Baku","Vilnus","Riga"])
     }
     
+    func layout() {
+        view.addSubview(locationButton)
+        tableView.rowHeight = 52
+        locationButton.topAnchor.constraint(equalTo: searchBar.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        locationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 11).isActive = true
+        navigationController?.isNavigationBarHidden = true
+    }
+    
+    func getLocation() {
+        LocationManager.locator.requestLocation()
+        LocationManager.locator.getLocation { [weak self] (location, error) in
+        guard location != nil else { return }
+        _ = self?.selectionVM.createData(name: "", key: nil, lat: location?.latitude, lon: location?.longitude)
+        LocationManager.locator.data = true
+        guard LocationManager.locator.access else { return }
+        guard LocationManager.locator.data else { return }
+        self?.navigationController?.pushViewController(PageViewController(), animated: true)
+        }
+        
+    }
     func reload() {
         DispatchQueue.main.async {
             self.tableView.reloadData()

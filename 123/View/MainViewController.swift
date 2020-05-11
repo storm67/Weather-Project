@@ -32,14 +32,16 @@ final class ViewController: UIViewController, MyViewDelegate {
     
     override func loadView() {
         view = CustomView()
+        view.setNeedsDisplay()
+        view.setNeedsLayout()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view().delegate = self
+        layout()
         location()
         update()
-        layout()
     }
     
     convenience init(model: SimpleModel) {
@@ -52,24 +54,16 @@ final class ViewController: UIViewController, MyViewDelegate {
         edgesForExtendedLayout = []
     }
     
-    @IBAction func del(_ sender: Any) {
-        switchVC()
-    }
-    
     fileprivate func update() {
         guard let model = simpleModel else { return }
-        viewModel?.weatherFiveDayRequest(key: Int(model.key)) { [weak self] weather, one in
+        viewModel?.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one in
+            print(one)
             self?.view().updateData("\(one.temperature)°", model.name)
             DispatchQueue.main.async {
                 self?.weather = weather
                 self?.myTableView.reloadData()
             }
-        }
-    }
-    
-    fileprivate func switchVC() {
-        let vc = storyboard?.instantiateViewController(withIdentifier: "TableViewController") as? CitySelector
-        navigationController?.pushViewController(vc!, animated: true)
+        })
     }
     
     fileprivate func location() {
