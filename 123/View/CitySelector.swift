@@ -12,28 +12,20 @@ import Foundation
 import UIKit
 import TagListView
 
-final class CitySelector: UIViewController, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate , TagListViewDelegate {
+final class CitySelector: UIViewController, UITableViewDelegate,  UISearchBarDelegate , TagListViewDelegate {
 
     fileprivate var citySelectorVM = CitySelectorViewModel(manager: NetworkService())
     fileprivate var selectionVM = Selected()
-    fileprivate let searchController = UISearchController(searchResultsController: nil)
-    var array: [Int] = []
     @IBOutlet weak var tableView: UITableView!
-    
-    let locationImage: UIImageView = {
-        let view = UIImageView()
-        view.image = UIImage(named: "nav")?.imageResize(sizeChange: CGSize(width: 666, height: 666))
-        return view
-    }()
-    
+    @IBOutlet weak var searchBar: UISearchBar!
     let tagListView: TagListView = {
         let view = TagListView()
         view.tagBackgroundColor = #colorLiteral(red: 0.92261606, green: 0.92261606, blue: 0.92261606, alpha: 1)
         view.textColor = .black
         view.textFont = view.textFont.withSize(14)
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     let locationButton: UILabel = {
         let button = UILabel()
         button.text = "Popular places"
@@ -47,10 +39,9 @@ final class CitySelector: UIViewController, UITableViewDelegate, UISearchResults
         view.addSubview(locationButton)
         addTag()
         reload()
-        configureSearchController()
         navigationController?.isNavigationBarHidden = true
         tableView.rowHeight = 52
-        locationButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 76).isActive = true
+        locationButton.topAnchor.constraint(equalTo: searchBar.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
         locationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 11).isActive = true
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -75,8 +66,7 @@ extension CitySelector: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selected = citySelectorVM.searchElements[indexPath.row]
-        array.append(selected.key)
-        searchController.searchBar.text = nil
+        searchBar.text = nil
         if selectionVM.createData(name: selected.name, key: selected.key) {
             selectionVM.fetchData { (item) in
                 print("\(item) selector")
@@ -84,16 +74,16 @@ extension CitySelector: UITableViewDataSource {
         navigationController?.pushViewController(PageViewController(), animated: true)
         }
     }
-    func updateSearchResults(for searchController: UISearchController) {
-        guard let text = searchController.searchBar.text else { return }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         checkActive()
-        citySelectorVM.checkCity(by: text, completion: {
-            self.reload()
+        citySelectorVM.checkCity(by: searchText, completion: {
+        self.reload()
         })
     }
     
     func checkActive() {
-        guard let text = searchController.searchBar.text?.count else { return }
+        guard let text = searchBar.text?.count else { return }
         if text >= 1 {
             locationButton.isHidden = true
             tagListView.isHidden = true
@@ -104,9 +94,11 @@ extension CitySelector: UITableViewDataSource {
     }
     func addTag() {
         guard let image = UIImage(named: "nav")?.imageResize(sizeChange: CGSize(width: 16, height: 16)) else { return }
-        tagListView.addSubview(locationImage)
-        tagListView.frame = CGRect(x: 10, y: 100, width: 350, height: 300)
         view.addSubview(tagListView)
+        tagListView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
+        tagListView.topAnchor.constraint(equalTo: locationButton.bottomAnchor, constant: 10).isActive = true
+        tagListView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
+        tagListView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -250).isActive = true
         tagListView.delegate = self
         tagListView.paddingY = 10
         tagListView.marginY = 8
@@ -142,16 +134,6 @@ extension CitySelector: UITableViewDataSource {
         tagListView.addTag("Riga")
     }
     
-    func configureSearchController() {
-        self.tableView.tableHeaderView = searchController.searchBar
-        searchController.searchBar.barTintColor = .white
-        searchController.searchBar.backgroundColor = .white
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        definesPresentationContext = true
-        searchController.searchBar.searchBarStyle = .minimal
-        searchController.searchBar.delegate = self
-    }
     func reload() {
         DispatchQueue.main.async {
             self.tableView.reloadData()

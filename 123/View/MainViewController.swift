@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import CoreLocation
-
 
 final class ViewController: UIViewController, MyViewDelegate {
     
@@ -23,12 +21,12 @@ final class ViewController: UIViewController, MyViewDelegate {
     
     fileprivate var myTableView: UITableView! = {
         var myTableView = UITableView()
-        myTableView = UITableView(frame: CGRect(x: 0, y: 365, width: 355, height: 230))
-        myTableView.alwaysBounceVertical = false
         myTableView.separatorColor = .white
         myTableView.tableFooterView = UIView(frame: .zero)
         myTableView.rowHeight = 57.0
         myTableView.register(CustomCell.self, forCellReuseIdentifier: "cell")
+        myTableView.translatesAutoresizingMaskIntoConstraints = false
+        myTableView.isScrollEnabled = false
         return myTableView
     }()
     
@@ -39,11 +37,9 @@ final class ViewController: UIViewController, MyViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view().delegate = self
-        view().addSubview(myTableView)
-        myTableView.dataSource = self
-        myTableView.delegate = self
         location()
         update()
+        layout()
     }
     
     convenience init(model: SimpleModel) {
@@ -55,6 +51,7 @@ final class ViewController: UIViewController, MyViewDelegate {
         self.navigationController?.isNavigationBarHidden = true
         edgesForExtendedLayout = []
     }
+    
     @IBAction func del(_ sender: Any) {
         switchVC()
     }
@@ -62,7 +59,7 @@ final class ViewController: UIViewController, MyViewDelegate {
     fileprivate func update() {
         guard let model = simpleModel else { return }
         viewModel?.weatherFiveDayRequest(key: Int(model.key)) { [weak self] weather, one in
-            self?.view().updateData(temp: "\(one.temperature)°")
+            self?.view().updateData("\(one.temperature)°", model.name)
             DispatchQueue.main.async {
                 self?.weather = weather
                 self?.myTableView.reloadData()
@@ -84,21 +81,18 @@ final class ViewController: UIViewController, MyViewDelegate {
     public func didTapButton() {
         self.navigationController?.pushViewController(PagesViewController(), animated: true)
     }
+    
+    public func layout() {
+        view.addSubview(myTableView)
+        myTableView.dataSource = self
+        myTableView.delegate = self
+        myTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0.0).isActive = true
+        myTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 355.0).isActive = true
+        myTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0.0).isActive = true
+        myTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -32.0).isActive = true
+    }
 }
 
-extension ViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        
-        switch status {
-        case CLAuthorizationStatus.denied, CLAuthorizationStatus.notDetermined, CLAuthorizationStatus.restricted:
-            switchVC()
-        default:
-            break
-        }
-        
-    }
-    
-}
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -109,6 +103,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
         cell.viewModel = viewModel?.cellViewModel(index: indexPath.row)
+        cell.selectionStyle = .none
         return cell
     }
     

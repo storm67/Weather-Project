@@ -32,7 +32,7 @@ final class CustomView: UIView {
     
     let imageView: UIImageView = {
         let label = UIImageView()
-        label.image = UIImage(named: "main")?.imageResize(sizeChange: CGSize(width: 360,height: 230))
+        label.image = UIImage(named: "main")
         label.layer.cornerRadius = 5
         label.layer.masksToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -42,10 +42,6 @@ final class CustomView: UIView {
     let searchIcon: UIButton = {
         let label = UIButton()
         label.setImage(UIImage(named: "search"), for: .normal)
-        label.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 230, right: 230)
-        label.imageView?.contentMode = .scaleAspectFill
-        label.contentHorizontalAlignment = .fill
-        label.contentVerticalAlignment = .fill
         label.translatesAutoresizingMaskIntoConstraints = false
         label.addTarget(self, action: #selector(buttonTapAction), for: .touchUpInside)
         return label
@@ -72,10 +68,6 @@ final class CustomView: UIView {
     let menu: UIButton = {
         let label = UIButton()
         label.setImage(UIImage(named: "menu"), for: .normal)
-        label.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 225, right: 225)
-        label.imageView?.contentMode = .scaleAspectFill
-        label.contentHorizontalAlignment = .fill
-        label.contentVerticalAlignment = .fill
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -95,7 +87,7 @@ final class CustomView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        setNeedsLayout()
         layoutIfNeeded()
         layout()
         backgroundColor = .white
@@ -113,26 +105,38 @@ final class CustomView: UIView {
         scrollView.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
         scrollView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
-        tempLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 70).isActive = true
-        tempLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 10).isActive = true
-        cityLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 45).isActive = true
-        cityLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 8).isActive = true
+        tempLabel.bottomAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 30).isActive = true
+        tempLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 13).isActive = true
+        imageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         imageView.topAnchor.constraint(equalTo: location.topAnchor, constant:
-            45).isActive = true
-        imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 200).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 8).isActive = true
+            40).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 230).isActive = true
+        imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95).isActive = true
+        //        imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 8).isActive = true
         searchIcon.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 6).isActive = true
-        searchIcon.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20).isActive = true
-        locationIcon.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 26).isActive = true
-        locationIcon.leadingAnchor.constraint(equalTo: searchIcon.leadingAnchor, constant: 100).isActive = true
-        menu.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20).isActive = true
-        menu.leadingAnchor.constraint(equalTo: location.leadingAnchor, constant: 208).isActive = true
-        location.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 17).isActive = true
-        location.leadingAnchor.constraint(equalTo: locationIcon.leadingAnchor, constant: 25).isActive = true
+        searchIcon.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 6).isActive = true
+        searchIcon.topAnchor.constraint(equalTo: menu.topAnchor, constant: 3).isActive = true
+        searchIcon.widthAnchor.constraint(equalToConstant: 28).isActive = true
+        searchIcon.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        locationIcon.topAnchor.constraint(equalTo: location.topAnchor, constant: 10).isActive = true
+        locationIcon.leadingAnchor.constraint(equalTo: location.leadingAnchor, constant: -25).isActive = true
+        menu.topAnchor.constraint(equalTo: location.topAnchor, constant: 3).isActive = true
+        menu.leadingAnchor.constraint(lessThanOrEqualTo: scrollView.leadingAnchor, constant: 380).isActive = true
+        menu.trailingAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
+        menu.widthAnchor.constraint(equalToConstant: 31).isActive = true
+        menu.heightAnchor.constraint(equalToConstant: 31).isActive = true
+        let widthConstraint = menu.bottomAnchor.constraint(equalTo: imageView.topAnchor, constant: 10)
+        widthConstraint.priority = UILayoutPriority(rawValue: 999)
+        widthConstraint.isActive = true
+        location.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        location.topAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        cityLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 12).isActive = true
+        cityLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 40).isActive = true
     }
     
-    func updateData(temp: String) {
+    func updateData(_ temp: String,_ city: String) {
         tempLabel.text = temp
+        cityLabel.text = city
     }
     
     @objc fileprivate func buttonTapAction() {

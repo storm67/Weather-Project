@@ -72,8 +72,8 @@ final class MainControllerViewModel: NSObject, Alias {
     }
     
     func returnit() {
-        dates.append("Сегодня")
-        dates.append("Завтра")
+        dates.append("Today")
+        dates.append("Tomorrow")
         for item in 2...4 {
             let data = Calendar.current.date(byAdding: .day, value: item, to: Date(), wrappingComponents: .random())!
             let dateFormatterPrint = DateFormatter()

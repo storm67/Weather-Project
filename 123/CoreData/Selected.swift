@@ -12,43 +12,44 @@ import UIKit
 
 class Selected {
     var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
+    
     func createData(name: String, key: Int) -> Bool {
         
-      let entity = NSEntityDescription.entity(forEntityName: "City", in: context)
+        let entity = NSEntityDescription.entity(forEntityName: "City", in: context)
         let newUser = NSManagedObject(entity: entity!, insertInto: context)
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = City.fetchRequest()
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         newUser.setValue(name, forKey: "name")
         newUser.setValue(key, forKey: "cityId")
         do {
-        try context.save()
+            try context.execute(deleteRequest)
+            try context.save()
         } catch {
             print("Failed saving")
         }
         return true
     }
-        func fetchData(completion:@escaping ([SimpleModel]) -> Void) {
+    func fetchData(completion:@escaping ([SimpleModel]) -> Void) {
         
-         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "City")
-         //request.predicate = NSPredicate(format: "age = %@", "12")
-         request.returnsObjectsAsFaults = false
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "City")
+        //request.predicate = NSPredicate(format: "age = %@", "12")
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            let result = try context.fetch(request)
+            var item = [SimpleModel]()
+            for data in result as! [NSManagedObject] {
+                item.append(SimpleModel(name: data.value(forKey: "name") as! String, key: data.value(forKey: "cityId") as! Int))
+            }
+            completion(item)
+            
+        } catch {
+            
+            print("Failed")
+        }
+    }
+}
 
-         do {
-             let result = try context.fetch(request)
-             var item = [SimpleModel]()
-             for data in result as! [NSManagedObject] {
-             item.append(SimpleModel(name: data.value(forKey: "name") as! String, key: data.value(forKey: "cityId") as! Int))
-             }
-             completion(item)
-             
-         } catch {
-             
-             print("Failed")
-         }
-}
-}
-    
-    
-    
+
+
 

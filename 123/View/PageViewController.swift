@@ -13,16 +13,6 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
     
     let selected = Selected()
     
-    var intArray: [Int] {
-        get {
-            return UserDefaults.standard.array(forKey: "intArray") as? [Int] ?? []
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: "intArray")
-        }
-    }
-    
-    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -56,9 +46,9 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
     }
     
     func setUp() {
-        selected.fetchData { (md) in
+        selected.fetchData { [weak self] (md) in
             for item in md {
-                self.pages.append(ViewController(model: SimpleModel(name: item.name, key: item.key)))
+                self?.pages.append(ViewController(model: SimpleModel(name: item.name, key: item.key)))
             }
         }
     }

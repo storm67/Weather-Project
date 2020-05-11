@@ -34,7 +34,7 @@ class CustomCell: UITableViewCell {
         tempLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 18).isActive = true
         tempLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 330).isActive = true
         imgView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 7).isActive = true
-        imgView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 240).isActive = true
+        imgView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 220).isActive = true
     }
     
     required init?(coder: NSCoder) {
