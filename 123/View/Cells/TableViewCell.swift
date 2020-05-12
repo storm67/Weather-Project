@@ -14,12 +14,13 @@ class CustomCell: UITableViewCell {
     
     
     override var frame: CGRect {
+        
         get {
             return super.frame
         }
         set (newFrame) {
             var frame = newFrame
-            let newWidth = frame.width * 0.90 // get 80% width here
+            let newWidth = frame.width * 0.93 // get 80% width here
             let space = (frame.width - newWidth) / 2
             frame.size.width = newWidth
             frame.origin.x += space
@@ -40,7 +41,7 @@ class CustomCell: UITableViewCell {
     
     let imgView: UIImageView = {
         let label = UIImageView()
-        label.image = UIImage(named: "weather")?.imageResize(sizeChange: CGSize(width: 32,height: 32))
+        label.image = UIImage(named: "cloud")?.imageResize(sizeChange: CGSize(width: 32,height: 32))
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -77,11 +78,14 @@ class CustomCell: UITableViewCell {
        
        self.layer.masksToBounds = false
        self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.layer.cornerRadius).cgPath
-        tempLabel.topAnchor.constraint(equalTo: backView.topAnchor, constant: 18).isActive = true
-        tempLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 330).isActive = true
-        imgView.topAnchor.constraint(equalTo: backView.topAnchor, constant: 7).isActive = true
-        imgView.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 220).isActive = true
+        tempLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 14).isActive = true
+        tempLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 285).isActive = true
+        imgView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
+        imgView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 220).isActive = true
+        imgView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
+        imgView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -78).isActive = true
 
+        
         backgroundColor = .clear
         
 

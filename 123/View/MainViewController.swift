@@ -41,7 +41,6 @@ final class ViewController: UIViewController {
         super.viewDidLoad()
         myTableView.backgroundColor = .purple
         layout()
-        location()
         update()
     }
     
@@ -50,7 +49,7 @@ final class ViewController: UIViewController {
         self.simpleModel = model
     }
     
-    override func viewWillLayoutSubviews() {
+    override func viewDidLayoutSubviews() {
         self.navigationController?.isNavigationBarHidden = true
         edgesForExtendedLayout = []
     }
@@ -70,23 +69,16 @@ final class ViewController: UIViewController {
             }
         })
     }
-    
-    fileprivate func location() {
-        self.viewModel?.completion = { [weak self] item, one in
-            self?.weather = item
-        }
-    }
-
-    
+  
     public func layout() {
-        view.addSubview(myTableView)
+        view().scrollView.addSubview(myTableView)
         myTableView.sectionHeaderHeight = 100
         myTableView.dataSource = self
         myTableView.delegate = self
-        myTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
-        myTableView.topAnchor.constraint(equalTo: view().imageView.safeAreaLayoutGuide.bottomAnchor, constant: 15).isActive = true
-        myTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
-        myTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -28.0).isActive = true
+        myTableView.centerXAnchor.constraint(equalTo: view().scrollView.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        myTableView.topAnchor.constraint(equalTo: view().imageView.safeAreaLayoutGuide.bottomAnchor, constant: 10).isActive = true
+        myTableView.widthAnchor.constraint(equalToConstant: 355).isActive = true
+        myTableView.heightAnchor.constraint(equalToConstant: 400).isActive = true
         myTableView.layer.cornerRadius = 5
         myTableView.layer.masksToBounds = true
     }

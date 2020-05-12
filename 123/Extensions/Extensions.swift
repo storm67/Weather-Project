@@ -24,7 +24,7 @@ extension String {
 extension Int {
     
     func convertToCelsius() -> Int {
-        return Int(5.0 / 9.0 * (Double(self) - 32.0))
+        return abs(Int(self - 32) * Int(5.0) / Int(9.0))
     }
     
 }

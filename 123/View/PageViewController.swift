@@ -40,14 +40,16 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
     var pages = [UIViewController]()
     
     func setupPageControl() {
-        pageControl = UIPageControl(frame: CGRect(x: 2,y: UIScreen.main.bounds.minY + 25, width: UIScreen.main.bounds.width,height: 50))
+        self.view.addSubview(pageControl)
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+        pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        pageControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 7).isActive = true
         self.pageControl.numberOfPages = pages.count
         self.pageControl.currentPage = 0
         self.pageControl.tintColor = UIColor.gray
         self.pageControl.pageIndicatorTintColor = UIColor.lightGray
         self.pageControl.currentPageIndicatorTintColor = UIColor.lightGray
         pageControl.backgroundColor = UIColor.clear
-        self.view.addSubview(pageControl)
     }
     
     
