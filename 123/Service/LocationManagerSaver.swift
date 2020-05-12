@@ -40,9 +40,9 @@ class LocationManager: NSObject {
         }
     
     
-    fileprivate var locationHandler: (( _ locations: CLLocationCoordinate2D?, _ error: Error?)->())?
+    fileprivate var locationHandler: (( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?)->())?
     
-    public func getLocation(onCompletion:@escaping ( _ locations: CLLocationCoordinate2D?, _ error: Error?)->()) {
+    public func getLocation(onCompletion:@escaping ( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?)->()) {
         
         self.locationHandler = onCompletion
         
@@ -76,11 +76,15 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let handler = self.locationHandler {
             if let location = locations.first {
-            handler(location.coordinate, nil)
+            let geocoder = CLGeocoder()
+            geocoder.reverseGeocodeLocation(location) { placemarks, error in
+                guard let placemarks = placemarks?[0], let town = placemarks.locality else { return }
+                handler(location.coordinate,town, nil)
+                }
             manager.delegate = nil
             manager.stopUpdatingHeading()
         } else { // Failed to get location
-            handler(Defaults.location,nil)
+            handler(Defaults.location,"", nil)
             }
         }
     }

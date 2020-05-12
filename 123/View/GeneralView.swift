@@ -10,22 +10,26 @@ import Foundation
 import UIKit
 
 final class CustomView: UIView {
-    
-    weak var delegate: MyViewDelegate?
-    
-    var cityLabel: UILabel = {
+    var tempLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Москва"
         label.font = label.font.withSize(35)
+        label.textColor = .white
         return label
     }()
     
-    let tempLabel: UILabel = {
+    let cityLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "15°"
+        label.textColor = .white
+        label.sizeToFit()
+        label.adjustsFontSizeToFitWidth = true
+        label.numberOfLines = 1
+        label.minimumScaleFactor = 0.5
         label.font = label.font.withSize(25)
+        label.clipsToBounds = true
         return label
     }()
     
@@ -36,14 +40,6 @@ final class CustomView: UIView {
         label.layer.cornerRadius = 5
         label.layer.masksToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let searchIcon: UIButton = {
-        let label = UIButton()
-        label.setImage(UIImage(named: "search"), for: .normal)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.addTarget(self, action: #selector(buttonTapAction), for: .touchUpInside)
         return label
     }()
     
@@ -65,11 +61,11 @@ final class CustomView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    let menu: UIButton = {
-        let label = UIButton()
-        label.setImage(UIImage(named: "menu"), for: .normal)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    
+    let headerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .purple
+        return view
     }()
     
     let scrollView: UIScrollView = {
@@ -95,69 +91,39 @@ final class CustomView: UIView {
     }
     func layout() {
         addSubview(scrollView)
+        addSubview(headerView)
+        headerView.addSubview(cityLabel)
+        headerView.addSubview(tempLabel)
         scrollView.addSubview(imageView)
-        scrollView.addSubview(searchIcon)
         scrollView.addSubview(locationIcon)
         scrollView.addSubview(location)
-        scrollView.addSubview(menu)
-        scrollView.addSubview(cityLabel)
-        scrollView.addSubview(tempLabel)
         scrollView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
         scrollView.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
         scrollView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
-        tempLabel.bottomAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 30).isActive = true
-        tempLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 13).isActive = true
+        let constraint = cityLabel.frame.height * 1.1
+        cityLabel.bottomAnchor.constraint(lessThanOrEqualTo: tempLabel.safeAreaLayoutGuide.bottomAnchor, constant: constraint).isActive = true
+        cityLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 5).isActive = true
+        cityLabel.trailingAnchor.constraint(lessThanOrEqualTo: headerView.trailingAnchor, constant: -5).isActive = true
         imageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         imageView.topAnchor.constraint(equalTo: location.topAnchor, constant:
             40).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 230).isActive = true
         imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95).isActive = true
         //        imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 8).isActive = true
-        searchIcon.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 6).isActive = true
-        searchIcon.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 6).isActive = true
-        searchIcon.topAnchor.constraint(equalTo: menu.topAnchor, constant: 3).isActive = true
-        searchIcon.widthAnchor.constraint(equalToConstant: 28).isActive = true
-        searchIcon.heightAnchor.constraint(equalToConstant: 28).isActive = true
         locationIcon.topAnchor.constraint(equalTo: location.topAnchor, constant: 10).isActive = true
         locationIcon.leadingAnchor.constraint(equalTo: location.leadingAnchor, constant: -25).isActive = true
-        menu.topAnchor.constraint(equalTo: location.topAnchor, constant: 3).isActive = true
-        menu.leadingAnchor.constraint(lessThanOrEqualTo: scrollView.leadingAnchor, constant: 380).isActive = true
-        menu.trailingAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
-        menu.widthAnchor.constraint(equalToConstant: 31).isActive = true
-        menu.heightAnchor.constraint(equalToConstant: 31).isActive = true
-        let widthConstraint = menu.bottomAnchor.constraint(equalTo: imageView.topAnchor, constant: 10)
-        widthConstraint.priority = UILayoutPriority(rawValue: 999)
-        widthConstraint.isActive = true
         location.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-        location.topAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-        cityLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 12).isActive = true
-        cityLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 40).isActive = true
+        location.topAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.topAnchor, constant: -4).isActive = true
+        tempLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 5).isActive = true
+        tempLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 2).isActive = true
     }
     
-    func updateData(_ temp: String,_ city: String) {
+    func updateData(_ temp: String,_ city: String,_ value: String) {
         tempLabel.text = temp
         cityLabel.text = city
-    }
-    
-    @objc fileprivate func buttonTapAction() {
-        delegate?.didTapButton()
+        location.setTitle(value, for: .normal)
     }
     
 }
 
-extension UIImage {
-    
-    func imageResize (sizeChange:CGSize)-> UIImage {
-        
-        let hasAlpha = true
-        let scale: CGFloat = 0.0 // Use scale factor of main screen
-        
-        UIGraphicsBeginImageContextWithOptions(sizeChange, !hasAlpha, scale)
-        self.draw(in: CGRect(origin: CGPoint.zero, size: sizeChange))
-        
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-        return scaledImage!
-    }
-    
-}
