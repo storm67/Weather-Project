@@ -73,24 +73,10 @@ final class MainControllerViewModel: NSObject, Alias {
         func newDebug(key: Int?, lat: Double?, lon: Double?, completion: @escaping (type)) {
             if key != nil {
                 
-            let Operator = Init(test: Test(str: nil, key: key, lat: nil, lon: nil))
-                  NetworkService.request(router: Operator.getWeather()) { [unowned self] data in
-                      let array = data["DailyForecasts"].arrayValue
-                      let WeatherModel = array.map { DailyForecast(dictionary: $0) }
-                      let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
-                          return Convertible(date: self.format(data: first.date),
-                                             temperature: first.temperature.convertToCelsius(),
-                                             dayIcon: first.dayIcon,
-                                             dayIconPhrase: first.dayIconPhrase,
-                                             nightIconPhrase: first.nightIconPhrase,
-                                             realFeel: first.realFeel,
-                                             wind: first.wind,
-                                             standardDate: second)
-                          
-                      }
-                      self.weather = weatherX
-                      completion(weatherX, weatherX[0])
-                  }
+                guard let key = key else { return }
+                weatherFiveDayRequest(key: key) { (first, second) in
+                    completion(first,second)
+                }
             } else {
                 
                 let Operator = Init(test: Test(str: nil, key: nil, lat: lat, lon: lon))

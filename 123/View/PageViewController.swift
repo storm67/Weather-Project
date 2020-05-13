@@ -48,7 +48,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
         self.pageControl.currentPage = 0
         self.pageControl.tintColor = UIColor.gray
         self.pageControl.pageIndicatorTintColor = UIColor.lightGray
-        self.pageControl.currentPageIndicatorTintColor = UIColor.lightGray
+        self.pageControl.currentPageIndicatorTintColor = UIColor.black
         pageControl.backgroundColor = UIColor.clear
     }
     
