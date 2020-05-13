@@ -11,6 +11,21 @@ import UIKit
 
 class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
+    let menu: UIButton = {
+        let label = UIButton()
+        label.setImage(UIImage(named: "menu"), for: .normal)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let searchIcon: UIButton = {
+        let label = UIButton()
+        label.setImage(UIImage(named: "search"), for: .normal)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.addTarget(self, action: #selector(buttonTapAction), for: .touchUpInside)
+        return label
+    }()
+    
     let selected = Selected()
     
     required init?(coder aDecoder: NSCoder) {
@@ -25,12 +40,12 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
     var pages = [UIViewController]()
     
     func setupPageControl() {
-        pageControl = UIPageControl(frame: CGRect(x: 0,y: UIScreen.main.bounds.maxY - 50, width: UIScreen.main.bounds.width,height: 50))
+        pageControl = UIPageControl(frame: CGRect(x: 2,y: UIScreen.main.bounds.minY + 25, width: UIScreen.main.bounds.width,height: 50))
         self.pageControl.numberOfPages = pages.count
         self.pageControl.currentPage = 0
-        self.pageControl.tintColor = UIColor.lightGray
+        self.pageControl.tintColor = UIColor.gray
         self.pageControl.pageIndicatorTintColor = UIColor.lightGray
-        self.pageControl.currentPageIndicatorTintColor = UIColor.black
+        self.pageControl.currentPageIndicatorTintColor = UIColor.lightGray
         pageControl.backgroundColor = UIColor.clear
         self.view.addSubview(pageControl)
     }
@@ -43,6 +58,14 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
         self.dataSource = self
         self.delegate = self
         setupPageControl()
+        layout()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        pageControl.subviews.forEach {
+            $0.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        }
     }
     
     func setUp() {
@@ -51,6 +74,27 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
                 self?.pages.append(ViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon)))
             }
         }
+    }
+    
+    func layout() {
+        view.addSubview(searchIcon)
+        view.addSubview(menu)
+        searchIcon.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 6).isActive = true
+        searchIcon.topAnchor.constraint(equalTo: menu.topAnchor, constant: 3).isActive = true
+        searchIcon.widthAnchor.constraint(equalToConstant: 28).isActive = true
+        searchIcon.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        menu.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        menu.leadingAnchor.constraint(lessThanOrEqualTo: view.leadingAnchor, constant: 380).isActive = true
+        menu.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
+        menu.widthAnchor.constraint(equalToConstant: 31).isActive = true
+        menu.heightAnchor.constraint(equalToConstant: 31).isActive = true
+        let widthConstraint = menu.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 10)
+        widthConstraint.priority = UILayoutPriority(rawValue: 999)
+        widthConstraint.isActive = true
+    }
+    
+    @objc fileprivate func buttonTapAction() {
+        self.navigationController?.pushViewController(PagesViewController(), animated: true)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {

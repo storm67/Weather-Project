@@ -61,7 +61,6 @@ enum Router: URLRequestConvertible {
         let urlString = completeURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         let url = URL(string: urlString)
         var request = URLRequest(url: url!)
-        print(url)
         request.httpMethod = method
         do{
             return try Alamofire.JSONEncoding.default.encode(request)

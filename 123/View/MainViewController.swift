@@ -8,12 +8,13 @@
 
 import UIKit
 
-final class ViewController: UIViewController, MyViewDelegate {
+final class ViewController: UIViewController {
     
     fileprivate func view() -> CustomView {
         return view as! CustomView
     }
     
+    fileprivate let back = BackgroundView()
     fileprivate var simpleModel: SimpleModel?
     fileprivate var weather = [Convertible]()
     fileprivate let selectionVM = Selected()
@@ -38,7 +39,7 @@ final class ViewController: UIViewController, MyViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view().delegate = self
+        myTableView.backgroundColor = .purple
         layout()
         location()
         update()
@@ -57,8 +58,12 @@ final class ViewController: UIViewController, MyViewDelegate {
     fileprivate func update() {
         guard let model = simpleModel else { return }
         viewModel?.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one in
-            print(one)
-            self?.view().updateData("\(one.temperature)°", model.name)
+            if model.lat != nil {
+            self?.view().updateData("\(one.temperature)°","\(one.dayIconPhrase), Ощущается как \(one.realFeel)°", "Current Location")
+            } else {
+            self?.view().updateData("\(one.temperature)°", "\(one.dayIconPhrase), ощущается как \(one.realFeel)°", model.name)
+                self?.view().locationIcon.isHidden = true
+            }
             DispatchQueue.main.async {
                 self?.weather = weather
                 self?.myTableView.reloadData()
@@ -71,19 +76,19 @@ final class ViewController: UIViewController, MyViewDelegate {
             self?.weather = item
         }
     }
-    
-    public func didTapButton() {
-        self.navigationController?.pushViewController(PagesViewController(), animated: true)
-    }
+
     
     public func layout() {
         view.addSubview(myTableView)
+        myTableView.sectionHeaderHeight = 100
         myTableView.dataSource = self
         myTableView.delegate = self
-        myTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0.0).isActive = true
-        myTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 355.0).isActive = true
-        myTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0.0).isActive = true
-        myTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -32.0).isActive = true
+        myTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
+        myTableView.topAnchor.constraint(equalTo: view().imageView.safeAreaLayoutGuide.bottomAnchor, constant: 15).isActive = true
+        myTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
+        myTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -28.0).isActive = true
+        myTableView.layer.cornerRadius = 5
+        myTableView.layer.masksToBounds = true
     }
 }
 
@@ -96,10 +101,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
-        cell.viewModel = viewModel?.cellViewModel(index: indexPath.row)
+        cell.viewModel = viewModel?.cellViewModel(index: indexPath.row)        
         cell.selectionStyle = .none
         return cell
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return view().headerView
+    }
     
 }

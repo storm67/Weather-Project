@@ -9,9 +9,8 @@
 import Foundation
 import UIKit
 
-class BackgroundView {
-   
-  
+class BackgroundView: NSObject {
+    
     func switchImage(_ image: Int) -> UIImage {
            switch image {
            case 1: return UIImage(named: "01-s")!
