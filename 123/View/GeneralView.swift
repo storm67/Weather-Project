@@ -100,22 +100,21 @@ final class CustomView: UIView {
     }
     
     func layout() {
-        addSubview(scrollView)
         addSubview(headerView)
-        scrollView.contentSize = CGSize(width:frame.size.width, height: 680)
+        scrollView.addSubview(imageView)
+        addSubview(scrollView)
+        addSubview(headerOfMainView)
+        scrollView.contentSize = CGSize(width:frame.size.width, height: 690)
         headerView.addSubview(cityLabel)
         headerView.addSubview(tempLabel)
-        scrollView.addSubview(imageView)
-        scrollView.addSubview(headerOfMainView)
         headerOfMainView.addSubview(locationIcon)
         headerOfMainView.addSubview(location)
-        headerOfMainView.topAnchor.constraint(equalTo: scrollView.frameLayoutGuide.topAnchor, constant: 15).isActive = true
-        headerOfMainView.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor, constant: 0).isActive = true
-        headerOfMainView.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor, constant: 0).isActive = true
-        headerOfMainView.heightAnchor.constraint(equalToConstant: 38).isActive = true
-        headerOfMainView.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        headerOfMainView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        headerOfMainView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        headerOfMainView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        headerOfMainView.widthAnchor.constraint(equalToConstant: 400).isActive = true
         scrollView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
-        scrollView.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
+        scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         scrollView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
         let constraint = cityLabel.frame.height
@@ -124,13 +123,13 @@ final class CustomView: UIView {
         cityLabel.trailingAnchor.constraint(lessThanOrEqualTo: headerView.trailingAnchor, constant: -5).isActive = true
         imageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         imageView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant:
-            43).isActive = true
+            45).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 230).isActive = true
         imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95).isActive = true
         locationIcon.topAnchor.constraint(equalTo: location.topAnchor, constant: 10).isActive = true
         locationIcon.leadingAnchor.constraint(equalTo: location.leadingAnchor, constant: -25).isActive = true
         location.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-        location.centerYAnchor.constraint(equalTo: headerOfMainView.centerYAnchor, constant: -4).isActive = true
+        location.centerYAnchor.constraint(equalTo: headerOfMainView.centerYAnchor, constant: -6).isActive = true
         tempLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 5).isActive = true
         tempLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 2).isActive = true
     }

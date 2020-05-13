@@ -175,9 +175,9 @@
 				31324A89240EF3C60077C339 /* Storyboard */,
 				31324A70240EF3960077C339 /* MainViewController.swift */,
 				3131C5DE2460749800953D6D /* PageViewController.swift */,
+				31324AB9240F14C90077C339 /* CitySelector.swift */,
 				312C6ACC24618033007AAC03 /* PagesViewController.swift */,
 				3133B83F2434E15A00C4EE93 /* BackgroundView.swift */,
-				31324AB9240F14C90077C339 /* CitySelector.swift */,
 				31320305245B5B6600E3C054 /* GeneralView.swift */,
 			);
 			path = View;

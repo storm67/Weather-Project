@@ -19,6 +19,7 @@ final class MainControllerViewModel: NSObject, Alias {
     
     private let dateFormatter: DateFormatter = {
         var dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "RU-ru")
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         return dateFormatter
     }()
@@ -57,11 +58,12 @@ final class MainControllerViewModel: NSObject, Alias {
     }
     
     func returnit() {
-        dates.append("Today")
-        dates.append("Tomorrow")
+        dates.append("Сегодня")
+        dates.append("Завтра")
         for item in 2...4 {
             let data = Calendar.current.date(byAdding: .day, value: item, to: Date(), wrappingComponents: .random())!
             let dateFormatterPrint = DateFormatter()
+            dateFormatterPrint.locale = Locale(identifier: "RU-ru")
             dateFormatterPrint.dateFormat = "EEEE"
             let finish = dateFormatterPrint.string(from: data)
             dates.append(finish)
@@ -116,9 +118,10 @@ extension MainControllerViewModel {
     
     func format(data: String) -> String {
         let dateFormatterPrint = DateFormatter()
-        dateFormatterPrint.dateFormat = "MMM dd"
+        dateFormatterPrint.locale = Locale(identifier: "RU-ru")
+        dateFormatterPrint.dateFormat = "dd MMM"
         guard let date: Date = dateFormatter.date(from: data) as Date? else { return String()}
-        let finish = dateFormatterPrint.string(from: date)
+        let finish = dateFormatterPrint.string(from: date).capitalized
         return finish
     }
 }

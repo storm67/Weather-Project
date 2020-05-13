@@ -48,7 +48,6 @@ class LocationManager: NSObject {
         
             // Request for Location Authorization
            requestLocation()
-
     }
    
 }

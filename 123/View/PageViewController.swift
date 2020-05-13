@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
-    
+class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
+    var currentPage = 0
     let menu: UIButton = {
         let label = UIButton()
         label.setImage(UIImage(named: "menu"), for: .normal)
@@ -43,7 +43,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
         self.view.addSubview(pageControl)
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        pageControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 7).isActive = true
+        pageControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12).isActive = true
         self.pageControl.numberOfPages = pages.count
         self.pageControl.currentPage = 0
         self.pageControl.tintColor = UIColor.gray
@@ -61,6 +61,12 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
         self.delegate = self
         setupPageControl()
         layout()
+        for subview in self.view.subviews {
+            if let scrollView = subview as? UIScrollView {
+                scrollView.delegate = self
+                break;
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -85,7 +91,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
         searchIcon.topAnchor.constraint(equalTo: menu.topAnchor, constant: 3).isActive = true
         searchIcon.widthAnchor.constraint(equalToConstant: 28).isActive = true
         searchIcon.heightAnchor.constraint(equalToConstant: 28).isActive = true
-        menu.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        menu.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5).isActive = true
         menu.leadingAnchor.constraint(lessThanOrEqualTo: view.leadingAnchor, constant: 380).isActive = true
         menu.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
         menu.widthAnchor.constraint(equalToConstant: 31).isActive = true
@@ -121,7 +127,23 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
         if let viewControllers = pageViewController.viewControllers {
             if let viewControllerIndex = self.pages.firstIndex(of: viewControllers[0]) {
                 self.pageControl.currentPage = viewControllerIndex
+                self.currentPage = pageControl.currentPage
+
             }
+        }
+    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (currentPage == 0 && scrollView.contentOffset.x < scrollView.bounds.size.width) {
+            scrollView.contentOffset = CGPoint(x: scrollView.bounds.size.width, y: 0);
+        } else if (currentPage == pages.count - 1 && scrollView.contentOffset.x > scrollView.bounds.size.width) {
+            scrollView.contentOffset = CGPoint(x: scrollView.bounds.size.width, y: 0);
+        }
+    }
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if (currentPage == 0 && scrollView.contentOffset.x <= scrollView.bounds.size.width) {
+            targetContentOffset.pointee = CGPoint(x: scrollView.bounds.size.width, y: 0);
+        } else if (currentPage == pages.count - 1 && scrollView.contentOffset.x >= scrollView.bounds.size.width) {
+            targetContentOffset.pointee = CGPoint(x: scrollView.bounds.size.width, y: 0);
         }
     }
 }
