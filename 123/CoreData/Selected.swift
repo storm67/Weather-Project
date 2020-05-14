@@ -24,7 +24,6 @@ class Selected {
         newUser.setValue(lat, forKey: "lat")
         newUser.setValue(lon, forKey: "lon")
         do {
-            try context.execute(deleteRequest)
             try context.save()
         } catch {
             print("Failed saving")

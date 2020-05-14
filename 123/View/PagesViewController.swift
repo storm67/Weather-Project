@@ -52,9 +52,11 @@ class PagesViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.separatorColor = .black
         tableView.rowHeight = 52
         addButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 330).isActive = true
-        addButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 620).isActive = true
+        addButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 600).isActive = true
         addButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
         addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
+        addButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        addButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
         tableView.dataSource = self
         tableView.delegate = self
     }

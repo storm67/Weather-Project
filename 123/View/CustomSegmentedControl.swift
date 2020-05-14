@@ -105,7 +105,7 @@ extension CustomSegmentedControl {
         for buttonTitle in buttonTitles {
             let button = UIButton(type: .system)
             button.setTitle(buttonTitle, for: .normal)
-            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22.0)
+            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20.0)
             button.addTarget(self, action:#selector(CustomSegmentedControl.buttonAction(sender:)), for: .touchUpInside)
             button.setTitleColor(textColor, for: .normal)
             buttons.append(button)

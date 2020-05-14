@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
+    
     var currentPage = 0
     let menu: UIButton = {
         let button = UIButton()

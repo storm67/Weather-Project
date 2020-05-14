@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Ela. All rights reserved.
 //
 
+
 import UIKit
 
 @IBDesignable
@@ -35,7 +36,7 @@ open class TagView: UIButton {
 //               titleEdgeInsets = titleEdge
 //           }
 //       }
-//    
+//
     open var imageEdge: UIEdgeInsets? {
            didSet {
             guard let imageEdge = imageEdge else { return }
@@ -192,7 +193,6 @@ open class TagView: UIButton {
     }
     
     // MARK: - layout
-
     override open var intrinsicContentSize: CGSize {
         var size = titleLabel?.text?.size(withAttributes: [NSAttributedString.Key.font: textFont]) ?? CGSize.zero
         size.height = textFont.pointSize + paddingY * 2
