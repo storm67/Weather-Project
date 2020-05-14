@@ -24,52 +24,6 @@ final class MainControllerViewModel: NSObject, Alias {
         return dateFormatter
     }()
     
-    func weatherFiveDayRequest(key: Int,completion: @escaping (type)) {
-        
-        let Operator = Init(test: Test(str: nil, key: key, lat: nil, lon: nil))
-        print(key)
-        NetworkService.request(router: Operator.getWeather()) { [unowned self] data in
-            let array = data["DailyForecasts"].arrayValue
-            let WeatherModel = array.map { DailyForecast(dictionary: $0) }
-            let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
-                return Convertible(date: self.format(data: first.date),
-                                   temperature: first.temperature.convertToCelsius(),
-                                   dayIcon: first.dayIcon,
-                                   dayIconPhrase: first.dayIconPhrase,
-                                   nightIconPhrase: first.nightIconPhrase,
-                                   realFeel: first.realFeel,
-                                   wind: first.wind,
-                                   standardDate: second)
-                
-            }
-            self.weather = weatherX
-            completion(weatherX, weatherX[0])
-        }
-    }
-    
-    
-    
-    func numberOfCities() -> Int {
-        return weather.count
-    }
-    
-    func cellViewModel(index: Int) -> Convertible? {
-        return weather[index]
-    }
-    
-    func returnit() {
-        dates.append("Сегодня")
-        dates.append("Завтра")
-        for item in 2...4 {
-            let data = Calendar.current.date(byAdding: .day, value: item, to: Date(), wrappingComponents: .random())!
-            let dateFormatterPrint = DateFormatter()
-            dateFormatterPrint.locale = Locale(identifier: "RU-ru")
-            dateFormatterPrint.dateFormat = "EEEE"
-            let finish = dateFormatterPrint.string(from: data)
-            dates.append(finish)
-        }
-    }
-    
     func newDebug(key: Int?, lat: Double?, lon: Double?, completion: @escaping (type)) {
         if key != nil {
             guard let key = key else { return }
@@ -87,6 +41,44 @@ final class MainControllerViewModel: NSObject, Alias {
                     }
                 }
             }
+        }
+    }
+    
+    func returnit() {
+           dates.append("Сегодня")
+           dates.append("Завтра")
+           for item in 2...4 {
+               let data = Calendar.current.date(byAdding: .day, value: item, to: Date(), wrappingComponents: .random())!
+               let dateFormatterPrint = DateFormatter()
+               dateFormatterPrint.locale = Locale(identifier: "RU-ru")
+               dateFormatterPrint.dateFormat = "EEEE"
+               let finish = dateFormatterPrint.string(from: data)
+               dates.append(finish)
+           }
+       }
+       
+       func cellViewModel(index: Int) -> Convertible? {
+           return weather[index]
+       }
+    
+    func weatherFiveDayRequest(key: Int,completion: @escaping (type)) {
+        
+        let Operator = Init(test: Test(str: nil, key: key, lat: nil, lon: nil))
+        NetworkService.request(router: Operator.getWeather()) { [unowned self] data in
+            let array = data["DailyForecasts"].arrayValue
+            let WeatherModel = array.map { DailyForecast(dictionary: $0) }
+            let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
+                return Convertible(date: self.format(data: first.date),
+                                   temperature: first.temperature.convertToCelsius(),
+                                   dayIcon: first.dayIcon,
+                                   dayIconPhrase: first.dayIconPhrase,
+                                   nightIconPhrase: first.nightIconPhrase,
+                                   realFeel: first.realFeel,
+                                   wind: first.wind,
+                                   standardDate: second)
+            }
+            self.weather = weatherX
+            completion(weatherX, weatherX[0])
         }
     }
     

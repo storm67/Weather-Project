@@ -11,6 +11,14 @@ import UIKit
 
 final class CustomView: UIView {
     
+    var segmentedControl: CustomSegmentedControl = {
+        let interfaceSegmented = CustomSegmentedControl()
+        interfaceSegmented.setButtonTitles(buttonTitles: ["12/H","5Days"])
+        interfaceSegmented.selectorViewColor = .white
+        interfaceSegmented.selectorTextColor = .white
+        interfaceSegmented.translatesAutoresizingMaskIntoConstraints = false
+        return interfaceSegmented
+    }()
     var tempLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -102,7 +110,9 @@ final class CustomView: UIView {
         addSubview(scrollView)
         addSubview(headerOfMainView)
         scrollView.contentSize = CGSize(width:frame.size.width, height: 690)
+        headerView.addSubview(segmentedControl)
         headerView.addSubview(cityLabel)
+        segmentedControl.backgroundColor = .purple
         headerView.addSubview(tempLabel)
         headerOfMainView.addSubview(locationIcon)
         headerOfMainView.addSubview(location)
@@ -118,6 +128,8 @@ final class CustomView: UIView {
         cityLabel.bottomAnchor.constraint(lessThanOrEqualTo: tempLabel.safeAreaLayoutGuide.bottomAnchor, constant: constraint).isActive = true
         cityLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 5).isActive = true
         cityLabel.trailingAnchor.constraint(lessThanOrEqualTo: headerView.trailingAnchor, constant: -5).isActive = true
+        segmentedControl.centerYAnchor.constraint(equalTo: headerView.centerYAnchor, constant: 28).isActive = true
+        segmentedControl.centerXAnchor.constraint(equalTo: headerView.centerXAnchor, constant: 100).isActive = true
         imageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         imageView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant:
             45).isActive = true

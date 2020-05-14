@@ -33,6 +33,7 @@
 		3133B8402434E15A00C4EE93 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3133B83F2434E15A00C4EE93 /* BackgroundView.swift */; };
 		3133B8422435134A00C4EE93 /* LocationManagerSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3133B8412435134A00C4EE93 /* LocationManagerSaver.swift */; };
 		3135981824680BE2004DD6CD /* SimpleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3135981724680BE2004DD6CD /* SimpleModel.swift */; };
+		31382D83246CC46A0051AECC /* CustomSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31382D82246CC46A0051AECC /* CustomSegmentedControl.swift */; };
 		313B510D2469E5070059161C /* PagesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313B510C2469E5070059161C /* PagesViewCell.swift */; };
 		31415FE6243D03B8003BD9B6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31415FE5243D03B8003BD9B6 /* Constants.swift */; };
 		31548E782418F04C00D94EC9 /* URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31548E772418F04C00D94EC9 /* URLRequest.swift */; };
@@ -73,6 +74,7 @@
 		3133B83F2434E15A00C4EE93 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		3133B8412435134A00C4EE93 /* LocationManagerSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerSaver.swift; sourceTree = "<group>"; };
 		3135981724680BE2004DD6CD /* SimpleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleModel.swift; path = ../../../../../../Downloads/abc/123/ViewModel/Details/SimpleModel.swift; sourceTree = "<group>"; };
+		31382D82246CC46A0051AECC /* CustomSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentedControl.swift; sourceTree = "<group>"; };
 		313B510C2469E5070059161C /* PagesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesViewCell.swift; sourceTree = "<group>"; };
 		31415FE5243D03B8003BD9B6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		31548E772418F04C00D94EC9 /* URLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequest.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 				313B510B2469E4F70059161C /* Cells */,
 				31324A89240EF3C60077C339 /* Storyboard */,
 				31324A70240EF3960077C339 /* MainViewController.swift */,
+				31382D82246CC46A0051AECC /* CustomSegmentedControl.swift */,
 				3131C5DE2460749800953D6D /* PageViewController.swift */,
 				31324AB9240F14C90077C339 /* CitySelector.swift */,
 				312C6ACC24618033007AAC03 /* PagesViewController.swift */,
@@ -406,6 +409,7 @@
 				31324A6F240EF3960077C339 /* SceneDelegate.swift in Sources */,
 				3131C5DF2460749800953D6D /* PageViewController.swift in Sources */,
 				31B7F71724166E3500BCB7C9 /* Selected.swift in Sources */,
+				31382D83246CC46A0051AECC /* CustomSegmentedControl.swift in Sources */,
 				3133B8422435134A00C4EE93 /* LocationManagerSaver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -20,6 +20,15 @@ final class ViewController: UIViewController {
     fileprivate let selectionVM = Selected()
     public var viewModel: MainControllerViewModel? = MainControllerViewModel(data: NetworkService())
     
+     lazy var interfaceSegmented: CustomSegmentedControl = {
+               let interfaceSegmented = CustomSegmentedControl()
+               interfaceSegmented.setButtonTitles(buttonTitles: ["OFF","HTTP","AUTO"])
+               interfaceSegmented.selectorViewColor = .orange
+               interfaceSegmented.selectorTextColor = .orange
+               interfaceSegmented.translatesAutoresizingMaskIntoConstraints = false
+               return interfaceSegmented
+       }()
+
     fileprivate var myTableView: UITableView! = {
         var myTableView = UITableView()
         myTableView.separatorColor = .white
@@ -37,8 +46,6 @@ final class ViewController: UIViewController {
     
     override func loadView() {
         view = CustomView()
-        view.setNeedsDisplay()
-        view.setNeedsLayout()
     }
     
     override func viewDidLoad() {
