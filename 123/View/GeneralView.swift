@@ -36,31 +36,31 @@ final class CustomView: UIView {
     
     
     let imageView: UIImageView = {
-        let label = UIImageView()
-        label.image = UIImage(named: "main")
-        label.layer.cornerRadius = 5
-        label.layer.masksToBounds = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+        let image = UIImageView()
+        image.image = UIImage(named: "main")
+        image.layer.cornerRadius = 5
+        image.layer.masksToBounds = true
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
     }()
     
     let locationIcon: UIButton = {
-        let label = UIButton()
-        label.setImage(UIImage(named: "navigation"), for: .normal)
-        label.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 496, right: 496)
-        label.imageView?.contentMode = .scaleAspectFill
-        label.contentHorizontalAlignment = .fill
-        label.contentVerticalAlignment = .fill
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+        let button = UIButton()
+        button.setImage(UIImage(named: "navigation"), for: .normal)
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 496, right: 496)
+        button.imageView?.contentMode = .scaleAspectFill
+        button.contentHorizontalAlignment = .fill
+        button.contentVerticalAlignment = .fill
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     let location: UIButton = {
-        let label = UIButton()
-        label.setTitleColor(.black, for: .normal)
-        label.setTitle("Current Location", for: .normal)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+        let button = UIButton()
+        button.setTitleColor(.black, for: .normal)
+        button.setTitle("Current Location", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     let headerView: UIView = {
@@ -93,9 +93,6 @@ final class CustomView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layout()
-        setNeedsLayout()
-        layoutSubviews()
-        setNeedsDisplay()
         backgroundColor = .white
     }
     

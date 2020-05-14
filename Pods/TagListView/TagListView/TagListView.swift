@@ -9,7 +9,7 @@
 import UIKit
 
 @objc public protocol TagListViewDelegate {
-    @objc optional func tagPressed(_ title: String, tagView: TagView, sender: TagListView) -> Void
+    @objc optional func tagPressed(_ title: String, _ number: Int, tagView: TagView, sender: TagListView) -> Void
     @objc optional func tagRemoveButtonPressed(_ title: String, tagView: TagView, sender: TagListView) -> Void
 }
 
@@ -322,8 +322,8 @@ open class TagListView: UIView {
         return CGSize(width: frame.width, height: height)
     }
     
-    private func createNewTagView(_ title: String) -> TagView {
-        let tagView = TagView(title: title, image: UIImage())
+    private func createNewTagView(_ title: String, code: Int) -> TagView {
+        let tagView = TagView(title: title, image: UIImage(), code: code)
         tagView.textColor = textColor
         tagView.selectedTextColor = selectedTextColor
         tagView.tagBackgroundColor = tagBackgroundColor
@@ -355,8 +355,8 @@ open class TagListView: UIView {
     }
     
     private func createNewTagViewWithImage(_ title: String, _ image: UIImage) -> TagView {
-        let tagView = TagView(title: title, image: image)
-        guard let imageEdge = imageEdge else { return TagView(title: "", image: UIImage())}
+        let tagView = TagView(title: title, image: image, code: Int())
+        guard let imageEdge = imageEdge else { return TagView(title: "", image: UIImage(), code: Int())}
         tagView.image = true
         tagView.imagePaddingX = imagePaddingX
         tagView.imageEdge = imageEdge
@@ -388,7 +388,7 @@ open class TagListView: UIView {
     @discardableResult
     open func addTag(_ title: String) -> TagView {
         defer { rearrangeViews() }
-        return addTagView(createNewTagView(title))
+        return addTagView(createNewTagView(title, code: 0))
     }
     
     @discardableResult
@@ -398,10 +398,12 @@ open class TagListView: UIView {
     }
     
     @discardableResult
-    open func addTags(_ titles: [String]) -> [TagView] {
-        return addTagViews(titles.map(createNewTagView))
-    }
-    
+    open func addTags(_ titles: Dictionary<String,Int>) -> [TagView] {
+        return addTagViews(titles.map ({ (str, int) in
+            createNewTagView(str, code: int)
+   
+           })
+    )}
     @discardableResult
     open func addTagView(_ tagView: TagView) -> TagView {
         defer { rearrangeViews() }
@@ -421,7 +423,7 @@ open class TagListView: UIView {
 
     @discardableResult
     open func insertTag(_ title: String, at index: Int) -> TagView {
-        return insertTagView(createNewTagView(title), at: index)
+        return insertTagView(createNewTagView(title, code: index), at: index)
     }
     
 
@@ -471,7 +473,7 @@ open class TagListView: UIView {
     
     @objc func tagPressed(_ sender: TagView!) {
         sender.onTap?(sender)
-        delegate?.tagPressed?(sender.currentTitle ?? "", tagView: sender, sender: self)
+        delegate?.tagPressed?(sender.currentTitle ?? "", sender.tag , tagView: sender, sender: self)
         sender.someAction(sender: sender)
     }
     

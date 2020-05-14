@@ -12,18 +12,18 @@ import UIKit
 class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
     var currentPage = 0
     let menu: UIButton = {
-        let label = UIButton()
-        label.setImage(UIImage(named: "menu"), for: .normal)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+        let button = UIButton()
+        button.setImage(UIImage(named: "menu"), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     let searchIcon: UIButton = {
-        let label = UIButton()
-        label.setImage(UIImage(named: "search"), for: .normal)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.addTarget(self, action: #selector(buttonTapAction), for: .touchUpInside)
-        return label
+        let button = UIButton()
+        button.setImage(UIImage(named: "search"), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(buttonTapAction), for: .touchUpInside)
+        return button
     }()
     
     let selected = Selected()

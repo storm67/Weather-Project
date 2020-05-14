@@ -24,9 +24,13 @@ final class ViewController: UIViewController {
         var myTableView = UITableView()
         myTableView.separatorColor = .white
         myTableView.tableFooterView = UIView(frame: .zero)
+        myTableView.backgroundColor = .purple
         myTableView.rowHeight = 57.0
+        myTableView.sectionHeaderHeight = 100
         myTableView.register(CustomCell.self, forCellReuseIdentifier: "cell")
         myTableView.translatesAutoresizingMaskIntoConstraints = false
+        myTableView.layer.cornerRadius = 5
+        myTableView.layer.masksToBounds = true
         myTableView.isScrollEnabled = false
         return myTableView
     }()
@@ -39,7 +43,6 @@ final class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        myTableView.backgroundColor = .purple
         layout()
         update()
     }
@@ -72,15 +75,12 @@ final class ViewController: UIViewController {
   
     public func layout() {
         view().scrollView.addSubview(myTableView)
-        myTableView.sectionHeaderHeight = 100
         myTableView.dataSource = self
         myTableView.delegate = self
         myTableView.centerXAnchor.constraint(equalTo: view().scrollView.safeAreaLayoutGuide.centerXAnchor).isActive = true
         myTableView.topAnchor.constraint(equalTo: view().imageView.safeAreaLayoutGuide.bottomAnchor, constant: 10).isActive = true
         myTableView.widthAnchor.constraint(equalToConstant: 355).isActive = true
         myTableView.heightAnchor.constraint(equalToConstant: 400).isActive = true
-        myTableView.layer.cornerRadius = 5
-        myTableView.layer.masksToBounds = true
     }
 }
 

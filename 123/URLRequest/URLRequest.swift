@@ -60,6 +60,7 @@ enum Router: URLRequestConvertible {
         let completeURLString = path
         let urlString = completeURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         let url = URL(string: urlString)
+        print(url)
         var request = URLRequest(url: url!)
         request.httpMethod = method
         do{

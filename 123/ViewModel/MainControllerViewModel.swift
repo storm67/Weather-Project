@@ -24,28 +24,28 @@ final class MainControllerViewModel: NSObject, Alias {
         return dateFormatter
     }()
     
-     func weatherFiveDayRequest(key: Int,completion: @escaping (type)) {
-           
-           let Operator = Init(test: Test(str: nil, key: key, lat: nil, lon: nil))
-           
-           NetworkService.request(router: Operator.getWeather()) { [unowned self] data in
-               let array = data["DailyForecasts"].arrayValue
-               let WeatherModel = array.map { DailyForecast(dictionary: $0) }
-               let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
-                   return Convertible(date: self.format(data: first.date),
-                                      temperature: first.temperature.convertToCelsius(),
-                                      dayIcon: first.dayIcon,
-                                      dayIconPhrase: first.dayIconPhrase,
-                                      nightIconPhrase: first.nightIconPhrase,
-                                      realFeel: first.realFeel,
-                                      wind: first.wind,
-                                      standardDate: second)
-                   
-               }
-               self.weather = weatherX
-               completion(weatherX, weatherX[0])
-           }
-       }
+    func weatherFiveDayRequest(key: Int,completion: @escaping (type)) {
+        
+        let Operator = Init(test: Test(str: nil, key: key, lat: nil, lon: nil))
+        print(key)
+        NetworkService.request(router: Operator.getWeather()) { [unowned self] data in
+            let array = data["DailyForecasts"].arrayValue
+            let WeatherModel = array.map { DailyForecast(dictionary: $0) }
+            let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
+                return Convertible(date: self.format(data: first.date),
+                                   temperature: first.temperature.convertToCelsius(),
+                                   dayIcon: first.dayIcon,
+                                   dayIconPhrase: first.dayIconPhrase,
+                                   nightIconPhrase: first.nightIconPhrase,
+                                   realFeel: first.realFeel,
+                                   wind: first.wind,
+                                   standardDate: second)
+                
+            }
+            self.weather = weatherX
+            completion(weatherX, weatherX[0])
+        }
+    }
     
     
     
@@ -69,29 +69,26 @@ final class MainControllerViewModel: NSObject, Alias {
             dates.append(finish)
         }
     }
-        
-        func newDebug(key: Int?, lat: Double?, lon: Double?, completion: @escaping (type)) {
-            if key != nil {
-                
-                guard let key = key else { return }
-                weatherFiveDayRequest(key: key) { (first, second) in
-                    completion(first,second)
+    
+    func newDebug(key: Int?, lat: Double?, lon: Double?, completion: @escaping (type)) {
+        if key != nil {
+            guard let key = key else { return }
+            weatherFiveDayRequest(key: key) { (first, second) in
+                completion(first,second)
+            }
+        } else {
+            let Operator = Init(test: Test(str: nil, key: nil, lat: lat, lon: lon))
+            self.NetworkService.request(router: Operator.geoLocate()) { [weak self] data in
+                if let key = data["Key"].string {
+                    guard let int = Int(key) else { return }
+                    self?.weatherFiveDayRequest(key: int) { [weak self] item, one in
+                        self?.weather = item
+                        completion(item,one)
+                    }
                 }
-            } else {
-                
-                let Operator = Init(test: Test(str: nil, key: nil, lat: lat, lon: lon))
-                           
-                   self.NetworkService.request(router: Operator.geoLocate()) { [weak self] data in
-                               if let key = data["Key"].string {
-                                guard let int = Int(key) else { return }
-                                   self?.weatherFiveDayRequest(key: int) { [weak self] item, one in
-                                       self?.weather = item
-                                       completion(item,one)
-                                   }
-                               }
-                           }
             }
         }
+    }
     
     init(data: NetworkService) {
         self.NetworkService = data

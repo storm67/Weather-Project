@@ -23,6 +23,12 @@ open class TagView: UIButton {
         }
     }
     
+    @IBInspectable open var buttonTag: Int = 0 {
+        didSet {
+            tag = buttonTag
+        }
+    }
+    
 //     open var titleEdge: UIEdgeInsets? {
 //           didSet {
 //            guard let titleEdge = titleEdge else { return }
@@ -109,15 +115,8 @@ open class TagView: UIButton {
     
     private func reloadStyles() {
         if isHighlighted {
-//            if let highlightedBackgroundColor = highlightedBackgroundColor {
-                // For highlighted, if it's nil, we should not fallback to backgroundColor.
-                // Instead, we keep the current color.
-               // backgroundColor = highlightedBackgroundColor
-            //}
         }
         else if isSelected {
-//            backgroundColor = selectedBackgroundColor ?? tagBackgroundColor
-//            layer.borderColor = selectedBorderColor?.cgColor ?? borderColor?.cgColor
             setTitleColor(selectedTextColor, for: UIControl.State())
         }
         else {
@@ -169,11 +168,12 @@ open class TagView: UIButton {
         setupView()
     }
     
-    public init(title: String, image: UIImage?) {
+    public init(title: String, image: UIImage?, code: Int) {
         super.init(frame: CGRect.zero)
         setTitle(title, for: .normal)
         setImage(image, for: .normal)
         setImage(image, for: .highlighted)
+        tag = code
         setupView()
     }
     

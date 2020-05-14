@@ -83,7 +83,6 @@ extension LocationManager: CLLocationManagerDelegate {
             manager.delegate = nil
             manager.stopUpdatingHeading()
         } else { // Failed to get location
-            handler(Defaults.location,"", nil)
             }
         }
     }
