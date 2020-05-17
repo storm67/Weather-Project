@@ -18,16 +18,7 @@ final class ViewController: UIViewController {
     fileprivate var simpleModel: SimpleModel?
     fileprivate var weather = [Convertible]()
     fileprivate let selectionVM = Selected()
-    public var viewModel: MainControllerViewModel? = MainControllerViewModel(data: NetworkService())
-    
-     lazy var interfaceSegmented: CustomSegmentedControl = {
-               let interfaceSegmented = CustomSegmentedControl()
-               interfaceSegmented.setButtonTitles(buttonTitles: ["OFF","HTTP","AUTO"])
-               interfaceSegmented.selectorViewColor = .orange
-               interfaceSegmented.selectorTextColor = .orange
-               interfaceSegmented.translatesAutoresizingMaskIntoConstraints = false
-               return interfaceSegmented
-       }()
+    public var viewModel = MainControllerViewModel(data: NetworkService())
 
     fileprivate var myTableView: UITableView! = {
         var myTableView = UITableView()
@@ -66,8 +57,9 @@ final class ViewController: UIViewController {
     
     fileprivate func update() {
         guard let model = simpleModel else { return }
-        viewModel?.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one in
-            if model.lat != nil {
+        viewModel.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one in
+            print(model.name)
+            if model.lat == nil {
             self?.view().updateData("\(one.temperature)°","\(one.dayIconPhrase), Ощущается как \(one.realFeel)°", "Current Location")
             } else {
             self?.view().updateData("\(one.temperature)°", "\(one.dayIconPhrase), ощущается как \(one.realFeel)°", model.name)
@@ -94,13 +86,12 @@ final class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let viewModel = viewModel else { return 0 }
         return viewModel.weather.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
-        cell.viewModel = viewModel?.cellViewModel(index: indexPath.row)        
+        cell.viewModel = viewModel.cellViewModel(index: indexPath.row)
         cell.selectionStyle = .none
         return cell
     }

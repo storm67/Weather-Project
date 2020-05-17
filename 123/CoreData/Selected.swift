@@ -11,20 +11,29 @@ import CoreData
 import UIKit
 
 class Selected {
-    var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    func createData(name: String, key: Int?, lat: Double?, lon: Double?) -> Bool {
-        
+    var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var city: [City] = []
+    func createData(name: String, key: Double?, lat: Double?, lon: Double?) -> Bool {
         let entity = NSEntityDescription.entity(forEntityName: "City", in: context)
-        let newUser = NSManagedObject(entity: entity!, insertInto: context)
+        let object = City(context: context)
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = City.fetchRequest()
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        newUser.setValue(name, forKey: "name")
-        newUser.setValue(key, forKey: "cityId")
-        newUser.setValue(lat, forKey: "lat")
-        newUser.setValue(lon, forKey: "lon")
+        object.setValue(name, forKey: "name")
+        object.setValue(key, forKey: "cityId")
+        object.setValue(lat, forKey: "lat")
+        object.setValue(lon, forKey: "lon")
         do {
+            ///try context.execute(deleteRequest)
+            let set = try context.fetch(fetchRequest)
+            city.append(object)
+            print(city)
+            let count = try context.count(for: fetchRequest)
+            object.setValue(count, forKey: "position")
             try context.save()
+            for i in 0..<set.count {
+             print(i)
+            }
         } catch {
             print("Failed saving")
         }
@@ -33,24 +42,39 @@ class Selected {
     func fetchData(completion:@escaping ([SimpleModel]) -> Void) {
         
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "City")
-        //request.predicate = NSPredicate(format: "age = %@", "12")
         request.returnsObjectsAsFaults = false
-        
+        let sortDescriptor = NSSortDescriptor(key: "position", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+        let result = try? context.fetch(request) as! [City]
+
         do {
-            let result = try context.fetch(request)
+            city = result!
             var item = [SimpleModel]()
-            for data in result as! [NSManagedObject] {
-                item.append(SimpleModel(name: data.value(forKey: "name") as! String, key: data.value(forKey: "cityId") as? Int, lat: data.value(forKey: "lat") as? Double, lon: data.value(forKey: "lon") as? Double))
+            for data in city {
+                item.append(SimpleModel(name: data.name!, key: Int(data.cityId), lat: data.lat, lon: data.lon, position: Int(data.position)))
             }
             completion(item)
             
         } catch {
-            
             print("Failed")
         }
     }
+    func resetable(completion:@escaping () -> Void) {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "City")
+        let sortDescriptor = NSSortDescriptor(key: "position", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+        do {
+            city = try context.fetch(request) as! [City]
+            print("Data fetched, no issues")
+            completion()
+        } catch {
+            print("Unable to fetch data: ", error.localizedDescription)
+            completion()
+        }
+    }
+    func cellViewModel(index: Int) -> City? {
+        guard index < city.count else { return nil }
+        return city[index]
+    }
 }
-
-
-
 

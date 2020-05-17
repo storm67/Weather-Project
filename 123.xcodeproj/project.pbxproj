@@ -66,7 +66,6 @@
 		31324A94240EF8BC0077C339 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		31324AAF240F0B500077C339 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		31324AB4240F133A0077C339 /* DataSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSender.swift; sourceTree = "<group>"; };
-		31324AB8240F14A00077C339 /* FinishWeather.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FinishWeather.xcdatamodel; sourceTree = "<group>"; };
 		31324AB9240F14C90077C339 /* CitySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitySelector.swift; sourceTree = "<group>"; };
 		3132946D245CA6FD00B4DC85 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		31339B1E241BCB3D000D7A88 /* MainControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainControllerViewModel.swift; sourceTree = "<group>"; };
@@ -144,7 +143,6 @@
 				31324A86240EF3B10077C339 /* Service */,
 				31324A84240EF3A40077C339 /* ViewModel */,
 				31324A7D240EF3970077C339 /* Info.plist */,
-				31324AB6240F14A00077C339 /* FinishWeather */,
 			);
 			path = 123;
 			sourceTree = "<group>";
@@ -230,14 +228,6 @@
 				31324AB4240F133A0077C339 /* DataSender.swift */,
 			);
 			path = Protocols;
-			sourceTree = "<group>";
-		};
-		31324AB6240F14A00077C339 /* FinishWeather */ = {
-			isa = PBXGroup;
-			children = (
-				31324AB7240F14A00077C339 /* FinishWeather.xcdatamodeld */,
-			);
-			path = FinishWeather;
 			sourceTree = "<group>";
 		};
 		313B510B2469E4F70059161C /* Cells */ = {
@@ -609,16 +599,6 @@
 			);
 			currentVersion = 31324A76240EF3960077C339 /* PizdecProject.xcdatamodel */;
 			path = PizdecProject.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-		31324AB7240F14A00077C339 /* FinishWeather.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				31324AB8240F14A00077C339 /* FinishWeather.xcdatamodel */,
-			);
-			currentVersion = 31324AB8240F14A00077C339 /* FinishWeather.xcdatamodel */;
-			path = FinishWeather.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

@@ -13,7 +13,7 @@ final class CustomView: UIView {
     
     var segmentedControl: CustomSegmentedControl = {
         let interfaceSegmented = CustomSegmentedControl()
-        interfaceSegmented.setButtonTitles(buttonTitles: ["12 hours","5 days"])
+        interfaceSegmented.setButtonTitles(buttonTitles: ["12 часов","5 дней"])
         interfaceSegmented.selectorViewColor = .white
         interfaceSegmented.selectorTextColor = .white
         interfaceSegmented.translatesAutoresizingMaskIntoConstraints = false
@@ -127,7 +127,6 @@ final class CustomView: UIView {
         let constraint = cityLabel.frame.height
         cityLabel.bottomAnchor.constraint(lessThanOrEqualTo: tempLabel.safeAreaLayoutGuide.bottomAnchor, constant: constraint).isActive = true
         cityLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 5).isActive = true
-        cityLabel.trailingAnchor.constraint(lessThanOrEqualTo: headerView.trailingAnchor, constant: -10).isActive = true
         segmentedControl.centerYAnchor.constraint(equalTo: headerView.centerYAnchor, constant: 28).isActive = true
         segmentedControl.centerXAnchor.constraint(equalTo: headerView.centerXAnchor, constant: 89).isActive = true
         imageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true

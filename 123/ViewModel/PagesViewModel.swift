@@ -10,16 +10,14 @@ import Foundation
 import UIKit
 
 class PagesViewModel: UIViewController {
-    let pageMainView = PageViewController()
     
-    var pages: [UIViewController] {
-        get {
-            return pageMainView.pages
-        }
-        set {
-            pageMainView.pages = newValue
-        }
+    
+    var pages = [City]()
+    
+    
+    func cellViewModel(index: Int) -> City? {
+        guard index < pages.count else { return nil }
+        return pages[index]
     }
-    
-    
 }
+

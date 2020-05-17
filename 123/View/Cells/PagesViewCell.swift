@@ -9,6 +9,11 @@
 import Foundation
 import UIKit
 
-class PagesControllerViewModel {
-    
+class PagesViewCell: UITableViewCell {
+    var viewModel: City! {
+        didSet {
+            guard let viewModel = viewModel else { return }
+            textLabel?.text = viewModel.name
+        }
+    }
 }

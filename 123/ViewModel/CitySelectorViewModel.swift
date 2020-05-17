@@ -23,7 +23,7 @@ final class CitySelectorViewModel {
         weatherManager.request(router: Operator.getCities()) { [weak self] data in
             let converted = JSON(data).arrayValue
             let cvm = converted.map { CityModel(mod: $0) }
-            let vvm = cvm.compactMap { CellViewModel(reg: $0) }
+            let vvm = cvm.map { CellViewModel(reg: $0) }
             self?.searchElements = vvm
             completion()
         }
@@ -33,6 +33,7 @@ final class CitySelectorViewModel {
         guard index < searchElements.count else { return nil }
         return searchElements[index]
     }
+    
     init(manager: NetworkService) {
         self.weatherManager = manager
     }

@@ -11,7 +11,11 @@ import UIKit
 
 class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
     
-    var currentPage = 0
+    var currentPage: Int {
+        get {
+            pageControl.currentPage
+        }
+    }
     let menu: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "menu"), for: .normal)
@@ -80,7 +84,8 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
     func setUp() {
         selected.fetchData { [weak self] (md) in
             for item in md {
-                self?.pages.append(ViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon)))
+                print(item)
+                self?.pages.append(ViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon, position: item.position)))
             }
         }
     }
@@ -103,6 +108,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
     }
     
     @objc fileprivate func buttonTapAction() {
+        let vc = storyboard?.instantiateViewController(identifier: "PagesViewController")
         self.navigationController?.pushViewController(PagesViewController(), animated: true)
     }
     
@@ -128,8 +134,6 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
         if let viewControllers = pageViewController.viewControllers {
             if let viewControllerIndex = self.pages.firstIndex(of: viewControllers[0]) {
                 self.pageControl.currentPage = viewControllerIndex
-                self.currentPage = pageControl.currentPage
-
             }
         }
     }
