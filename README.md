@@ -3,8 +3,11 @@
 App In development progress
 
 -Application uses pagecontrol as pages
--The application uses pagecontrol as pages, you can choose one, two, or five, or as many cities as you want
+
+-you can choose one, two, or five, or as many cities as you want
+
 -You can move as well as delete cities. They will always be stored in memory even if you reload the application
+
 -The application allows you to select a city from the "top list", find any city from the search, or simply determine the location
 
 ~~~~
