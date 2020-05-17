@@ -23,3 +23,4 @@ future changes:
 CoreAnimation will be added i think
 Using linear Charts
 CATransition
+Side menu
