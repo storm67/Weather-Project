@@ -18,3 +18,7 @@ Alamofire + SwiftyJSON works as a network layer
 Api AccuWeather was selected to search for weather information
 80% of the layout is done in code
 The application uses a custom control segment, a library that creates a view from the buttons, and will use custom page control (in the future)
+~~~
+future changes
+CoreAnimation will be added i think
+Using Charts
