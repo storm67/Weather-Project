@@ -21,4 +21,4 @@ The application uses a custom control segment, a library that creates a view fro
 ~~~
 future changes
 CoreAnimation will be added i think
-Using Charts
+Using linear Charts
