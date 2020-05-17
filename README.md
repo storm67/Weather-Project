@@ -22,3 +22,4 @@ The application uses a custom segment control, a library that creates a view fro
 future changes:
 CoreAnimation will be added i think
 Using linear Charts
+CATransition
