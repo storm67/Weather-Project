@@ -72,6 +72,19 @@ class Selected {
             completion()
         }
     }
+    
+    func deleteData(indexPath: IndexPath) {
+        context.delete(city[indexPath.row])
+        do {
+            try context.save()
+            print("Data Deleted")
+            
+        } catch {
+            print("Failed to delete data: ", error.localizedDescription)
+            
+        }
+    }
+    
     func cellViewModel(index: Int) -> City? {
         guard index < city.count else { return nil }
         return city[index]

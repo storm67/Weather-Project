@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class PagesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -125,6 +126,18 @@ class PagesViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.tableView.reloadData()
         }
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    if editingStyle == .delete {
+    selected.deleteData(indexPath: indexPath)
+    selected.city.remove(at: indexPath.row)
+    tableView.deleteRows(at: [indexPath], with: .fade)
+    }
+        do {
+           try selected.context.save()
+        } catch {
+            print(error)
+        }
 }
-
+}
 
