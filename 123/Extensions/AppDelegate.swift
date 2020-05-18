@@ -18,11 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // MARK: UISceneSession Lifecycle
         // Override point for customization after application launch.
-        let rootViewController = window?.rootViewController as? ViewController
-
-      let repository = NetworkService()
-      let mainViewModel = MainControllerViewModel(data: repository)
-      rootViewController?.viewModel = mainViewModel
+//        let rootViewController = window?.rootViewController as? MainViewController
+//
+//      let repository = NetworkService()
+//      let mainViewModel = MainControllerViewModel(data: repository)
+//      rootViewController?.viewModel = mainViewModel
       return true
     }
     

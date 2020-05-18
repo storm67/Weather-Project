@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class BackgroundView: NSObject {
+final class BackgroundView: NSObject {
     
     func switchImage(_ image: Int) -> UIImage {
         switch image {

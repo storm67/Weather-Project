@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Convertible {
+final class Convertible {
     var date: String
     var temperature: Int
     var dayIcon: Int

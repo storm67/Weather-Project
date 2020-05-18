@@ -8,17 +8,16 @@
 
 import UIKit
 
-final class ViewController: UIViewController {
+final class MainViewController: UIViewController {
     
-    fileprivate func view() -> CustomView {
-        return view as! CustomView
+    fileprivate func view() -> MainControllerView {
+        return view as! MainControllerView
     }
     
     fileprivate let back = BackgroundView()
     fileprivate var simpleModel: SimpleModel?
     fileprivate var weather = [Convertible]()
-    fileprivate let selectionVM = Selected()
-    public var viewModel = MainControllerViewModel(data: NetworkService())
+    fileprivate var viewModel = MainControllerViewModel(data: NetworkService())
 
     fileprivate var myTableView: UITableView! = {
         var myTableView = UITableView()
@@ -36,7 +35,7 @@ final class ViewController: UIViewController {
     }()
     
     override func loadView() {
-        view = CustomView()
+        view = MainControllerView()
     }
     
     override func viewDidLoad() {
@@ -51,14 +50,13 @@ final class ViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        self.navigationController?.isNavigationBarHidden = true
-        edgesForExtendedLayout = []
-    }
+           self.navigationController?.isNavigationBarHidden = true
+           edgesForExtendedLayout = []
+       }
     
     fileprivate func update() {
         guard let model = simpleModel else { return }
         viewModel.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one in
-            print(model.name)
             if model.lat == nil {
             self?.view().updateData("\(one.temperature)°","\(one.dayIconPhrase), Ощущается как \(one.realFeel)°", "Current Location")
             } else {
@@ -83,7 +81,7 @@ final class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.weather.count

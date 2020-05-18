@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CellViewModel {
+final class CellViewModel {
 let name: String
 let key: Int
 let country: String

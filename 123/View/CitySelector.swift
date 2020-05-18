@@ -18,7 +18,7 @@ final class CitySelector: UIViewController, UITableViewDelegate,  UISearchBarDel
     
     fileprivate let searchController = UISearchController(searchResultsController: nil)
     fileprivate var citySelectorVM = CitySelectorViewModel(manager: NetworkService())
-    fileprivate var selectionVM = Selected()
+    fileprivate var selectionVM = CoreDataManager()
     
     let tagListView: TagListView = {
         let view = TagListView()

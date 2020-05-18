@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
+final class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
     
     var currentPage: Int {
         get {
@@ -31,7 +31,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
         return button
     }()
     
-    let selected = Selected()
+    let selected = CoreDataManager()
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -60,6 +60,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        pages = []
         setUp()
         setViewControllers([pages[0]], direction: .forward, animated: true, completion: nil)
         self.dataSource = self
@@ -83,9 +84,11 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
     
     func setUp() {
         selected.fetchData { [weak self] (md) in
-            for item in md {
+            var simple = [SimpleModel]()
+            simple = md
+            for item in simple {
                 print(item)
-                self?.pages.append(ViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon, position: item.position)))
+                self?.pages.append(MainViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon, position: item.position)))
             }
         }
     }

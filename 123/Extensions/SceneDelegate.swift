@@ -13,9 +13,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-       let windowkey = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
-        let height = windowkey?.windowScene?.statusBarManager?.statusBarFrame
-        guard let _ = (scene as? UIWindowScene) else { return }
+    guard let _ = (scene as? UIWindowScene) else { return }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

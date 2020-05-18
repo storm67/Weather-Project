@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-final class CustomView: UIView {
+final class MainControllerView: UIView {
     
     var segmentedControl: CustomSegmentedControl = {
         let interfaceSegmented = CustomSegmentedControl()
@@ -19,6 +19,7 @@ final class CustomView: UIView {
         interfaceSegmented.translatesAutoresizingMaskIntoConstraints = false
         return interfaceSegmented
     }()
+    
     var tempLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false

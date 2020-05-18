@@ -25,7 +25,7 @@ final class MainControllerViewModel: NSObject, Alias {
     }()
     
     func newDebug(key: Int?, lat: Double?, lon: Double?, completion: @escaping (type)) {
-        if key != nil {
+        if key != nil && key != 0 {
             guard let key = key else { return }
             weatherFiveDayRequest(key: key) { (first, second) in
                 completion(first,second)

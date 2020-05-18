@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class Test {
+final class Test {
     let str: String
     let key: Int
     let lat: Double

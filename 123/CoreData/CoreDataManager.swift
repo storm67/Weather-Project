@@ -10,32 +10,28 @@ import Foundation
 import CoreData
 import UIKit
 
-class Selected {
+class CoreDataManager {
     
     var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+     let background = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.newBackgroundContext()
     var city: [City] = []
     func createData(name: String, key: Double?, lat: Double?, lon: Double?) -> Bool {
-        let entity = NSEntityDescription.entity(forEntityName: "City", in: context)
         let object = City(context: context)
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = City.fetchRequest()
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        let count = try? self.context.count(for: fetchRequest)
         object.setValue(name, forKey: "name")
         object.setValue(key, forKey: "cityId")
         object.setValue(lat, forKey: "lat")
         object.setValue(lon, forKey: "lon")
+        object.setValue(count, forKey: "position")
+        background.perform {
         do {
-            ///try context.execute(deleteRequest)
-            let set = try context.fetch(fetchRequest)
-            city.append(object)
-            print(city)
-            let count = try context.count(for: fetchRequest)
-            object.setValue(count, forKey: "position")
-            try context.save()
-            for i in 0..<set.count {
-             print(i)
+            self.city.append(object)
+            try self.context.save()
             }
-        } catch {
+         catch {
             print("Failed saving")
+        }
         }
         return true
     }
@@ -45,14 +41,14 @@ class Selected {
         request.returnsObjectsAsFaults = false
         let sortDescriptor = NSSortDescriptor(key: "position", ascending: true)
         request.sortDescriptors = [sortDescriptor]
-        let result = try? context.fetch(request) as! [City]
-
         do {
-            city = result!
+            let result = try context.fetch(request) as! [City]
+            city = result
             var item = [SimpleModel]()
             for data in city {
-                item.append(SimpleModel(name: data.name!, key: Int(data.cityId), lat: data.lat, lon: data.lon, position: Int(data.position)))
-            }
+                guard let name = data.name else { return }
+                item.append(SimpleModel(name: name, key: Int(data.cityId), lat: data.lat, lon: data.lon, position: Int(data.position))
+           )}
             completion(item)
             
         } catch {

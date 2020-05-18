@@ -10,7 +10,7 @@
 import Foundation
 import CoreLocation
 
-class LocationManager: NSObject {
+final class LocationManager: NSObject {
     
     static let locator = LocationManager()
     var access = false

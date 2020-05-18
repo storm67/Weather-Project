@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class PagesViewModel: UIViewController {
+final class PagesViewModel: UIViewController {
     
     
     var pages = [City]()

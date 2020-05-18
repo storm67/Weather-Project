@@ -13,7 +13,7 @@ protocol CustomSegmentedControlDelegate:class {
     func changeToIndex(index:Int)
 }
 
-class CustomSegmentedControl: UIView {
+final class CustomSegmentedControl: UIView {
     private var buttonTitles:[String]!
     private var buttons: [UIButton]!
     private var selectorView: UIView!
@@ -45,7 +45,6 @@ class CustomSegmentedControl: UIView {
     func setIndex(index:Int) {
         buttons.forEach({ $0.setTitleColor(textColor, for: .normal) })
         let button = buttons[index]
-        let seletedIndex = index
         button.setTitleColor(selectorTextColor, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 35.0)
         let selectorPosition = frame.width/CGFloat(buttonTitles.count) * CGFloat(index)

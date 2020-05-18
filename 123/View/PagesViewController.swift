@@ -10,96 +10,58 @@ import Foundation
 import UIKit
 import CoreData
 
-class PagesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+protocol GetEdit: class {
+    func throwsEdit()
+    func getBack()
+    func getNewCity()
+}
+
+final class PagesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GetEdit {
+    
+    fileprivate func view() -> PagesMainView {
+        return view as! PagesMainView
+    }
     
     fileprivate let viewModel = PagesViewModel()
-    fileprivate let selected = Selected()
-    fileprivate var simpleModel: [City] = []
+    fileprivate let selected = CoreDataManager()
     
-    
-    let tableView: UITableView = {
-        var myTableView = UITableView()
-        myTableView.separatorColor = .black
-        myTableView.rowHeight = 52
-        myTableView.tableFooterView = UIView(frame: .zero)
-        myTableView.rowHeight = 57.0
-        myTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        myTableView.translatesAutoresizingMaskIntoConstraints = false
-        return myTableView
-    }()
-    
-    let editingButton: UIButton = {
-        let button = UIButton()
-        button.setTitleColor(.black, for: .normal)
-        button.setTitle("Edit", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .black
-        button.addTarget(self, action: #selector(editNow), for: .touchUpInside)
-        return button
-    }()
-    
-    
-    let addButton: UIButton = {
-        let button = UIButton()
-        button.setTitleColor(.white, for: .normal)
-        button.setTitle("+", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .black
-        button.addTarget(self, action: #selector(getNewCity), for: .touchUpInside)
-        return button
-    }()
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        addButton.clipsToBounds = true
-        addButton.layer.cornerRadius = addButton.frame.height/2
+    override func loadView() {
+        view = PagesMainView()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(PagesViewCell.self, forCellReuseIdentifier: "cell")
-        view.backgroundColor = .white
-        view.addSubview(tableView)
-        view.addSubview(addButton)
-        view.addSubview(editingButton)
         addPrimitiveData()
-        layout()
+        view().delegate = self
+        view().tableView.dataSource = self
+        view().tableView.delegate = self
     }
     
-    func layout() {
-        tableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        tableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        addButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 330).isActive = true
-        addButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 620).isActive = true
-        addButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0).isActive = true
-        addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
-        tableView.dataSource = self
-        tableView.delegate = self
-    }
-    
-    @objc func getNewCity() {
+    func getNewCity() {
         self.navigationController?.popToRootViewController(animated: true)
-    }
-    
-    @objc func editNow() {
-        tableView.isEditing = !tableView.isEditing
-        switch tableView.isEditing {
-        case true:
-            editingButton.setTitle("Done", for: .normal)
-        case false:
-            editingButton.setTitle("Edit", for: .normal)
-        }
     }
     
     func addPrimitiveData() {
         selected.resetable {
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self.view().tableView.reloadData()
             }
         }
     }
+    
+    func throwsEdit() {
+        view().tableView.isEditing = !view().tableView.isEditing
+        switch view().tableView.isEditing {
+        case true:
+            view().editingButton.setTitle("Done", for: .normal)
+        case false:
+            view().editingButton.setTitle("Edit", for: .normal)
+        }
+    }
+    
+    func getBack() {
+        navigationController?.popViewController(animated: true)
+     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return selected.city.count
@@ -122,22 +84,14 @@ class PagesViewController: UIViewController, UITableViewDelegate, UITableViewDat
         for (index, name) in selected.city.enumerated() {
             name.position = Double(index)
         }
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-        }
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-    if editingStyle == .delete {
-    selected.deleteData(indexPath: indexPath)
-    selected.city.remove(at: indexPath.row)
-    tableView.deleteRows(at: [indexPath], with: .fade)
-    }
-        do {
-           try selected.context.save()
-        } catch {
-            print(error)
+        if editingStyle == .delete {
+            selected.deleteData(indexPath: indexPath)
+            selected.city.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
         }
-}
+    }
 }
 
