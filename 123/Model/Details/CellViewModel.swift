@@ -14,11 +14,9 @@ let key: Int
 let country: String
     
     init(reg: CityModel) {
-        
         self.name = reg.cityName
         self.country = reg.country
         self.key = reg.key
-        
     }
 }
 

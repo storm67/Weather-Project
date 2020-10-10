@@ -7,4 +7,7 @@ target '123' do
 pod 'Alamofire', '~> 5.0'
 pod 'SwiftyJSON', '~> 4.0'
 pod 'TagListView', '~> 1.0'
+pod 'RxSwift', '~> 5'
+pod 'RxCocoa', '~> 5'
+pod 'Swinject'
 end

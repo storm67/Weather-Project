@@ -7,11 +7,12 @@
 //
 
 import Foundation
-import UIKit
+import RxSwift
+import RxCocoa
 import SwiftyJSON
 
 final class CitySelectorViewModel {
-    private var weatherManager: NetworkService
+    private var weatherManager: NetworkManager
     private(set) var searchElements = [CellViewModel]()
     static let cellID = "cell"
     
@@ -29,12 +30,27 @@ final class CitySelectorViewModel {
         }
     }
     
+    func getWeatherInfo(by searchText: String) -> Observable<CellViewModel> {
+           let request = Init(test: Test(str: searchText, key: nil, lat: nil, lon: nil))
+           guard let url = URL.groupWeatherById else { return Observable.error }
+           let payLoad: [String: String] = ["id": IDs,
+                                            "units": temperatureManager.getTemperatureUnit().rawValue,
+                                            "APPID": ApiKey.appId]
+           let resource = Resource<CityWeatherModel>(url: url, parameter: payLoad)
+           return networkingManager.load(resource: resource)
+               .map { article -> CityWeatherModel in
+                   article
+               }
+               .asObservable()
+               .retry(2)
+       }
+    
     func cellViewModel(index: Int) -> CellViewModel? {
         guard index < searchElements.count else { return nil }
         return searchElements[index]
     }
     
-    init(manager: NetworkService) {
+    init(manager: NetworkManager) {
         self.weatherManager = manager
     }
 }
