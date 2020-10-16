@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Swinject
 
 final class MainViewController: UIViewController {
     
@@ -14,10 +15,9 @@ final class MainViewController: UIViewController {
         return view as! MainControllerView
     }
     
-    fileprivate let back = BackgroundView()
     fileprivate var simpleModel: SimpleModel?
     fileprivate var weather = [Convertible]()
-    fileprivate var viewModel = MainControllerViewModel(data: NetworkService())
+    public var viewModel: ViewModelProtocol!
 
     fileprivate var myTableView: UITableView! = {
         var myTableView = UITableView()
@@ -44,9 +44,10 @@ final class MainViewController: UIViewController {
         update()
     }
     
-    convenience init(model: SimpleModel) {
+    convenience init(model: SimpleModel, viewModel: ViewModelProtocol) {
         self.init()
         self.simpleModel = model
+        self.viewModel = viewModel
     }
     
     override func viewDidLayoutSubviews() {

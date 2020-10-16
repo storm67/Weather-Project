@@ -12,24 +12,36 @@ import SwiftyJSON
 protocol DataSender {
     func set(completion: @escaping ([CellViewModel]) -> Void)
 }
-protocol DataSend {
+
+protocol NetworkingProtocol {
     func request(router: Router, data: @escaping (JSON) -> Void)
 }
+
 protocol Operator {
     func getCities() -> Router
     func getWeather() -> Router
     func geoLocate() -> Router
 }
+
 protocol MyViewDelegate: class {
     func didTapButton()
 }
+
 protocol getLocation: class {
     func getLocation()
 }
+
 protocol SelectRow: class {
     func sendModel(_ model: CellViewModel)
 }
-protocol Alias {
+
+protocol ViewModelProtocol {
     typealias type = ([Convertible], Convertible) -> Void
+    func newDebug(key: Int?, lat: Double?, lon: Double?, completion: @escaping (type))
+    func returnit()
+    func cellViewModel(index: Int) -> Convertible?
+    func weatherFiveDayRequest(key: Int,completion: @escaping (type))
+    init(data: NetworkingProtocol)
+    var weather: [Convertible] { get set }
 }
 

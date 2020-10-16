@@ -12,13 +12,12 @@ import Foundation
 import UIKit
 import TagListView
 
-final class CitySelector: UIViewController, UITableViewDelegate,  UISearchBarDelegate , UISearchResultsUpdating, TagListViewDelegate {
+final class CitySelector: UIViewController, UITableViewDelegate,  UISearchBarDelegate, UISearchResultsUpdating, TagListViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
     fileprivate let searchController = UISearchController(searchResultsController: nil)
-    fileprivate var citySelectorVM = CitySelectorViewModel(manager: NetworkService())
-    fileprivate var selectionVM = CoreDataManager()
+    var viewModel: CitySelectorProtocol! 
     
     let tagListView: TagListView = {
         let view = TagListView()
@@ -36,7 +35,7 @@ final class CitySelector: UIViewController, UITableViewDelegate,  UISearchBarDel
         button.font = UIFont.init(name: "Arial", size: 16)
         return button
     }()
- 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSearchController()
@@ -44,43 +43,48 @@ final class CitySelector: UIViewController, UITableViewDelegate,  UISearchBarDel
         layout()
     }
     
+   required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
 }
 
 extension CitySelector: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return citySelectorVM.searchElements.count
+        return viewModel.searchElements.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: CitySelectorViewModel.cellID) as? CellView {
-            cell.viewModel = self.citySelectorVM.cellViewModel(index: indexPath.row)
+            cell.viewModel = self.viewModel.cellViewModel(index: indexPath.row)
             return cell
         }
         return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selected = citySelectorVM.searchElements[indexPath.row]
+        let selected = viewModel.searchElements[indexPath.row]
         searchController.searchBar.text = nil
-        if selectionVM.createData(name: selected.name, key: Double(selected.key), lat: nil, lon: nil) {
-        navigationController?.pushViewController(PageViewController(), animated: true)
+        if viewModel.createData(name: selected.name) {
+        let view = storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
+        navigationController?.pushViewController(view, animated: true)
         }
     }
     
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text else { return }
         checkActive()
-        citySelectorVM.checkCity(by: text, completion: {
+        viewModel.checkCity(by: text, completion: {
             self.reload()
         })
     }
     
     func tagPressed(_ title: String, _ number: Int, tagView: TagView, sender: TagListView) {
         guard number != 0 else { return }
-        if selectionVM.createData(name: title, key: Double(number), lat: nil, lon: nil) {
-        navigationController?.pushViewController(PageViewController(), animated: true)
+        if viewModel.createDataFromTag(name: title, key: number) {
+        let view = storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
+        navigationController?.pushViewController(view, animated: true)
         }
         tagView.isSelected = !tagView.isSelected
     }
@@ -111,7 +115,7 @@ extension CitySelector: UITableViewDataSource {
         tagListView.imageEdge = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
         tagListView.delegate = self
         tagListView.addTagWithImage("  Location  ", image).onTap = { [weak self] _ in
-            self?.getLocation()
+        self?.getLocation()
         }
         tagListView.paddingX = 4
         tagListView.imagePaddingX = 0
@@ -138,18 +142,17 @@ extension CitySelector: UITableViewDataSource {
     }
     
     func getLocation() {
-        LocationManager.locator.requestLocation()
-        LocationManager.locator.getLocation { [weak self] (location, name, error) in
+        viewModel.getLocation()
+        viewModel.setLocation { [weak self] (location, name, error) in
         guard location != nil else { return }
-        _ = self?.selectionVM.createData(name: name, key: nil, lat: location?.latitude, lon: location?.longitude)
-        LocationManager.locator.data = true
-        guard LocationManager.locator.access else { return }
-        guard LocationManager.locator.data else { return }
-        print(LocationManager.locator.data)
-        self?.navigationController?.pushViewController(PageViewController(), animated: true)
+        _ = self?.viewModel.createFromLocation(name: name, lat: location?.latitude, lon: location?.longitude)
+        guard let access = self?.viewModel.checkAccess(access: true) else { return }
+        if access {
+            let view = self?.storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
+            self?.navigationController?.pushViewController(view, animated: true)
         }
-        
     }
+}
     
     func reload() {
         DispatchQueue.main.async {
@@ -157,7 +160,6 @@ extension CitySelector: UITableViewDataSource {
         }
     }
 }
-
 
 
 

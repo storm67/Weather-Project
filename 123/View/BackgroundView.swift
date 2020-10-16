@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-final class BackgroundView: NSObject {
+final class BackgroundView: NSObject, BackViewProtocol {
     
     func switchImage(_ image: Int) -> UIImage {
         switch image {
@@ -37,4 +37,8 @@ final class BackgroundView: NSObject {
         }
         return UIImage()
     }
+}
+
+protocol BackViewProtocol {
+    func switchImage(_ image: Int) -> UIImage
 }

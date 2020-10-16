@@ -7,13 +7,15 @@
 //
 
 import Foundation
-import RxSwift
-import RxCocoa
+import UIKit
 import SwiftyJSON
+import CoreLocation
 
-final class CitySelectorViewModel {
-    private var weatherManager: NetworkManager
+final class CitySelectorViewModel: CitySelectorProtocol {
+    fileprivate var coreDataManager: CoreDataProtocol
+    fileprivate var locationManager: LocationManagerProtocol
     private(set) var searchElements = [CellViewModel]()
+    private(set) var weatherManager: NetworkingProtocol
     static let cellID = "cell"
     
     func checkCity(by searchText: String, completion: @escaping () -> Void) {
@@ -30,27 +32,60 @@ final class CitySelectorViewModel {
         }
     }
     
-    func getWeatherInfo(by searchText: String) -> Observable<CellViewModel> {
-           let request = Init(test: Test(str: searchText, key: nil, lat: nil, lon: nil))
-           guard let url = URL.groupWeatherById else { return Observable.error }
-           let payLoad: [String: String] = ["id": IDs,
-                                            "units": temperatureManager.getTemperatureUnit().rawValue,
-                                            "APPID": ApiKey.appId]
-           let resource = Resource<CityWeatherModel>(url: url, parameter: payLoad)
-           return networkingManager.load(resource: resource)
-               .map { article -> CityWeatherModel in
-                   article
-               }
-               .asObservable()
-               .retry(2)
-       }
-    
-    func cellViewModel(index: Int) -> CellViewModel? {
-        guard index < searchElements.count else { return nil }
-        return searchElements[index]
+    func createData(name: String) -> Bool {
+        return coreDataManager.createData(name: name, key: nil, lat: nil, lon: nil)
     }
     
-    init(manager: NetworkManager) {
-        self.weatherManager = manager
+    func createDataFromTag(name: String, key: Int) -> Bool {
+        return coreDataManager.createData(name: name, key: Double(key), lat: nil, lon: nil)
     }
+    
+    func checkAccess(access: Bool) -> Bool {
+        if access {
+            self.locationManager.data = true
+            guard self.locationManager.access else { return false }
+            guard self.locationManager.data else { return false }
+            return true
+        }
+        return false
+    }
+    
+        func cellViewModel(index: Int) -> CellViewModel? {
+            guard index < searchElements.count else { return nil }
+            return searchElements[index]
+        }
+        
+        func getLocation() {
+            locationManager.requestLocation()
+        }
+        
+        func setLocation(onCompletion:@escaping ( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?)->()) {
+            locationManager.getLocation { (coord, name, err) in
+                onCompletion(coord,name,err)
+            }
+        }
+        
+        func createFromLocation(name: String, lat: Double?, lon: Double?) {
+            _ = coreDataManager.createData(name: name, key: nil, lat: lat, lon: lon)
+        }
+        
+        init(manager: NetworkingProtocol,
+             location: LocationManagerProtocol,
+             coreData: CoreDataProtocol) {
+            self.weatherManager = manager
+            self.coreDataManager = coreData
+            self.locationManager = location
+        }
+    }
+    protocol CitySelectorProtocol {
+        func checkCity(by searchText: String, completion: @escaping () -> Void)
+        func cellViewModel(index: Int) -> CellViewModel?
+        func createData(name: String) -> Bool
+        func getLocation()
+        func createDataFromTag(name: String, key: Int) -> Bool
+        func setLocation(onCompletion:@escaping ( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?)->())
+        func createFromLocation(name: String, lat: Double?, lon: Double?)
+        func checkAccess(access: Bool) -> Bool
+        init(manager: NetworkingProtocol,location: LocationManagerProtocol,coreData: CoreDataProtocol)
+        var searchElements: [CellViewModel] { get }
 }

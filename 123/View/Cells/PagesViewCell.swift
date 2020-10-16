@@ -14,6 +14,7 @@ class PagesViewCell: UITableViewCell {
         didSet {
             guard let viewModel = viewModel else { return }
             textLabel?.text = viewModel.name
+            print(viewModel.name)
         }
     }
 }

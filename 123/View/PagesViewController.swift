@@ -22,8 +22,7 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
         return view as! PagesMainView
     }
     
-    fileprivate let viewModel = PagesViewModel()
-    fileprivate let selected = CoreDataManager()
+    public var viewModel: PageManagerProtocol!
     
     override func loadView() {
         view = PagesMainView()
@@ -42,7 +41,7 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func addPrimitiveData() {
-        selected.resetable {
+        viewModel.rearrange {
             DispatchQueue.main.async {
                 self.view().tableView.reloadData()
             }
@@ -64,12 +63,12 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
      }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return selected.city.count
+        return viewModel.count()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PagesViewCell
-        cell.viewModel = selected.cellViewModel(index: indexPath.row)
+        cell.viewModel = viewModel.cellViewerModel(indexPath.row)
         return cell
     }
     
@@ -78,18 +77,13 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let item = selected.city[sourceIndexPath.row]
-        selected.city.remove(at: sourceIndexPath.row)
-        selected.city.insert(item, at: destinationIndexPath.row)
-        for (index, name) in selected.city.enumerated() {
-            name.position = Double(index)
-        }
+        let item = viewModel.model()[sourceIndexPath.row]
+        viewModel.refresh(sourceIndexPath, item, destinationIndexPath)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            selected.deleteData(indexPath: indexPath)
-            selected.city.remove(at: indexPath.row)
+            viewModel.delete(indexPath)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }

@@ -9,12 +9,11 @@
 import Foundation
 import SwiftyJSON
 
-final class MainControllerViewModel: NSObject, Alias {
+final class MainControllerViewModel: ViewModelProtocol {
     
-    fileprivate var locationManager: LocationManager?
-    private var NetworkService: NetworkService
+    private var NetworkService: NetworkingProtocol
     var completion: type?
-    private(set) var weather = [Convertible]()
+    var weather = [Convertible]()
     var dates = [String]()
     
     private let dateFormatter: DateFormatter = {
@@ -82,9 +81,8 @@ final class MainControllerViewModel: NSObject, Alias {
         }
     }
     
-    init(data: NetworkService) {
+    init(data: NetworkingProtocol) {
         self.NetworkService = data
-        super.init()
         returnit()
     }
 }

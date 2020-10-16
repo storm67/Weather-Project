@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Swinject
 
 final class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
     
@@ -16,6 +17,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
             pageControl.currentPage
         }
     }
+    
     let menu: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "menu"), for: .normal)
@@ -31,7 +33,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         return button
     }()
     
-    let selected = CoreDataManager()
+    var manager: PageViewModelProtocol!
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -83,13 +85,8 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     }
     
     func setUp() {
-        selected.fetchData { [weak self] (md) in
-            var simple = [SimpleModel]()
-            simple = md
-            for item in simple {
-                print(item)
-                self?.pages.append(MainViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon, position: item.position)))
-            }
+        manager.fetchData { [weak self] (md) in
+            self?.pages = md
         }
     }
     
@@ -111,8 +108,8 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     }
     
     @objc fileprivate func buttonTapAction() {
-        let vc = storyboard?.instantiateViewController(identifier: "PagesViewController")
-        self.navigationController?.pushViewController(PagesViewController(), animated: true)
+        let vc = storyboard?.instantiateViewController(identifier: "PagesViewController") as! PagesViewController
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -155,4 +152,3 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         }
     }
 }
-

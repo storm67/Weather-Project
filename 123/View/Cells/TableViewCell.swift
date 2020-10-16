@@ -97,7 +97,7 @@ class CustomCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
    
-    var viewModel: Convertible? {
+    weak var viewModel: Convertible? {
         didSet {
             guard let viewModel = viewModel else { return }
             textLabel?.text = "\(viewModel.date)"

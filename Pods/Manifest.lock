@@ -8,6 +8,8 @@ PODS:
   - RxSwift (5.1.1)
   - SwiftyJSON (4.3.0)
   - Swinject (2.7.1)
+  - SwinjectStoryboard (2.2.0):
+    - Swinject (~> 2.6)
   - TagListView (1.4.0)
 
 DEPENDENCIES:
@@ -16,6 +18,7 @@ DEPENDENCIES:
   - RxSwift (~> 5)
   - SwiftyJSON (~> 4.0)
   - Swinject
+  - SwinjectStoryboard
   - TagListView (~> 1.0)
 
 SPEC REPOS:
@@ -26,6 +29,7 @@ SPEC REPOS:
     - RxSwift
     - SwiftyJSON
     - Swinject
+    - SwinjectStoryboard
     - TagListView
 
 SPEC CHECKSUMS:
@@ -35,8 +39,9 @@ SPEC CHECKSUMS:
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
   Swinject: ddf78b8486dd9b71a667b852cad919ab4484478e
+  SwinjectStoryboard: 32512ef16c2b0ff5b8f823b23539c4a50f6d3383
   TagListView: 987b0bdbb16cd9d9e7c0e2ec32aff37ecba8b173
 
-PODFILE CHECKSUM: 2fc0ce579e96bbb6361954d9b4b1ea585f2b04c5
+PODFILE CHECKSUM: c724be96664241afcbdbc9e8f5c366b6c18701cb
 
 COCOAPODS: 1.9.0

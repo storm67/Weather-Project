@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Convertible {
+final class Convertible {
     var date: String
     var temperature: Int
     var dayIcon: Int
@@ -17,6 +17,16 @@ struct Convertible {
     var realFeel: Int
     var wind: Int
     var standardDate: String
+    init(date: String, temperature: Int, dayIcon: Int, dayIconPhrase: String, nightIconPhrase: String, realFeel: Int, wind: Int, standardDate: String) {
+        self.standardDate = standardDate
+        self.realFeel = realFeel
+        self.wind = wind
+        self.date = date
+        self.temperature = temperature
+        self.dayIcon = dayIcon
+        self.dayIconPhrase = dayIconPhrase
+        self.nightIconPhrase = nightIconPhrase
+    }
 }
 
 
