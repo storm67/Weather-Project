@@ -145,7 +145,7 @@ extension CitySelector: UITableViewDataSource {
         viewModel.getLocation()
         viewModel.setLocation { [weak self] (location, name, error) in
         guard location != nil else { return }
-        _ = self?.viewModel.createFromLocation(name: name, lat: location?.latitude, lon: location?.longitude)
+        self?.viewModel.createFromLocation(name: name, lat: location?.latitude, lon: location?.longitude)
         guard let access = self?.viewModel.checkAccess(access: true) else { return }
         if access {
             let view = self?.storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController

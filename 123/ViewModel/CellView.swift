@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import CoreLocation
+
 final class CellView: UITableViewCell {
     var viewModel: CellViewModel? {
         didSet {

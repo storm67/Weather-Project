@@ -16,6 +16,8 @@ class CoreDataManager: CoreDataProtocol {
     var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let background = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.newBackgroundContext()
     var city: [City] = []
+    
+    @discardableResult
     func createData(name: String, key: Double?, lat: Double?, lon: Double?) -> Bool {
         let object = City(context: context)
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = City.fetchRequest()
@@ -96,15 +98,13 @@ protocol CoreDataProtocol {
     var city: [City] { get set }
 }
 
-protocol PageViewModelProtocol {
-    func fetchData(completion:@escaping ([UIViewController]) -> Void)
-}
-
 class PagerViewModel: PageViewModelProtocol {
     var coreData: CoreDataProtocol
-    init(p: CoreDataProtocol) {
-        self.coreData = p
+    
+    init(cdp: CoreDataProtocol) {
+        self.coreData = cdp
     }
+    
     func fetchData(completion:@escaping ([UIViewController]) -> Void) {
         coreData.fetchData { (md) in
             var controllers = [UIViewController]()
@@ -115,4 +115,8 @@ class PagerViewModel: PageViewModelProtocol {
             completion(controllers)
         }
     }
+}
+
+protocol PageViewModelProtocol {
+    func fetchData(completion:@escaping ([UIViewController]) -> Void)
 }

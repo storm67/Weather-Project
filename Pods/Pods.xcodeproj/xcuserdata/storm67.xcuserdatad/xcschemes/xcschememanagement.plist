@@ -27,6 +27,11 @@
 		<key>RxSwift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>SwiftChart.xcscheme</key>
+		<dict>
+			<key>isShown</key>
 			<true/>
 		</dict>
 		<key>SwiftyJSON.xcscheme</key>
@@ -37,12 +42,12 @@
 		<key>Swinject.xcscheme</key>
 		<dict>
 			<key>isShown</key>
-			<true/>
+			<false/>
 		</dict>
 		<key>SwinjectStoryboard.xcscheme</key>
 		<dict>
 			<key>isShown</key>
-			<true/>
+			<false/>
 		</dict>
 		<key>TagListView.xcscheme</key>
 		<dict>

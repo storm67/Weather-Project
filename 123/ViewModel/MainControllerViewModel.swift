@@ -16,6 +16,11 @@ final class MainControllerViewModel: ViewModelProtocol {
     var weather = [Convertible]()
     var dates = [String]()
     
+    init(data: NetworkingProtocol) {
+        self.NetworkService = data
+        returnit()
+    }
+    
     private let dateFormatter: DateFormatter = {
         var dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "RU-ru")
@@ -36,6 +41,7 @@ final class MainControllerViewModel: ViewModelProtocol {
                     guard let int = Int(key) else { return }
                     self?.weatherFiveDayRequest(key: int) { [weak self] item, one in
                         self?.weather = item
+                        self?.formation(item)
                         completion(item,one)
                     }
                 }
@@ -44,21 +50,30 @@ final class MainControllerViewModel: ViewModelProtocol {
     }
     
     func returnit() {
-           dates.append("Сегодня")
-           dates.append("Завтра")
-           for item in 2...4 {
-               let data = Calendar.current.date(byAdding: .day, value: item, to: Date(), wrappingComponents: .random())!
-               let dateFormatterPrint = DateFormatter()
-               dateFormatterPrint.locale = Locale(identifier: "RU-ru")
-               dateFormatterPrint.dateFormat = "EEEE"
-               let finish = dateFormatterPrint.string(from: data)
-               dates.append(finish)
-           }
-       }
-       
-       func cellViewModel(index: Int) -> Convertible? {
-           return weather[index]
-       }
+        dates.append("Сегодня")
+        dates.append("Завтра")
+        for item in 2...4 {
+            let data = Calendar.current.date(byAdding: .day, value: item, to: Date(), wrappingComponents: .random())!
+            let dateFormatterPrint = DateFormatter()
+            dateFormatterPrint.locale = Locale(identifier: "RU-ru")
+            dateFormatterPrint.dateFormat = "EEEE"
+            let finish = dateFormatterPrint.string(from: data)
+            dates.append(finish)
+        }
+    }
+    
+    func cellViewModel(index: Int) -> Convertible? {
+        return weather[index]
+    }
+    
+    @discardableResult
+    func formation(_ get: [Convertible]) -> [Int] {
+        var int = [Int]()
+        get.forEach { item in
+            int.append(item.temperature)
+        }
+        return int
+    }
     
     func weatherFiveDayRequest(key: Int,completion: @escaping (type)) {
         
@@ -79,11 +94,6 @@ final class MainControllerViewModel: ViewModelProtocol {
             self.weather = weatherX
             completion(weatherX, weatherX[0])
         }
-    }
-    
-    init(data: NetworkingProtocol) {
-        self.NetworkService = data
-        returnit()
     }
 }
 

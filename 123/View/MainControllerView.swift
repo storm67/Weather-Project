@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SwiftChart
 
 final class MainControllerView: UIView {
     
@@ -18,6 +19,27 @@ final class MainControllerView: UIView {
         interfaceSegmented.selectorTextColor = .white
         interfaceSegmented.translatesAutoresizingMaskIntoConstraints = false
         return interfaceSegmented
+    }()
+    
+    var myTableView: UITableView! = {
+        var myTableView = UITableView()
+        myTableView.separatorColor = .white
+        myTableView.tableFooterView = UIView(frame: .zero)
+        myTableView.backgroundColor = .purple
+        myTableView.rowHeight = 57.0
+        myTableView.sectionHeaderHeight = 100
+        myTableView.register(CustomCell.self, forCellReuseIdentifier: "cell")
+        myTableView.translatesAutoresizingMaskIntoConstraints = false
+        myTableView.layer.cornerRadius = 5
+        myTableView.layer.masksToBounds = true
+        myTableView.isScrollEnabled = false
+        return myTableView
+    }()
+    
+    var charts: Chart = {
+        let chart = Chart()
+        chart.translatesAutoresizingMaskIntoConstraints = false
+        return chart
     }()
     
     var tempLabel: UILabel = {
@@ -110,6 +132,8 @@ final class MainControllerView: UIView {
         scrollView.addSubview(imageView)
         addSubview(scrollView)
         addSubview(headerOfMainView)
+        addSubview(charts)
+        scrollView.addSubview(myTableView)
         scrollView.contentSize = CGSize(width:frame.size.width, height: 690)
         headerView.addSubview(segmentedControl)
         headerView.addSubview(cityLabel)
@@ -117,30 +141,37 @@ final class MainControllerView: UIView {
         headerView.addSubview(tempLabel)
         headerOfMainView.addSubview(locationIcon)
         headerOfMainView.addSubview(location)
-        headerOfMainView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-        headerOfMainView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        headerOfMainView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        headerOfMainView.widthAnchor.constraint(equalToConstant: 400).isActive = true
-        scrollView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
-        scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-        scrollView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
-        let constraint = cityLabel.frame.height
-        cityLabel.bottomAnchor.constraint(lessThanOrEqualTo: tempLabel.safeAreaLayoutGuide.bottomAnchor, constant: constraint).isActive = true
-        cityLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 5).isActive = true
-        segmentedControl.centerYAnchor.constraint(equalTo: headerView.centerYAnchor, constant: 28).isActive = true
-        segmentedControl.centerXAnchor.constraint(equalTo: headerView.centerXAnchor, constant: 89).isActive = true
-        imageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        NSLayoutConstraint.activate([
+        charts.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
+        charts.centerYAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerYAnchor),
+        myTableView.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
+        myTableView.topAnchor.constraint(equalTo: imageView.safeAreaLayoutGuide.bottomAnchor, constant: 10),
+        myTableView.widthAnchor.constraint(equalToConstant: 355),
+        myTableView.heightAnchor.constraint(equalToConstant: 400),
+        headerOfMainView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0),
+        headerOfMainView.centerXAnchor.constraint(equalTo: centerXAnchor),
+        headerOfMainView.heightAnchor.constraint(equalToConstant: 40),
+        headerOfMainView.widthAnchor.constraint(equalToConstant: 400),
+        scrollView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
+        scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0),
+        scrollView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
+        scrollView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
+        cityLabel.bottomAnchor.constraint(lessThanOrEqualTo: tempLabel.safeAreaLayoutGuide.bottomAnchor, constant: cityLabel.frame.height),
+        cityLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 5),
+        segmentedControl.centerYAnchor.constraint(equalTo: headerView.centerYAnchor, constant: 28),
+        segmentedControl.centerXAnchor.constraint(equalTo: headerView.centerXAnchor, constant: 89),
+        imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
         imageView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant:
-            45).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 230).isActive = true
-        imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95).isActive = true
-        locationIcon.topAnchor.constraint(equalTo: location.topAnchor, constant: 10).isActive = true
-        locationIcon.leadingAnchor.constraint(equalTo: location.leadingAnchor, constant: -25).isActive = true
-        location.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-        location.centerYAnchor.constraint(equalTo: headerOfMainView.centerYAnchor, constant: -6).isActive = true
-        tempLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 5).isActive = true
-        tempLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 2).isActive = true
+            45),
+        imageView.heightAnchor.constraint(equalToConstant: 230),
+        imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
+        locationIcon.topAnchor.constraint(equalTo: location.topAnchor, constant: 10),
+        locationIcon.leadingAnchor.constraint(equalTo: location.leadingAnchor, constant: -25),
+        location.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+        location.centerYAnchor.constraint(equalTo: headerOfMainView.centerYAnchor, constant: -6),
+        tempLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 5),
+        tempLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 2)
+        ])
     }
     
     func updateData(_ temp: String,_ city: String,_ value: String) {

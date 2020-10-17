@@ -36,11 +36,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     var manager: PageViewModelProtocol!
     
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
-        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: options)
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
     
     var pageControl = UIPageControl()
@@ -137,6 +133,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
             }
         }
     }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if (currentPage == 0 && scrollView.contentOffset.x < scrollView.bounds.size.width) {
             scrollView.contentOffset = CGPoint(x: scrollView.bounds.size.width, y: 0);
@@ -144,6 +141,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
             scrollView.contentOffset = CGPoint(x: scrollView.bounds.size.width, y: 0);
         }
     }
+    
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if (currentPage == 0 && scrollView.contentOffset.x <= scrollView.bounds.size.width) {
             targetContentOffset.pointee = CGPoint(x: scrollView.bounds.size.width, y: 0);

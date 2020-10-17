@@ -12,8 +12,8 @@ import SwiftyJSON
 import CoreLocation
 
 final class CitySelectorViewModel: CitySelectorProtocol {
-    fileprivate var coreDataManager: CoreDataProtocol
-    fileprivate var locationManager: LocationManagerProtocol
+    private(set) var coreDataManager: CoreDataProtocol
+    private(set) var locationManager: LocationManagerProtocol
     private(set) var searchElements = [CellViewModel]()
     private(set) var weatherManager: NetworkingProtocol
     static let cellID = "cell"
@@ -31,7 +31,6 @@ final class CitySelectorViewModel: CitySelectorProtocol {
             completion()
         }
     }
-    
     func createData(name: String) -> Bool {
         return coreDataManager.createData(name: name, key: nil, lat: nil, lon: nil)
     }
@@ -64,9 +63,10 @@ final class CitySelectorViewModel: CitySelectorProtocol {
                 onCompletion(coord,name,err)
             }
         }
-        
+    
+    
         func createFromLocation(name: String, lat: Double?, lon: Double?) {
-            _ = coreDataManager.createData(name: name, key: nil, lat: lat, lon: lon)
+        coreDataManager.createData(name: name, key: nil, lat: lat, lon: lon)
         }
         
         init(manager: NetworkingProtocol,

@@ -8,7 +8,7 @@
 
 import UIKit
 import Swinject
-
+import SwiftChart
 final class MainViewController: UIViewController {
     
     fileprivate func view() -> MainControllerView {
@@ -18,21 +18,6 @@ final class MainViewController: UIViewController {
     fileprivate var simpleModel: SimpleModel?
     fileprivate var weather = [Convertible]()
     public var viewModel: ViewModelProtocol!
-
-    fileprivate var myTableView: UITableView! = {
-        var myTableView = UITableView()
-        myTableView.separatorColor = .white
-        myTableView.tableFooterView = UIView(frame: .zero)
-        myTableView.backgroundColor = .purple
-        myTableView.rowHeight = 57.0
-        myTableView.sectionHeaderHeight = 100
-        myTableView.register(CustomCell.self, forCellReuseIdentifier: "cell")
-        myTableView.translatesAutoresizingMaskIntoConstraints = false
-        myTableView.layer.cornerRadius = 5
-        myTableView.layer.masksToBounds = true
-        myTableView.isScrollEnabled = false
-        return myTableView
-    }()
     
     override func loadView() {
         view = MainControllerView()
@@ -40,8 +25,11 @@ final class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        layout()
+        view().myTableView.dataSource = self
+        view().myTableView.delegate = self
         update()
+        let char = ChartSeries([3])
+        view().charts.add(char)
     }
     
     convenience init(model: SimpleModel, viewModel: ViewModelProtocol) {
@@ -66,19 +54,9 @@ final class MainViewController: UIViewController {
             }
             DispatchQueue.main.async {
                 self?.weather = weather
-                self?.myTableView.reloadData()
+                self?.view().myTableView.reloadData()
             }
         })
-    }
-  
-    public func layout() {
-        view().scrollView.addSubview(myTableView)
-        myTableView.dataSource = self
-        myTableView.delegate = self
-        myTableView.centerXAnchor.constraint(equalTo: view().scrollView.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        myTableView.topAnchor.constraint(equalTo: view().imageView.safeAreaLayoutGuide.bottomAnchor, constant: 10).isActive = true
-        myTableView.widthAnchor.constraint(equalToConstant: 355).isActive = true
-        myTableView.heightAnchor.constraint(equalToConstant: 400).isActive = true
     }
 }
 

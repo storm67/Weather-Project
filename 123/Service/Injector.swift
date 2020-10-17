@@ -28,7 +28,7 @@ class Injector: Assembly {
             MainControllerViewModel(data: r.resolve(NetworkingProtocol.self)!)
         }.inObjectScope(.container)
         container.register(PageViewModelProtocol.self) { r in
-            PagerViewModel(p: r.resolve(CoreDataProtocol.self)!)
+            PagerViewModel(cdp: r.resolve(CoreDataProtocol.self)!)
         }.inObjectScope(.container)
         container.register(CitySelectorProtocol.self) { r in
             CitySelectorViewModel(manager: r.resolve(NetworkingProtocol.self)!, location: r.resolve(LocationManagerProtocol.self)!, coreData: r.resolve(CoreDataProtocol.self)!)
