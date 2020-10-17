@@ -17,15 +17,16 @@ final class MainControllerView: UIView {
         interfaceSegmented.setButtonTitles(buttonTitles: ["12 часов","5 дней"])
         interfaceSegmented.selectorViewColor = .white
         interfaceSegmented.selectorTextColor = .white
+        interfaceSegmented.backgroundColor = UIColor(hexFromString: "#99ceff")
         interfaceSegmented.translatesAutoresizingMaskIntoConstraints = false
         return interfaceSegmented
     }()
     
-    var myTableView: UITableView! = {
+    var tableView: UITableView! = {
         var myTableView = UITableView()
         myTableView.separatorColor = .white
         myTableView.tableFooterView = UIView(frame: .zero)
-        myTableView.backgroundColor = .purple
+        myTableView.backgroundColor = UIColor(hexFromString: "#99ceff")
         myTableView.rowHeight = 57.0
         myTableView.sectionHeaderHeight = 100
         myTableView.register(CustomCell.self, forCellReuseIdentifier: "cell")
@@ -38,6 +39,8 @@ final class MainControllerView: UIView {
     
     var charts: Chart = {
         let chart = Chart()
+        chart.showXLabelsAndGrid = false
+        chart.showYLabelsAndGrid = false
         chart.translatesAutoresizingMaskIntoConstraints = false
         return chart
     }()
@@ -96,7 +99,16 @@ final class MainControllerView: UIView {
     
     let headerView: UIView = {
         let view = UIView()
+        view.backgroundColor = UIColor(hexFromString: "#99ceff")
+        return view
+    }()
+    
+    let secondView: UIView = {
+        let view = UIView()
         view.backgroundColor = .purple
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 5
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -128,26 +140,33 @@ final class MainControllerView: UIView {
     }
     
     func layout() {
+        setGradientToTableView(tableView: tableView, UIColor.blue, UIColor.white)
         addSubview(headerView)
         scrollView.addSubview(imageView)
         addSubview(scrollView)
+        scrollView.addSubview(secondView)
         addSubview(headerOfMainView)
-        addSubview(charts)
-        scrollView.addSubview(myTableView)
-        scrollView.contentSize = CGSize(width:frame.size.width, height: 690)
+        scrollView.addSubview(tableView)
+        scrollView.contentSize = CGSize(width:frame.size.width, height: 1111)
         headerView.addSubview(segmentedControl)
         headerView.addSubview(cityLabel)
-        segmentedControl.backgroundColor = .purple
         headerView.addSubview(tempLabel)
         headerOfMainView.addSubview(locationIcon)
         headerOfMainView.addSubview(location)
+        scrollView.addSubview(charts)
         NSLayoutConstraint.activate([
-        charts.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
-        charts.centerYAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerYAnchor),
-        myTableView.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
-        myTableView.topAnchor.constraint(equalTo: imageView.safeAreaLayoutGuide.bottomAnchor, constant: 10),
-        myTableView.widthAnchor.constraint(equalToConstant: 355),
-        myTableView.heightAnchor.constraint(equalToConstant: 400),
+        secondView.centerXAnchor.constraint(equalTo: charts.safeAreaLayoutGuide.centerXAnchor),
+        secondView.topAnchor.constraint(equalTo: charts.safeAreaLayoutGuide.bottomAnchor),
+        secondView.widthAnchor.constraint(equalToConstant: 355),
+        secondView.heightAnchor.constraint(equalToConstant: 150),
+        charts.centerXAnchor.constraint(equalTo: tableView.safeAreaLayoutGuide.centerXAnchor),
+        charts.topAnchor.constraint(equalTo: tableView.safeAreaLayoutGuide.bottomAnchor),
+        charts.widthAnchor.constraint(equalToConstant: 355),
+        charts.heightAnchor.constraint(equalToConstant: 150),
+        tableView.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
+        tableView.topAnchor.constraint(equalTo: imageView.safeAreaLayoutGuide.bottomAnchor, constant: 10),
+        tableView.widthAnchor.constraint(equalToConstant: 355),
+        tableView.heightAnchor.constraint(equalToConstant: 400),
         headerOfMainView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0),
         headerOfMainView.centerXAnchor.constraint(equalTo: centerXAnchor),
         headerOfMainView.heightAnchor.constraint(equalToConstant: 40),
@@ -178,6 +197,21 @@ final class MainControllerView: UIView {
         tempLabel.text = temp
         cityLabel.text = city
         location.setTitle(value, for: .normal)
+    }
+    
+    func setGradientToTableView(tableView: UITableView, _ topColor:UIColor, _ bottomColor:UIColor) {
+
+        let gradientBackgroundColors = [topColor.cgColor, bottomColor.cgColor]
+        let gradientLocations = [0.0,1.0]
+
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = gradientBackgroundColors
+        gradientLayer.locations = gradientLocations as [NSNumber]
+
+        gradientLayer.frame = tableView.bounds
+        let backgroundView = UIView(frame: tableView.bounds)
+        backgroundView.layer.insertSublayer(gradientLayer, at: 0)
+        tableView.backgroundView = backgroundView
     }
     
 }

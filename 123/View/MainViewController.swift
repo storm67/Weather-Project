@@ -25,11 +25,19 @@ final class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view().myTableView.dataSource = self
-        view().myTableView.delegate = self
+        view().tableView.dataSource = self
+        view().tableView.delegate = self
         update()
-        let char = ChartSeries([3])
+        let char = ChartSeries(data: [(x: 0, y: 0),
+        (x: 3, y: 4),
+        (x: 4, y: 2),
+        (x: 5, y: 2.3),
+        (x: 7, y: 3),
+        (x: 8, y: 2.2),
+        (x: 9, y: 2.5)])
+        char.area = true
         view().charts.add(char)
+ 
     }
     
     convenience init(model: SimpleModel, viewModel: ViewModelProtocol) {
@@ -54,7 +62,7 @@ final class MainViewController: UIViewController {
             }
             DispatchQueue.main.async {
                 self?.weather = weather
-                self?.view().myTableView.reloadData()
+                self?.view().tableView.reloadData()
             }
         })
     }

@@ -27,6 +27,7 @@
 		31324AB0240F0B500077C339 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31324AAF240F0B500077C339 /* Main.storyboard */; };
 		31324AB5240F133A0077C339 /* DataSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31324AB4240F133A0077C339 /* DataSender.swift */; };
 		31324ABA240F14C90077C339 /* CitySelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31324AB9240F14C90077C339 /* CitySelector.swift */; };
+		31327A7C253B5B5D00F3304E /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31327A7B253B5B5D00F3304E /* View.xib */; };
 		3132946E245CA6FD00B4DC85 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3132946D245CA6FD00B4DC85 /* TableViewCell.swift */; };
 		31339B1F241BCB3D000D7A88 /* MainControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31339B1E241BCB3D000D7A88 /* MainControllerViewModel.swift */; };
 		31339B21241C2A74000D7A88 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31339B20241C2A74000D7A88 /* CellView.swift */; };
@@ -69,6 +70,7 @@
 		31324AAF240F0B500077C339 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		31324AB4240F133A0077C339 /* DataSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSender.swift; sourceTree = "<group>"; };
 		31324AB9240F14C90077C339 /* CitySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitySelector.swift; sourceTree = "<group>"; };
+		31327A7B253B5B5D00F3304E /* View.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = View.xib; sourceTree = "<group>"; };
 		3132946D245CA6FD00B4DC85 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		31339B1E241BCB3D000D7A88 /* MainControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainControllerViewModel.swift; sourceTree = "<group>"; };
 		31339B20241C2A74000D7A88 /* CellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
@@ -175,16 +177,13 @@
 		31324A85240EF3AC0077C339 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				31327A79253B310B00F3304E /* UIView Layer */,
 				313B510B2469E4F70059161C /* Cells */,
 				31324A89240EF3C60077C339 /* Storyboard */,
 				31324A70240EF3960077C339 /* MainViewController.swift */,
 				3131C5DE2460749800953D6D /* PageViewController.swift */,
 				31324AB9240F14C90077C339 /* CitySelector.swift */,
-				31382D82246CC46A0051AECC /* CustomSegmentedControl.swift */,
-				313917F32471C2660011EFCD /* PagesMainView.swift */,
 				312C6ACC24618033007AAC03 /* PagesViewController.swift */,
-				3133B83F2434E15A00C4EE93 /* BackgroundView.swift */,
-				31320305245B5B6600E3C054 /* MainControllerView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -234,6 +233,26 @@
 				31324AB4240F133A0077C339 /* DataSender.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		31327A79253B310B00F3304E /* UIView Layer */ = {
+			isa = PBXGroup;
+			children = (
+				31327A7A253B5B4D00F3304E /* Xib */,
+				31382D82246CC46A0051AECC /* CustomSegmentedControl.swift */,
+				3133B83F2434E15A00C4EE93 /* BackgroundView.swift */,
+				31320305245B5B6600E3C054 /* MainControllerView.swift */,
+				313917F32471C2660011EFCD /* PagesMainView.swift */,
+			);
+			path = "UIView Layer";
+			sourceTree = "<group>";
+		};
+		31327A7A253B5B4D00F3304E /* Xib */ = {
+			isa = PBXGroup;
+			children = (
+				31327A7B253B5B5D00F3304E /* View.xib */,
+			);
+			path = Xib;
 			sourceTree = "<group>";
 		};
 		313B510B2469E4F70059161C /* Cells */ = {
@@ -323,6 +342,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31327A7C253B5B5D00F3304E /* View.xib in Resources */,
 				31324AB0240F0B500077C339 /* Main.storyboard in Resources */,
 				31324A95240EF8BC0077C339 /* LaunchScreen.storyboard in Resources */,
 				312C824C24471B1D003E13B7 /* Assets.xcassets in Resources */,
