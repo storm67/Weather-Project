@@ -41,7 +41,7 @@ protocol ViewModelProtocol {
     func returnit()
     func cellViewModel(index: Int) -> Convertible?
     func weatherFiveDayRequest(key: Int,completion: @escaping (type))
-    init(data: NetworkingProtocol)
     var weather: [Convertible] { get set }
+    func conversion()
 }
 

@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-final class DailyForecast {
+final class DailyForecast: Decodable {
     var date: String
     var temperature: Int
     var dayIcon: Int

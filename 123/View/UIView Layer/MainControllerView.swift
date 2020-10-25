@@ -213,6 +213,5 @@ final class MainControllerView: UIView {
         backgroundView.layer.insertSublayer(gradientLayer, at: 0)
         tableView.backgroundView = backgroundView
     }
-    
 }
 

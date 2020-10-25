@@ -25,7 +25,7 @@ class Injector: Assembly {
             PageManagerViewModel(manager: r.resolve(CoreDataProtocol.self)!)
         }.inObjectScope(.container)
         container.register(ViewModelProtocol.self) { r in
-            MainControllerViewModel(data: r.resolve(NetworkingProtocol.self)!)
+            MainControllerViewModel(loader: Routing<WeatherAPI>())
         }.inObjectScope(.container)
         container.register(PageViewModelProtocol.self) { r in
             PagerViewModel(cdp: r.resolve(CoreDataProtocol.self)!)
@@ -48,24 +48,4 @@ class Injector: Assembly {
         }
         SwinjectStoryboard.defaultContainer = container
     }
-}
-//
-extension SwinjectStoryboard {
-    class func setup() {
-      let assembler = Assembler(container: defaultContainer)
-      assembler.apply(assemblies: [Injector()])
-    }
-}
-extension Assembler {
-    static let sharedAssembler: Assembler = {
-        let container = Container()
-
-        let assembler = Assembler(
-            [
-                Injector()
-            ],
-            container: container)
-
-        return assembler
-    }()
 }

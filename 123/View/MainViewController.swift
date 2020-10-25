@@ -9,22 +9,24 @@
 import UIKit
 import Swinject
 import SwiftChart
+
 final class MainViewController: UIViewController {
     
     fileprivate func view() -> MainControllerView {
         return view as! MainControllerView
     }
-    
     fileprivate var simpleModel: SimpleModel?
     fileprivate var weather = [Convertible]()
     public var viewModel: ViewModelProtocol!
-    
     override func loadView() {
         view = MainControllerView()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let ab = cc(re: IntLoader<WeatherAPI>())
+        ab.ab()
+        viewModel.conversion()
         view().tableView.dataSource = self
         view().tableView.delegate = self
         update()

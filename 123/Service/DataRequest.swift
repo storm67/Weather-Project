@@ -14,6 +14,7 @@ final class NetworkService: NetworkingProtocol {
     func request(router: Router, data: @escaping (JSON) -> Void) {
         Alamofire.AF.request(router.urlRequest).validate().responseJSON { (response) in switch response.result {
         case .success:
+            print(router.urlRequest)
             if let value = response.data {
                 let converted = JSON(value)
                 data(converted)

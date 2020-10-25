@@ -9,15 +9,26 @@
 import Foundation
 import SwiftyJSON
 
-final class MainControllerViewModel: ViewModelProtocol {
+class DST {
     
-    private var NetworkService: NetworkingProtocol
+}
+
+final class MainControllerViewModel<P: EndPoint>: ViewModelProtocol, NetworkRouter {
+    func request(_ route: P, completion: @escaping (Data) -> Void) {
+        
+    }
+    
+    func conversion() {
+        
+    }
+    
+    var networkService: Routing<P>
     var completion: type?
     var weather = [Convertible]()
     var dates = [String]()
     
-    init(data: NetworkingProtocol) {
-        self.NetworkService = data
+    init<Loader: NetworkRouter>(loader: Loader) where Loader.P == P {
+        self.networkService = AnyLoaderBox(loader)
         returnit()
     }
     
@@ -36,7 +47,7 @@ final class MainControllerViewModel: ViewModelProtocol {
             }
         } else {
             let Operator = Init(test: Test(str: nil, key: nil, lat: lat, lon: lon))
-            self.NetworkService.request(router: Operator.geoLocate()) { [weak self] data in
+            self.networkService.request(router: Operator.geoLocate()) { [weak self] data in
                 if let key = data["Key"].string {
                     guard let int = Int(key) else { return }
                     self?.weatherFiveDayRequest(key: int) { [weak self] item, one in
@@ -78,11 +89,11 @@ final class MainControllerViewModel: ViewModelProtocol {
     func weatherFiveDayRequest(key: Int,completion: @escaping (type)) {
         
         let Operator = Init(test: Test(str: nil, key: key, lat: nil, lon: nil))
-        NetworkService.request(router: Operator.getWeather()) { [unowned self] data in
+        networkService.request(router: Operator.getWeather()) { [unowned self] data in
             let array = data["DailyForecasts"].arrayValue
             let WeatherModel = array.map { DailyForecast(dictionary: $0) }
             let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
-                return Convertible(date: self.format(data: first.date),
+                Convertible(date: self.format(data: first.date),
                                    temperature: first.temperature.convertToCelsius(),
                                    dayIcon: first.dayIcon,
                                    dayIconPhrase: first.dayIconPhrase,

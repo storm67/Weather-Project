@@ -21,7 +21,7 @@ public struct Constants {
     case requestWeather = "forecasts/v1/daily/1day/"
     case fiveDayRequest = "forecasts/v1/daily/5day/"
     case geoSearch      = "locations/v1/cities/geoposition/search"
-    case apiKeyWeather  = "7DDJhLCRKeCinRl0MbpAL5S45UpKFEL9"
+    case apiKeyWeather  = "W2HObTSzkC1Wwg3mfpFj5DaZhfqFu9Pq"
     }
     
     
