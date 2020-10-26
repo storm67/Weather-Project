@@ -13,22 +13,14 @@ class DST {
     
 }
 
-final class MainControllerViewModel<P: EndPoint>: ViewModelProtocol, NetworkRouter {
-    func request(_ route: P, completion: @escaping (Data) -> Void) {
-        
-    }
+final class MainControllerViewModel: ViewModelProtocol {
     
-    func conversion() {
-        
-    }
-    
-    var networkService: Routing<P>
     var completion: type?
     var weather = [Convertible]()
     var dates = [String]()
-    
-    init<Loader: NetworkRouter>(loader: Loader) where Loader.P == P {
-        self.networkService = AnyLoaderBox(loader)
+    var networkService = Routing<WeatherAPI>()
+    init(networkService: Routing<WeatherAPI>) {
+        self.networkService = networkService
         returnit()
     }
     
@@ -38,7 +30,6 @@ final class MainControllerViewModel<P: EndPoint>: ViewModelProtocol, NetworkRout
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         return dateFormatter
     }()
-    
     func newDebug(key: Int?, lat: Double?, lon: Double?, completion: @escaping (type)) {
         if key != nil && key != 0 {
             guard let key = key else { return }
@@ -46,9 +37,9 @@ final class MainControllerViewModel<P: EndPoint>: ViewModelProtocol, NetworkRout
                 completion(first,second)
             }
         } else {
-            let Operator = Init(test: Test(str: nil, key: nil, lat: lat, lon: lon))
-            self.networkService.request(router: Operator.geoLocate()) { [weak self] data in
-                if let key = data["Key"].string {
+            guard let lat = lat, let lon = lon else { return }
+            self.networkService.request(.getCityByLocation(lat: lat, lon: lon)) { [weak self] data in
+                if let key = JSON(data)["Key"].string {
                     guard let int = Int(key) else { return }
                     self?.weatherFiveDayRequest(key: int) { [weak self] item, one in
                         self?.weather = item
@@ -87,20 +78,18 @@ final class MainControllerViewModel<P: EndPoint>: ViewModelProtocol, NetworkRout
     }
     
     func weatherFiveDayRequest(key: Int,completion: @escaping (type)) {
-        
-        let Operator = Init(test: Test(str: nil, key: key, lat: nil, lon: nil))
-        networkService.request(router: Operator.getWeather()) { [unowned self] data in
-            let array = data["DailyForecasts"].arrayValue
+        networkService.request(.getFiveDayWeather(city: String(key))) { [unowned self] data in
+            let array = JSON(data)["DailyForecasts"].arrayValue
             let WeatherModel = array.map { DailyForecast(dictionary: $0) }
             let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
                 Convertible(date: self.format(data: first.date),
-                                   temperature: first.temperature.convertToCelsius(),
-                                   dayIcon: first.dayIcon,
-                                   dayIconPhrase: first.dayIconPhrase,
-                                   nightIconPhrase: first.nightIconPhrase,
-                                   realFeel: first.realFeel,
-                                   wind: first.wind,
-                                   standardDate: second)
+                            temperature: first.temperature.convertToCelsius(),
+                            dayIcon: first.dayIcon,
+                            dayIconPhrase: first.dayIconPhrase,
+                            nightIconPhrase: first.nightIconPhrase,
+                            realFeel: first.realFeel,
+                            wind: first.wind,
+                            standardDate: second)
             }
             self.weather = weatherX
             completion(weatherX, weatherX[0])

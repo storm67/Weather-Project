@@ -22,7 +22,7 @@ enum WeatherAPI {
     case getMainImage(id:Int, query: String)
     case getCityData(text: String)
     case getFiveDayWeather(city: String)
-    case getCityByLocation(lat: Int, lon: Int)
+    case getCityByLocation(lat: Double, lon: Double)
 }
 
 extension WeatherAPI: EndPoint {
@@ -30,11 +30,11 @@ extension WeatherAPI: EndPoint {
     var environmentBaseURL : String {
         switch self {
         case .getMainImage: return "https://api.unsplash.com/search"
-        case .getFiveDayWeather: return "http://dataservice.accuweather.com/forecasts"
+        case .getFiveDayWeather: return "http://dataservice.accuweather.com"
         case .getCityData:
             return ""
         case .getCityByLocation:
-            return ""
+            return "http://dataservice.accuweather.com"
         }
     }
     
@@ -50,9 +50,9 @@ extension WeatherAPI: EndPoint {
         case .getCityData(let text):
         return text
         case .getFiveDayWeather(let text):
-        return "v1/daily/5day/\(text)"
-        case .getCityByLocation(let geo):
-        return "\(geo.lat)"
+        return "/forecasts/v1/daily/5day/\(text)"
+        case .getCityByLocation:
+        return "locations/v1/cities/geoposition/search"
         }
     }
     
@@ -72,13 +72,12 @@ extension WeatherAPI: EndPoint {
         return .requestParameters(bodyParameters: nil,
                                   bodyEncoding: .urlEncoding,
         urlParameters: ["apikey":NetworkManager.MovieAPIKey,
-        "language":"en"])
-//        case .getCityByLocation(let text):
-//        return .requestParameters(bodyParameters: nil,
-//        bodyEncoding: .urlEncoding,
-//        urlParameters: ["page":page,
-//        "query":query,
-//        "client_id":NetworkManager.MovieAPIKey])
+        "language":"ru"])
+        case .getCityByLocation(let lat, let lon):
+        return .requestParameters(bodyParameters: nil,
+        bodyEncoding: .urlEncoding,
+        urlParameters: ["apikey":NetworkManager.MovieAPIKey,
+                        "q":"\(lat),\(lon)"])
 //        case .getCityData(let text):
 //            return .requestParameters(bodyParameters: nil,
 //            bodyEncoding: .urlEncoding,

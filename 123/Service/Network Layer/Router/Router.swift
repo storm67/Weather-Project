@@ -18,16 +18,12 @@ protocol NetworkRouter: class {
 
 
 class Routing<P: EndPoint>: NetworkRouter {
-    //private(set) var point: (P, @escaping (Data) -> Void) -> ()
-    
-//    init<E: NetworkRouter>(sourceObserver: E) where E.P == P {
-//        self.point = sourceObserver.request
-//    }
-    
+ 
     func request(_ route: P, completion: @escaping (Data) -> Void) {
         do {
             let request = try self.buildRequest(from: route)
             URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+                print(request,data)
                 if let response = response as? HTTPURLResponse {
                     let result = self.handleNetworkResponse(response)
                         switch result {
@@ -112,42 +108,3 @@ class Routing<P: EndPoint>: NetworkRouter {
 }
 
 
- final class AnyLoaderBox<T: NetworkRouter>: Routing<T.P> {
-    private let box: T
-
-    init(_ box: T) {
-    self.box = box
-    }
-    
-    override func request(_ route: P, completion: @escaping (Data) -> Void) {
-        box.request(route, completion: completion)
-    }
-}
-
-final class AnyLoader<P: EndPoint>: NetworkRouter {
-    private let box: Routing<P>
-
-    init<C: NetworkRouter> (_ loader: C) where C.P == P {
-        self.box = AnyLoaderBox(loader)
-    }
-
-    func request(_ route: P, completion: @escaping (Data) -> Void) {
-        box.request(route, completion: completion)
-    }
-
-}
-
-class cc: NSObject {
-    let intLoder: Routing<WeatherAPI>
-    let dataLoaderList: AnyLoader<WeatherAPI>
-    init(re: Routing<WeatherAPI>) {
-        self.intLoder = re
-        self.dataLoaderList = AnyLoader(intLoder)
-    }
-    
-    func ab() {
-        dataLoaderList.request(.getCityData(text: "hello")) { (dd) in
-            print(dd)
-        }
-    }
-}

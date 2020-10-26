@@ -24,9 +24,6 @@ final class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let ab = cc(re: IntLoader<WeatherAPI>())
-        ab.ab()
-        viewModel.conversion()
         view().tableView.dataSource = self
         view().tableView.delegate = self
         update()
@@ -39,7 +36,6 @@ final class MainViewController: UIViewController {
         (x: 9, y: 2.5)])
         char.area = true
         view().charts.add(char)
- 
     }
     
     convenience init(model: SimpleModel, viewModel: ViewModelProtocol) {
