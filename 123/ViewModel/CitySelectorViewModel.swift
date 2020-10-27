@@ -15,15 +15,12 @@ final class CitySelectorViewModel: CitySelectorProtocol {
     private(set) var coreDataManager: CoreDataProtocol
     private(set) var locationManager: LocationManagerProtocol
     private(set) var searchElements = [CellViewModel]()
-    private(set) var weatherManager: NetworkingProtocol
+    private(set) var networkManager: Routing<WeatherAPI>
     static let cellID = "cell"
     
     func checkCity(by searchText: String, completion: @escaping () -> Void) {
         
-        let initIt = Test(str: searchText, key: nil, lat: nil, lon: nil)
-        let Operator = Init(test: initIt)
-        
-        weatherManager.request(router: Operator.getCities()) { [weak self] data in
+        networkManager.request(.getCityData(text: searchText)) { [weak self] data in
             let converted = JSON(data).arrayValue
             let cvm = converted.map { CityModel(mod: $0) }
             let vvm = cvm.map { CellViewModel(reg: $0) }
@@ -69,10 +66,10 @@ final class CitySelectorViewModel: CitySelectorProtocol {
         coreDataManager.createData(name: name, key: nil, lat: lat, lon: lon)
         }
         
-        init(manager: NetworkingProtocol,
+    init(manager: Routing<WeatherAPI>,
              location: LocationManagerProtocol,
              coreData: CoreDataProtocol) {
-            self.weatherManager = manager
+            self.networkManager = manager
             self.coreDataManager = coreData
             self.locationManager = location
         }
@@ -86,6 +83,8 @@ final class CitySelectorViewModel: CitySelectorProtocol {
         func setLocation(onCompletion:@escaping ( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?)->())
         func createFromLocation(name: String, lat: Double?, lon: Double?)
         func checkAccess(access: Bool) -> Bool
-        init(manager: NetworkingProtocol,location: LocationManagerProtocol,coreData: CoreDataProtocol)
+        init(manager: Routing<WeatherAPI>,
+        location: LocationManagerProtocol,
+        coreData: CoreDataProtocol)
         var searchElements: [CellViewModel] { get }
 }

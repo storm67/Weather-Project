@@ -12,9 +12,7 @@ import SwinjectStoryboard
 
 class Injector: Assembly {
     func assemble(container: Container) {
-        container.register(NetworkingProtocol.self) { _ in
-            NetworkService()
-        }.inObjectScope(.container)
+
         container.register(LocationManagerProtocol.self) { r in
             LocationManager()
         }.inObjectScope(.container)
@@ -31,7 +29,7 @@ class Injector: Assembly {
             PagerViewModel(cdp: r.resolve(CoreDataProtocol.self)!)
         }.inObjectScope(.container)
         container.register(CitySelectorProtocol.self) { r in
-            CitySelectorViewModel(manager: r.resolve(NetworkingProtocol.self)!, location: r.resolve(LocationManagerProtocol.self)!, coreData: r.resolve(CoreDataProtocol.self)!)
+            CitySelectorViewModel(manager: Routing<WeatherAPI>(), location: r.resolve(LocationManagerProtocol.self)!, coreData: r.resolve(CoreDataProtocol.self)!)
         }.inObjectScope(.container)
         container.storyboardInitCompleted(UINavigationController.self) { _, _ in }
         container.storyboardInitCompleted(CitySelector.self) { r,c in
@@ -47,5 +45,5 @@ class Injector: Assembly {
             c.viewModel = r.resolve(PageManagerProtocol.self)!
         }
         SwinjectStoryboard.defaultContainer = container
-    }
+}
 }

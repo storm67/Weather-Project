@@ -13,16 +13,6 @@ protocol DataSender {
     func set(completion: @escaping ([CellViewModel]) -> Void)
 }
 
-protocol NetworkingProtocol {
-    func request(router: Router, data: @escaping (JSON) -> Void)
-}
-
-protocol Operator {
-    func getCities() -> Router
-    func getWeather() -> Router
-    func geoLocate() -> Router
-}
-
 protocol MyViewDelegate: class {
     func didTapButton()
 }

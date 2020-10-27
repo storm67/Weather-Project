@@ -93,7 +93,7 @@ extension LocationManager: CLLocationManagerDelegate {
     
 }
 
-protocol LocationManagerProtocol {
+protocol LocationManagerProtocol: class {
     func requestLocation()
     func getLocation(onCompletion:@escaping ( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?)->())
     var data: Bool { get set }

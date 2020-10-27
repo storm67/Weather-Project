@@ -32,7 +32,7 @@ extension WeatherAPI: EndPoint {
         case .getMainImage: return "https://api.unsplash.com/search"
         case .getFiveDayWeather: return "http://dataservice.accuweather.com"
         case .getCityData:
-            return ""
+            return "http://dataservice.accuweather.com"
         case .getCityByLocation:
             return "http://dataservice.accuweather.com"
         }
@@ -46,13 +46,13 @@ extension WeatherAPI: EndPoint {
     var path: String {
         switch self {
         case .getMainImage:
-        return "photos"
-        case .getCityData(let text):
-        return text
+            return "photos"
+        case .getCityData:
+            return "locations/v1/cities/search"
         case .getFiveDayWeather(let text):
-        return "/forecasts/v1/daily/5day/\(text)"
+            return "/forecasts/v1/daily/5day/\(text)"
         case .getCityByLocation:
-        return "locations/v1/cities/geoposition/search"
+            return "locations/v1/cities/geoposition/search"
         }
     }
     
@@ -63,29 +63,28 @@ extension WeatherAPI: EndPoint {
     var task: HTTPTask {
         switch self {
         case .getMainImage(let page, let query):
-        return .requestParameters(bodyParameters: nil,
+            return .requestParameters(bodyParameters: nil,
                                       bodyEncoding: .urlEncoding,
                                       urlParameters: ["page":page,
-                                      "query":query,
-                                      "client_id":NetworkManager.MovieAPIKey])
+                                                      "query":query,
+                                                      "client_id":NetworkManager.MovieAPIKey])
         case .getFiveDayWeather:
-        return .requestParameters(bodyParameters: nil,
-                                  bodyEncoding: .urlEncoding,
-        urlParameters: ["apikey":NetworkManager.MovieAPIKey,
-        "language":"ru"])
+            return .requestParameters(bodyParameters: nil,
+                                      bodyEncoding: .urlEncoding,
+                                      urlParameters: ["apikey":NetworkManager.MovieAPIKey,
+                                                      "language":"ru"])
         case .getCityByLocation(let lat, let lon):
-        return .requestParameters(bodyParameters: nil,
-        bodyEncoding: .urlEncoding,
-        urlParameters: ["apikey":NetworkManager.MovieAPIKey,
-                        "q":"\(lat),\(lon)"])
-//        case .getCityData(let text):
-//            return .requestParameters(bodyParameters: nil,
-//            bodyEncoding: .urlEncoding,
-//            urlParameters: ["page":page,
-//            "query":query,
-//            "client_id":NetworkManager.MovieAPIKey])
+            return .requestParameters(bodyParameters: nil,
+                                      bodyEncoding: .urlEncoding,
+                                      urlParameters: ["apikey":NetworkManager.MovieAPIKey,
+                                                      "q":"\(lat),\(lon)"])
+        case .getCityData(let text):
+            return .requestParameters(bodyParameters: nil,
+            bodyEncoding: .urlEncoding,
+            urlParameters: ["apikey":NetworkManager.MovieAPIKey,
+            "q":text])
         default:
-        return .request
+            return .request
         }
     }
     

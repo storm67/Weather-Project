@@ -22,7 +22,6 @@
 		31324A6F240EF3960077C339 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31324A6E240EF3960077C339 /* SceneDelegate.swift */; };
 		31324A71240EF3960077C339 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31324A70240EF3960077C339 /* MainViewController.swift */; };
 		31324A77240EF3960077C339 /* PizdecProject.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 31324A75240EF3960077C339 /* PizdecProject.xcdatamodeld */; };
-		31324A8B240EF5DC0077C339 /* DataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31324A8A240EF5DC0077C339 /* DataRequest.swift */; };
 		31324A8D240EF5F50077C339 /* CityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31324A8C240EF5F50077C339 /* CityModel.swift */; };
 		31324A91240EF8840077C339 /* CellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31324A90240EF8840077C339 /* CellViewModel.swift */; };
 		31324A95240EF8BC0077C339 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31324A94240EF8BC0077C339 /* LaunchScreen.storyboard */; };
@@ -47,8 +46,6 @@
 		313917F42471C2660011EFCD /* PagesMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313917F32471C2660011EFCD /* PagesMainView.swift */; };
 		313B17F8253A26920012F16D /* SimpleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313B17F7253A26920012F16D /* SimpleModel.swift */; };
 		313B510D2469E5070059161C /* PagesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313B510C2469E5070059161C /* PagesViewCell.swift */; };
-		31415FE6243D03B8003BD9B6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31415FE5243D03B8003BD9B6 /* Constants.swift */; };
-		31548E782418F04C00D94EC9 /* URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31548E772418F04C00D94EC9 /* URLRequest.swift */; };
 		31548E7C24190EFF00D94EC9 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31548E7B24190EFF00D94EC9 /* Test.swift */; };
 		31612F552528E87D00FA72EE /* Injector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31612F542528E87D00FA72EE /* Injector.swift */; };
 		31B7F71724166E3500BCB7C9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B7F71624166E3500BCB7C9 /* CoreDataManager.swift */; };
@@ -75,7 +72,6 @@
 		31324A70240EF3960077C339 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		31324A76240EF3960077C339 /* PizdecProject.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PizdecProject.xcdatamodel; sourceTree = "<group>"; };
 		31324A7D240EF3970077C339 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		31324A8A240EF5DC0077C339 /* DataRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRequest.swift; sourceTree = "<group>"; };
 		31324A8C240EF5F50077C339 /* CityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityModel.swift; sourceTree = "<group>"; };
 		31324A90240EF8840077C339 /* CellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellViewModel.swift; sourceTree = "<group>"; };
 		31324A94240EF8BC0077C339 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -100,8 +96,6 @@
 		313917F32471C2660011EFCD /* PagesMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesMainView.swift; sourceTree = "<group>"; };
 		313B17F7253A26920012F16D /* SimpleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleModel.swift; path = ../../../../SimpleModel.swift; sourceTree = "<group>"; };
 		313B510C2469E5070059161C /* PagesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesViewCell.swift; sourceTree = "<group>"; };
-		31415FE5243D03B8003BD9B6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		31548E772418F04C00D94EC9 /* URLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequest.swift; sourceTree = "<group>"; };
 		31548E7B24190EFF00D94EC9 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		31612F542528E87D00FA72EE /* Injector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injector.swift; sourceTree = "<group>"; };
 		31B7F71624166E3500BCB7C9 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -169,7 +163,6 @@
 		31324A6B240EF3960077C339 /* 123 */ = {
 			isa = PBXGroup;
 			children = (
-				31548E762418F00600D94EC9 /* URLRequest */,
 				31324A83240EF39F0077C339 /* Model */,
 				31324AB3240F12E40077C339 /* Protocols */,
 				31324A88240EF3BB0077C339 /* Extensions */,
@@ -224,7 +217,6 @@
 				3131BFD125419D1100BCA235 /* DI */,
 				3137B895253C4595004CBA8F /* Network Layer */,
 				3133B8412435134A00C4EE93 /* LocationManagerSaver.swift */,
-				31324A8A240EF5DC0077C339 /* DataRequest.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -332,15 +324,6 @@
 				313B510C2469E5070059161C /* PagesViewCell.swift */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		31548E762418F00600D94EC9 /* URLRequest */ = {
-			isa = PBXGroup;
-			children = (
-				31548E772418F04C00D94EC9 /* URLRequest.swift */,
-				31415FE5243D03B8003BD9B6 /* Constants.swift */,
-			);
-			path = URLRequest;
 			sourceTree = "<group>";
 		};
 		BC35C45865C37EF7F4A94B66 /* Pods */ = {
@@ -476,11 +459,9 @@
 				3137B899253C4616004CBA8F /* UrlConfigurator.swift in Sources */,
 				3131CC3C241BAFC2005C9314 /* DailyForecast.swift in Sources */,
 				3137B8A4253C5546004CBA8F /* Router.swift in Sources */,
-				31324A8B240EF5DC0077C339 /* DataRequest.swift in Sources */,
 				31320306245B5B6600E3C054 /* MainControllerView.swift in Sources */,
 				3137B89F253C52D5004CBA8F /* URLEncoder.swift in Sources */,
 				31612F552528E87D00FA72EE /* Injector.swift in Sources */,
-				31415FE6243D03B8003BD9B6 /* Constants.swift in Sources */,
 				313B510D2469E5070059161C /* PagesViewCell.swift in Sources */,
 				31548E7C24190EFF00D94EC9 /* Test.swift in Sources */,
 				31324A91240EF8840077C339 /* CellViewModel.swift in Sources */,
@@ -497,7 +478,6 @@
 				31313445242925350061A552 /* Convertible.swift in Sources */,
 				31324A8D240EF5F50077C339 /* CityModel.swift in Sources */,
 				31324AB5240F133A0077C339 /* DataSender.swift in Sources */,
-				31548E782418F04C00D94EC9 /* URLRequest.swift in Sources */,
 				31324ABA240F14C90077C339 /* CitySelector.swift in Sources */,
 				312C6ACD24618033007AAC03 /* PagesViewController.swift in Sources */,
 				312E37E024100D72001136A5 /* CitySelectorViewModel.swift in Sources */,

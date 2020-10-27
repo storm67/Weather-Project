@@ -19,7 +19,7 @@ final class MainViewController: UIViewController {
     fileprivate var weather = [Convertible]()
     public var viewModel: ViewModelProtocol!
     override func loadView() {
-        view = MainControllerView()
+    view = MainControllerView()
     }
     
     override func viewDidLoad() {
@@ -52,18 +52,18 @@ final class MainViewController: UIViewController {
     fileprivate func update() {
         guard let model = simpleModel else { return }
         viewModel.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one in
+            DispatchQueue.main.async {
             if model.lat == nil {
-            self?.view().updateData("\(one.temperature)°","\(one.dayIconPhrase), Ощущается как \(one.realFeel)°", "Current Location")
+            self?.view().updateData("\(one.temperature)°","\(one.dayIconPhrase), Ощущается как \(one.realFeel)°", "Текущее местоположение")
             } else {
             self?.view().updateData("\(one.temperature)°", "\(one.dayIconPhrase), ощущается как \(one.realFeel)°", model.name)
                 self?.view().locationIcon.isHidden = true
             }
-            DispatchQueue.main.async {
                 self?.weather = weather
                 self?.view().tableView.reloadData()
             }
-        })
-    }
+            }
+        )}
 }
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {

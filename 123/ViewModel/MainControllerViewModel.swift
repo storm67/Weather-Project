@@ -30,10 +30,12 @@ final class MainControllerViewModel: ViewModelProtocol {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         return dateFormatter
     }()
+    
     func newDebug(key: Int?, lat: Double?, lon: Double?, completion: @escaping (type)) {
+        DispatchQueue.global().async {
         if key != nil && key != 0 {
             guard let key = key else { return }
-            weatherFiveDayRequest(key: key) { (first, second) in
+            self.weatherFiveDayRequest(key: key) { (first, second) in
                 completion(first,second)
             }
         } else {
@@ -47,6 +49,7 @@ final class MainControllerViewModel: ViewModelProtocol {
                         completion(item,one)
                     }
                 }
+            }
             }
         }
     }
@@ -78,7 +81,8 @@ final class MainControllerViewModel: ViewModelProtocol {
     }
     
     func weatherFiveDayRequest(key: Int,completion: @escaping (type)) {
-        networkService.request(.getFiveDayWeather(city: String(key))) { [unowned self] data in
+        DispatchQueue.global().async {
+            self.networkService.request(.getFiveDayWeather(city: String(key))) { [unowned self] data in
             let array = JSON(data)["DailyForecasts"].arrayValue
             let WeatherModel = array.map { DailyForecast(dictionary: $0) }
             let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
@@ -93,6 +97,7 @@ final class MainControllerViewModel: ViewModelProtocol {
             }
             self.weather = weatherX
             completion(weatherX, weatherX[0])
+        }
         }
     }
 }

@@ -26,7 +26,8 @@ final class MainControllerView: UIView {
         var myTableView = UITableView()
         myTableView.separatorColor = .white
         myTableView.tableFooterView = UIView(frame: .zero)
-        myTableView.backgroundColor = UIColor(hexFromString: "#99ceff")
+        myTableView.backgroundColor = UIImage(named: "observingclo")?.areaAverage()
+        //UIColor(hexFromString: "#99ceff")
         myTableView.rowHeight = 57.0
         myTableView.sectionHeaderHeight = 100
         myTableView.register(CustomCell.self, forCellReuseIdentifier: "cell")
@@ -194,9 +195,11 @@ final class MainControllerView: UIView {
     }
     
     func updateData(_ temp: String,_ city: String,_ value: String) {
-        tempLabel.text = temp
-        cityLabel.text = city
-        location.setTitle(value, for: .normal)
+        DispatchQueue.main.async {
+            self.tempLabel.text = temp
+            self.cityLabel.text = city
+            self.location.setTitle(value, for: .normal)
+    }
     }
     
     func setGradientToTableView(tableView: UITableView, _ topColor:UIColor, _ bottomColor:UIColor) {
