@@ -5,8 +5,7 @@
 //  Created by gdml on 30/04/2020.
 //  Copyright © 2020 gdml. All rights reserved.
 //
-
-import Foundation
+import MapKit
 import UIKit
 import SwiftChart
 
@@ -17,17 +16,22 @@ final class MainControllerView: UIView {
         interfaceSegmented.setButtonTitles(buttonTitles: ["12 часов","5 дней"])
         interfaceSegmented.selectorViewColor = .white
         interfaceSegmented.selectorTextColor = .white
-        interfaceSegmented.backgroundColor = UIColor(hexFromString: "#99ceff")
+        interfaceSegmented.backgroundColor = UIColor(hexFromString: "#929aef")
         interfaceSegmented.translatesAutoresizingMaskIntoConstraints = false
         return interfaceSegmented
     }()
     
-    var tableView: UITableView! = {
+    var map: MKMapView = {
+        let map = MKMapView()
+        map.translatesAutoresizingMaskIntoConstraints = false
+        return map
+    }()
+    
+    var tableView: UITableView = {
         var myTableView = UITableView()
         myTableView.separatorColor = .white
         myTableView.tableFooterView = UIView(frame: .zero)
-        myTableView.backgroundColor = UIImage(named: "observingclo")?.areaAverage()
-        //UIColor(hexFromString: "#99ceff")
+        myTableView.backgroundColor = UIColor(hexFromString: "#929aef")
         myTableView.rowHeight = 57.0
         myTableView.sectionHeaderHeight = 100
         myTableView.register(CustomCell.self, forCellReuseIdentifier: "cell")
@@ -69,16 +73,6 @@ final class MainControllerView: UIView {
         return label
     }()
     
-    
-    let imageView: UIImageView = {
-        let image = UIImageView()
-        image.image = UIImage(named: "main")
-        image.layer.cornerRadius = 5
-        image.layer.masksToBounds = true
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
-    }()
-    
     let locationIcon: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "navigation"), for: .normal)
@@ -100,15 +94,13 @@ final class MainControllerView: UIView {
     
     let headerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(hexFromString: "#99ceff")
+        view.backgroundColor = UIColor(hexFromString: "#929aef")
         return view
     }()
     
     let secondView: UIView = {
         let view = UIView()
-        view.backgroundColor = .purple
-        view.layer.masksToBounds = true
-        view.layer.cornerRadius = 5
+        view.backgroundColor = UIColor(hexFromString: "#929aef")
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -143,7 +135,7 @@ final class MainControllerView: UIView {
     func layout() {
         setGradientToTableView(tableView: tableView, UIColor.blue, UIColor.white)
         addSubview(headerView)
-        scrollView.addSubview(imageView)
+        scrollView.addSubview(map)
         addSubview(scrollView)
         scrollView.addSubview(secondView)
         addSubview(headerOfMainView)
@@ -158,15 +150,15 @@ final class MainControllerView: UIView {
         NSLayoutConstraint.activate([
         secondView.centerXAnchor.constraint(equalTo: charts.safeAreaLayoutGuide.centerXAnchor),
         secondView.topAnchor.constraint(equalTo: charts.safeAreaLayoutGuide.bottomAnchor),
-        secondView.widthAnchor.constraint(equalToConstant: 355),
-        secondView.heightAnchor.constraint(equalToConstant: 150),
+        secondView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
+        secondView.heightAnchor.constraint(equalToConstant: 50),
         charts.centerXAnchor.constraint(equalTo: tableView.safeAreaLayoutGuide.centerXAnchor),
         charts.topAnchor.constraint(equalTo: tableView.safeAreaLayoutGuide.bottomAnchor),
-        charts.widthAnchor.constraint(equalToConstant: 355),
+        charts.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
         charts.heightAnchor.constraint(equalToConstant: 150),
         tableView.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
-        tableView.topAnchor.constraint(equalTo: imageView.safeAreaLayoutGuide.bottomAnchor, constant: 10),
-        tableView.widthAnchor.constraint(equalToConstant: 355),
+        tableView.topAnchor.constraint(equalTo: map.safeAreaLayoutGuide.bottomAnchor, constant: 10),
+        tableView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
         tableView.heightAnchor.constraint(equalToConstant: 400),
         headerOfMainView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0),
         headerOfMainView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -180,11 +172,11 @@ final class MainControllerView: UIView {
         cityLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 5),
         segmentedControl.centerYAnchor.constraint(equalTo: headerView.centerYAnchor, constant: 28),
         segmentedControl.centerXAnchor.constraint(equalTo: headerView.centerXAnchor, constant: 89),
-        imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-        imageView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant:
+        map.centerXAnchor.constraint(equalTo: centerXAnchor),
+        map.topAnchor.constraint(equalTo: scrollView.topAnchor, constant:
             45),
-        imageView.heightAnchor.constraint(equalToConstant: 230),
-        imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
+        map.heightAnchor.constraint(equalToConstant: 230),
+        map.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
         locationIcon.topAnchor.constraint(equalTo: location.topAnchor, constant: 10),
         locationIcon.leadingAnchor.constraint(equalTo: location.leadingAnchor, constant: -25),
         location.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class CustomCell: UITableViewCell {
+final class CustomCell: UITableViewCell {
     let back = BackgroundView()
     
     
@@ -78,17 +78,18 @@ class CustomCell: UITableViewCell {
        
        self.layer.masksToBounds = false
        self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.layer.cornerRadius).cgPath
-        tempLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 14).isActive = true
-        tempLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 285).isActive = true
-        imgView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
-        imgView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 220).isActive = true
-        imgView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
-        imgView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -78).isActive = true
-
+        NSLayoutConstraint.activate([
+        tempLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 14),
+        tempLabel.leadingAnchor.constraint(lessThanOrEqualTo: contentView.leadingAnchor, constant: 335),
+        tempLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+        imgView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+        imgView.leadingAnchor.constraint(lessThanOrEqualTo: contentView.leadingAnchor, constant: 265),
+        imgView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -52),
+        imgView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+        imgView.widthAnchor.constraint(equalToConstant: 35)
+        ])
         
         backgroundColor = .clear
-        
-
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 8
     }

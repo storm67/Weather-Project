@@ -19,21 +19,24 @@ final class MainViewController: UIViewController {
     fileprivate var weather = [Convertible]()
     public var viewModel: ViewModelProtocol!
     override func loadView() {
-    view = MainControllerView()
+        view = MainControllerView()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.downloader("") { (str) in
+            print(str)
+        }
         view().tableView.dataSource = self
         view().tableView.delegate = self
         update()
         let char = ChartSeries(data: [(x: 0, y: 0),
-        (x: 3, y: 4),
-        (x: 4, y: 2),
-        (x: 5, y: 2.3),
-        (x: 7, y: 3),
-        (x: 8, y: 2.2),
-        (x: 9, y: 2.5)])
+                                      (x: 3, y: 4),
+                                      (x: 4, y: 2),
+                                      (x: 5, y: 2.3),
+                                      (x: 7, y: 3),
+                                      (x: 8, y: 2.2),
+                                      (x: 9, y: 2.5)])
         char.area = true
         view().charts.add(char)
     }
@@ -45,22 +48,22 @@ final class MainViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-           self.navigationController?.isNavigationBarHidden = true
-           edgesForExtendedLayout = []
-       }
+        self.navigationController?.isNavigationBarHidden = true
+        edgesForExtendedLayout = []
+    }
     
     fileprivate func update() {
         guard let model = simpleModel else { return }
         viewModel.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one in
             DispatchQueue.main.async {
-            if model.lat == nil {
+                if model.lat == nil {
             self?.view().updateData("\(one.temperature)°","\(one.dayIconPhrase), Ощущается как \(one.realFeel)°", "Текущее местоположение")
-            } else {
+                } else {
             self?.view().updateData("\(one.temperature)°", "\(one.dayIconPhrase), ощущается как \(one.realFeel)°", model.name)
-                self?.view().locationIcon.isHidden = true
-            }
-                self?.weather = weather
-                self?.view().tableView.reloadData()
+            self?.view().locationIcon.isHidden = true
+                }
+            self?.weather = weather
+            self?.view().tableView.reloadData()
             }
             }
         )}

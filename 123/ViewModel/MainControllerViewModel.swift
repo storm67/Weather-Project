@@ -8,17 +8,14 @@
 
 import Foundation
 import SwiftyJSON
-
-class DST {
-    
-}
+import UIKit
 
 final class MainControllerViewModel: ViewModelProtocol {
     
     var completion: type?
     var weather = [Convertible]()
     var dates = [String]()
-    var networkService = Routing<WeatherAPI>()
+    var networkService: Routing<WeatherAPI>
     init(networkService: Routing<WeatherAPI>) {
         self.networkService = networkService
         returnit()
@@ -33,23 +30,23 @@ final class MainControllerViewModel: ViewModelProtocol {
     
     func newDebug(key: Int?, lat: Double?, lon: Double?, completion: @escaping (type)) {
         DispatchQueue.global().async {
-        if key != nil && key != 0 {
-            guard let key = key else { return }
-            self.weatherFiveDayRequest(key: key) { (first, second) in
-                completion(first,second)
-            }
-        } else {
-            guard let lat = lat, let lon = lon else { return }
-            self.networkService.request(.getCityByLocation(lat: lat, lon: lon)) { [weak self] data in
-                if let key = JSON(data)["Key"].string {
-                    guard let int = Int(key) else { return }
-                    self?.weatherFiveDayRequest(key: int) { [weak self] item, one in
-                        self?.weather = item
-                        self?.formation(item)
-                        completion(item,one)
+            if key != nil && key != 0 {
+                guard let key = key else { return }
+                self.weatherFiveDayRequest(key: key) { (first, second) in
+                    completion(first,second)
+                }
+            } else {
+                guard let lat = lat, let lon = lon else { return }
+                self.networkService.request(.getCityByLocation(lat: lat, lon: lon)) { [weak self] data in
+                    if let key = JSON(data)["Key"].string {
+                        guard let int = Int(key) else { return }
+                        self?.weatherFiveDayRequest(key: int) { [weak self] item, one in
+                            self?.weather = item
+                            self?.formation(item)
+                            completion(item,one)
+                        }
                     }
                 }
-            }
             }
         }
     }
@@ -83,21 +80,29 @@ final class MainControllerViewModel: ViewModelProtocol {
     func weatherFiveDayRequest(key: Int,completion: @escaping (type)) {
         DispatchQueue.global().async {
             self.networkService.request(.getFiveDayWeather(city: String(key))) { [unowned self] data in
-            let array = JSON(data)["DailyForecasts"].arrayValue
-            let WeatherModel = array.map { DailyForecast(dictionary: $0) }
-            let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
-                Convertible(date: self.format(data: first.date),
-                            temperature: first.temperature.convertToCelsius(),
-                            dayIcon: first.dayIcon,
-                            dayIconPhrase: first.dayIconPhrase,
-                            nightIconPhrase: first.nightIconPhrase,
-                            realFeel: first.realFeel,
-                            wind: first.wind,
-                            standardDate: second)
+                let array = JSON(data)["DailyForecasts"].arrayValue
+                let WeatherModel = array.map { DailyForecast(dictionary: $0) }
+                let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
+                    Convertible(date: self.format(data: first.date),
+                                temperature: first.temperature.convertToCelsius(),
+                                dayIcon: first.dayIcon,
+                                dayIconPhrase: first.dayIconPhrase,
+                                nightIconPhrase: first.nightIconPhrase,
+                                realFeel: first.realFeel,
+                                wind: first.wind,
+                                standardDate: second)
+                }
+                self.weather = weatherX
+                completion(weatherX, weatherX[0])
             }
-            self.weather = weatherX
-            completion(weatherX, weatherX[0])
         }
+    }
+    
+    func downloader(_ str: String, _ conv: @escaping (String) -> Void) {
+        networkService.request(.getMainImage(id: 1, query: "\(str)")) { (ttr) in
+            let data = JSON(ttr)["results"].arrayValue.map {ImageModel(js: $0)}.prefix(1).first?.link
+            guard let link = data else { return }
+            conv(link)
         }
     }
 }

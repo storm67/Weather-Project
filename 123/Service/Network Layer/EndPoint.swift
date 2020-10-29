@@ -67,7 +67,7 @@ extension WeatherAPI: EndPoint {
                                       bodyEncoding: .urlEncoding,
                                       urlParameters: ["page":page,
                                                       "query":query,
-                                                      "client_id":NetworkManager.MovieAPIKey])
+                                      "client_id":NetworkManager.correct])
         case .getFiveDayWeather:
             return .requestParameters(bodyParameters: nil,
                                       bodyEncoding: .urlEncoding,
@@ -83,8 +83,6 @@ extension WeatherAPI: EndPoint {
             bodyEncoding: .urlEncoding,
             urlParameters: ["apikey":NetworkManager.MovieAPIKey,
             "q":text])
-        default:
-            return .request
         }
     }
     

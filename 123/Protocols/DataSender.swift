@@ -30,6 +30,7 @@ protocol ViewModelProtocol {
     func newDebug(key: Int?, lat: Double?, lon: Double?, completion: @escaping (type))
     func returnit()
     func cellViewModel(index: Int) -> Convertible?
+    func downloader(_ str: String, _ conv: @escaping (String) -> Void)
     func weatherFiveDayRequest(key: Int,completion: @escaping (type))
     var weather: [Convertible] { get set }
 }

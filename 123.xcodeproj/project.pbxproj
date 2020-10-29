@@ -35,7 +35,6 @@
 		3133B8402434E15A00C4EE93 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3133B83F2434E15A00C4EE93 /* BackgroundView.swift */; };
 		3133B8422435134A00C4EE93 /* LocationManagerSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3133B8412435134A00C4EE93 /* LocationManagerSaver.swift */; };
 		3137B897253C45D3004CBA8F /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137B896253C45D3004CBA8F /* EndPoint.swift */; };
-		3137B899253C4616004CBA8F /* UrlConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137B898253C4616004CBA8F /* UrlConfigurator.swift */; };
 		3137B89B253C5266004CBA8F /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137B89A253C5266004CBA8F /* HTTP.swift */; };
 		3137B89D253C52A2004CBA8F /* Encode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137B89C253C52A2004CBA8F /* Encode.swift */; };
 		3137B89F253C52D5004CBA8F /* URLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137B89E253C52D5004CBA8F /* URLEncoder.swift */; };
@@ -46,8 +45,8 @@
 		313917F42471C2660011EFCD /* PagesMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313917F32471C2660011EFCD /* PagesMainView.swift */; };
 		313B17F8253A26920012F16D /* SimpleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313B17F7253A26920012F16D /* SimpleModel.swift */; };
 		313B510D2469E5070059161C /* PagesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313B510C2469E5070059161C /* PagesViewCell.swift */; };
-		31548E7C24190EFF00D94EC9 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31548E7B24190EFF00D94EC9 /* Test.swift */; };
 		31612F552528E87D00FA72EE /* Injector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31612F542528E87D00FA72EE /* Injector.swift */; };
+		319BDBAA254894F400567C79 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319BDBA9254894F400567C79 /* ImageModel.swift */; };
 		31B7F71724166E3500BCB7C9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B7F71624166E3500BCB7C9 /* CoreDataManager.swift */; };
 		EC8868CE84D8F2A8C1A700B6 /* Pods_123.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A32B0AEB15FBAB1190529B /* Pods_123.framework */; };
 /* End PBXBuildFile section */
@@ -85,7 +84,6 @@
 		3133B83F2434E15A00C4EE93 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		3133B8412435134A00C4EE93 /* LocationManagerSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerSaver.swift; sourceTree = "<group>"; };
 		3137B896253C45D3004CBA8F /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
-		3137B898253C4616004CBA8F /* UrlConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlConfigurator.swift; sourceTree = "<group>"; };
 		3137B89A253C5266004CBA8F /* HTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		3137B89C253C52A2004CBA8F /* Encode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encode.swift; sourceTree = "<group>"; };
 		3137B89E253C52D5004CBA8F /* URLEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncoder.swift; sourceTree = "<group>"; };
@@ -96,8 +94,8 @@
 		313917F32471C2660011EFCD /* PagesMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesMainView.swift; sourceTree = "<group>"; };
 		313B17F7253A26920012F16D /* SimpleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleModel.swift; path = ../../../../SimpleModel.swift; sourceTree = "<group>"; };
 		313B510C2469E5070059161C /* PagesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesViewCell.swift; sourceTree = "<group>"; };
-		31548E7B24190EFF00D94EC9 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		31612F542528E87D00FA72EE /* Injector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injector.swift; sourceTree = "<group>"; };
+		319BDBA9254894F400567C79 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		31B7F71624166E3500BCB7C9 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		3F4E9E69F64CE596A359D091 /* Pods-123.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-123.release.xcconfig"; path = "Target Support Files/Pods-123/Pods-123.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -125,7 +123,6 @@
 		312E37DE24100D65001136A5 /* Details */ = {
 			isa = PBXGroup;
 			children = (
-				31548E7B24190EFF00D94EC9 /* Test.swift */,
 				31324A90240EF8840077C339 /* CellViewModel.swift */,
 				31313444242925350061A552 /* Convertible.swift */,
 			);
@@ -181,6 +178,7 @@
 				313B17F7253A26920012F16D /* SimpleModel.swift */,
 				31324A8C240EF5F50077C339 /* CityModel.swift */,
 				3131CC3B241BAFC2005C9314 /* DailyForecast.swift */,
+				319BDBA9254894F400567C79 /* ImageModel.swift */,
 				312E37DE24100D65001136A5 /* Details */,
 			);
 			path = Model;
@@ -285,7 +283,6 @@
 				3137B8A5253C6CD8004CBA8F /* Encoder */,
 				3137B8A2253C553C004CBA8F /* Router */,
 				3137B896253C45D3004CBA8F /* EndPoint.swift */,
-				3137B898253C4616004CBA8F /* UrlConfigurator.swift */,
 				3137B89A253C5266004CBA8F /* HTTP.swift */,
 			);
 			path = "Network Layer";
@@ -456,14 +453,12 @@
 				31324A77240EF3960077C339 /* PizdecProject.xcdatamodeld in Sources */,
 				3137B8A8253C7D0B004CBA8F /* NetworkManager.swift in Sources */,
 				3133B8402434E15A00C4EE93 /* BackgroundView.swift in Sources */,
-				3137B899253C4616004CBA8F /* UrlConfigurator.swift in Sources */,
 				3131CC3C241BAFC2005C9314 /* DailyForecast.swift in Sources */,
 				3137B8A4253C5546004CBA8F /* Router.swift in Sources */,
 				31320306245B5B6600E3C054 /* MainControllerView.swift in Sources */,
 				3137B89F253C52D5004CBA8F /* URLEncoder.swift in Sources */,
 				31612F552528E87D00FA72EE /* Injector.swift in Sources */,
 				313B510D2469E5070059161C /* PagesViewCell.swift in Sources */,
-				31548E7C24190EFF00D94EC9 /* Test.swift in Sources */,
 				31324A91240EF8840077C339 /* CellViewModel.swift in Sources */,
 				3131BFD325419D3200BCA235 /* Assembler.swift in Sources */,
 				31324A71240EF3960077C339 /* MainViewController.swift in Sources */,
@@ -475,6 +470,7 @@
 				3137B897253C45D3004CBA8F /* EndPoint.swift in Sources */,
 				31324A6D240EF3960077C339 /* AppDelegate.swift in Sources */,
 				31339B1F241BCB3D000D7A88 /* MainControllerViewModel.swift in Sources */,
+				319BDBAA254894F400567C79 /* ImageModel.swift in Sources */,
 				31313445242925350061A552 /* Convertible.swift in Sources */,
 				31324A8D240EF5F50077C339 /* CityModel.swift in Sources */,
 				31324AB5240F133A0077C339 /* DataSender.swift in Sources */,
