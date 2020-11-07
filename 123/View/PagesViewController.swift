@@ -37,7 +37,8 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func getNewCity() {
-        self.navigationController?.popToRootViewController(animated: true)
+        let vc = storyboard?.instantiateViewController(identifier: "CitySelector") as! CitySelector
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func addPrimitiveData() {
@@ -52,9 +53,9 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
         view().tableView.isEditing = !view().tableView.isEditing
         switch view().tableView.isEditing {
         case true:
-            view().editingButton.setTitle("Done", for: .normal)
+            view().editingButton.setTitle("Сохранить", for: .normal)
         case false:
-            view().editingButton.setTitle("Edit", for: .normal)
+            view().editingButton.setTitle("Изменить", for: .normal)
         }
     }
     

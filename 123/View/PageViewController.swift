@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Swinject
+import SideMenu
 
 final class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
     
@@ -22,6 +23,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         let button = UIButton()
         button.setImage(UIImage(named: "menu"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(sideMenuAction), for: .touchUpInside)
         return button
     }()
     
@@ -32,6 +34,10 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         button.addTarget(self, action: #selector(buttonTapAction), for: .touchUpInside)
         return button
     }()
+    
+     override var prefersStatusBarHidden: Bool {
+            return true
+    }
     
     var manager: PageViewModelProtocol!
     
@@ -106,6 +112,14 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     @objc fileprivate func buttonTapAction() {
         let vc = storyboard?.instantiateViewController(identifier: "PagesViewController") as! PagesViewController
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc fileprivate func sideMenuAction() {
+        let menu = storyboard!.instantiateViewController(withIdentifier: "SideMenu") as! SideMenuNavigationController
+        menu.isNavigationBarHidden = true
+        menu.animationOptions = .curveEaseInOut
+        menu.presentationStyle = .menuSlideIn
+        present(menu, animated: true, completion: nil)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {

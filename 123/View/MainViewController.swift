@@ -24,9 +24,6 @@ final class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.downloader("") { (str) in
-            print(str)
-        }
         view().tableView.dataSource = self
         view().tableView.delegate = self
         update()
@@ -57,13 +54,13 @@ final class MainViewController: UIViewController {
         viewModel.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one in
             DispatchQueue.main.async {
                 if model.lat == nil {
-            self?.view().updateData("\(one.temperature)°","\(one.dayIconPhrase), Ощущается как \(one.realFeel)°", "Текущее местоположение")
+                    self?.view().updateData("\(one.temperature.convertToCelsius())°","\(one.dayIconPhrase)", "Текущее местоположение")
                 } else {
-            self?.view().updateData("\(one.temperature)°", "\(one.dayIconPhrase), ощущается как \(one.realFeel)°", model.name)
-            self?.view().locationIcon.isHidden = true
+                    self?.view().updateData("\(one.temperature.convertToCelsius())°", "\(one.dayIconPhrase)", model.name)
+                    self?.view().locationIcon.isHidden = true
                 }
-            self?.weather = weather
-            self?.view().tableView.reloadData()
+                self?.weather = weather
+                self?.view().tableView.reloadData()
             }
             }
         )}

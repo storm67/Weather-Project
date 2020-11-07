@@ -15,15 +15,15 @@ final class PagesMainView: UIView {
     weak var delegate: GetEdit?
     
     let tableView: UITableView = {
-           var myTableView = UITableView()
-           myTableView.separatorColor = .black
-           myTableView.rowHeight = 52
-           myTableView.tableFooterView = UIView(frame: .zero)
-           myTableView.rowHeight = 57.0
-           myTableView.register(PagesViewCell.self, forCellReuseIdentifier: "cell")
-           myTableView.translatesAutoresizingMaskIntoConstraints = false
-           return myTableView
-       }()
+        var myTableView = UITableView()
+        myTableView.separatorColor = .black
+        myTableView.rowHeight = 95
+        myTableView.tableFooterView = UIView(frame: .zero)
+        myTableView.register(PagesViewCell.self, forCellReuseIdentifier: "cell")
+        myTableView.translatesAutoresizingMaskIntoConstraints = false
+        myTableView.separatorInset = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        return myTableView
+    }()
     
     let toolbar: UIToolbar = {
         let toolbar = UIToolbar()
@@ -37,7 +37,7 @@ final class PagesMainView: UIView {
     let editingButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(.white, for: .normal)
-        button.setTitle("Edit", for: .normal)
+        button.setTitle("Изменить", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(editNow), for: .touchUpInside)
@@ -47,7 +47,7 @@ final class PagesMainView: UIView {
     let addButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(.black, for: .normal)
-    button.setImage(UIImage.init(systemName:"plus.square.on.square")?.imageResize(sizeChange: CGSize(width: 33, height: 33)), for: .normal)
+        button.setImage(UIImage.init(systemName:"plus.square.on.square")?.imageResize(sizeChange: CGSize(width: 33, height: 33)), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(getNewCity), for: .touchUpInside)
@@ -59,7 +59,7 @@ final class PagesMainView: UIView {
     let getBackButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(.black, for: .normal)
-    button.setImage(UIImage.init(systemName:"arrowtriangle.right.fill"), for: .normal)
+        button.setImage(UIImage.init(systemName:"arrowtriangle.right.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(getBackCity), for: .touchUpInside)
@@ -74,24 +74,26 @@ final class PagesMainView: UIView {
         tableView.addSubview(addButton)
         toolbar.addSubview(getBackButton)
         toolbar.addSubview(editingButton)
-        getBackButton.leftAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.leftAnchor, constant: 320).isActive = true
-        getBackButton.topAnchor.constraint(equalTo: toolbar.topAnchor, constant: 0).isActive = true
-        getBackButton.rightAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.rightAnchor, constant: 0).isActive = true
-        getBackButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: 0).isActive = true
-        editingButton.leftAnchor.constraint(equalTo: toolbar.leftAnchor, constant: 10).isActive = true
-        editingButton.topAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
-        editingButton.rightAnchor.constraint(equalTo: toolbar.rightAnchor, constant: -320).isActive = true
-        editingButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: -10).isActive = true
-        toolbar.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
-        toolbar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-        toolbar.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
-        toolbar.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: 0).isActive = true
-        tableView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
-        tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
-        tableView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
-        addButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 325).isActive = true
-        addButton.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 560).isActive = true
+        NSLayoutConstraint.activate([
+            getBackButton.leftAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.leftAnchor, constant: 320),
+            getBackButton.topAnchor.constraint(equalTo: toolbar.topAnchor, constant: 0),
+            getBackButton.rightAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.rightAnchor, constant: 0),
+            getBackButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: 0),
+            editingButton.leftAnchor.constraint(equalTo: toolbar.leftAnchor, constant: 10),
+            editingButton.topAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.topAnchor, constant: 10),
+            editingButton.rightAnchor.constraint(greaterThanOrEqualTo: toolbar.rightAnchor, constant: -320),
+            editingButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: -10),
+            toolbar.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
+            toolbar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0),
+            toolbar.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
+            toolbar.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: 0),
+            tableView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
+            tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 40),
+            tableView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
+            tableView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
+            addButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 325),
+            addButton.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 560)
+        ])
     }
     
     required init?(coder: NSCoder) {

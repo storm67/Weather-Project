@@ -84,7 +84,7 @@ final class MainControllerViewModel: ViewModelProtocol {
                 let WeatherModel = array.map { DailyForecast(dictionary: $0) }
                 let weatherX = zip(WeatherModel,self.dates).map { [unowned self] (first,second) -> Convertible in
                     Convertible(date: self.format(data: first.date),
-                                temperature: first.temperature.convertToCelsius(),
+                                temperature: first.temperature,
                                 dayIcon: first.dayIcon,
                                 dayIconPhrase: first.dayIconPhrase,
                                 nightIconPhrase: first.nightIconPhrase,

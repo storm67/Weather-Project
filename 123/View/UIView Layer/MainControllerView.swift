@@ -133,7 +133,6 @@ final class MainControllerView: UIView {
     }
     
     func layout() {
-        setGradientToTableView(tableView: tableView, UIColor.blue, UIColor.white)
         addSubview(headerView)
         scrollView.addSubview(map)
         addSubview(scrollView)
@@ -193,20 +192,4 @@ final class MainControllerView: UIView {
             self.location.setTitle(value, for: .normal)
     }
     }
-    
-    func setGradientToTableView(tableView: UITableView, _ topColor:UIColor, _ bottomColor:UIColor) {
-
-        let gradientBackgroundColors = [topColor.cgColor, bottomColor.cgColor]
-        let gradientLocations = [0.0,1.0]
-
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = gradientBackgroundColors
-        gradientLayer.locations = gradientLocations as [NSNumber]
-
-        gradientLayer.frame = tableView.bounds
-        let backgroundView = UIView(frame: tableView.bounds)
-        backgroundView.layer.insertSublayer(gradientLayer, at: 0)
-        tableView.backgroundView = backgroundView
-    }
 }
-

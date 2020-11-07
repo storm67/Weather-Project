@@ -89,6 +89,10 @@ extension CitySelector: UITableViewDataSource {
         tagView.isSelected = !tagView.isSelected
     }
     
+    override var prefersStatusBarHidden: Bool {
+            return true
+    }
+    
     func checkActive() {
         guard let text = searchController.searchBar.text?.count else { return }
         if text >= 1 {

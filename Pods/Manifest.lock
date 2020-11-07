@@ -1,11 +1,5 @@
 PODS:
-  - Alamofire (5.0.2)
-  - RxCocoa (5.1.1):
-    - RxRelay (~> 5)
-    - RxSwift (~> 5)
-  - RxRelay (5.1.1):
-    - RxSwift (~> 5)
-  - RxSwift (5.1.1)
+  - SideMenu (6.5.0)
   - SwiftChart (1.0.1)
   - SwiftyJSON (4.3.0)
   - Swinject (2.7.1)
@@ -14,9 +8,7 @@ PODS:
   - TagListView (1.4.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 5.0)
-  - RxCocoa (~> 5)
-  - RxSwift (~> 5)
+  - SideMenu
   - SwiftChart
   - SwiftyJSON (~> 4.0)
   - Swinject
@@ -25,10 +17,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - Alamofire
-    - RxCocoa
-    - RxRelay
-    - RxSwift
+    - SideMenu
     - SwiftChart
     - SwiftyJSON
     - Swinject
@@ -36,16 +25,13 @@ SPEC REPOS:
     - TagListView
 
 SPEC CHECKSUMS:
-  Alamofire: 3ba7a4db18b4f62c4a1c0e1cb39d7f3d52e10ada
-  RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
-  RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
-  RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
+  SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   SwiftChart: ba767a678d568a5ee22d419e146a0582865e1aff
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
   Swinject: ddf78b8486dd9b71a667b852cad919ab4484478e
   SwinjectStoryboard: 32512ef16c2b0ff5b8f823b23539c4a50f6d3383
   TagListView: 987b0bdbb16cd9d9e7c0e2ec32aff37ecba8b173
 
-PODFILE CHECKSUM: 2f81c1429c6d709ff165ef9ed4e42797e5591bc2
+PODFILE CHECKSUM: 1fc7633c023180202d41ece38d9c3ea9dcdd340a
 
 COCOAPODS: 1.9.0

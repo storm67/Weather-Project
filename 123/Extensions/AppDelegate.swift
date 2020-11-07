@@ -9,8 +9,6 @@
 import UIKit
 import CoreData
 import CoreLocation
-import Swinject
-import SwinjectStoryboard
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -79,3 +77,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 
+enum Defaults {
+    
+    static let location = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    static let dictionary: Dictionary <String, Int> = ["Санкт-петербург":295212,"Берлин":178087,"Ташкент":351199,"Будапешт": 187423,"Киев":324505,"Лос-анджелес":347625,"Омск":294463,"Воронеж":296543,"Ростов на дону":2951463,"Казань":295954,"Екатеринбург":295863,"Волгоград":29636,"Пермь":294922,"Москва":294021,"Новосибирск":294459,"Нижний новгород":294199,"Красноярск":293708,"Рига":225780,"Уфа":292177,"Самара":290396,"Каиро": 127164,"Баку":27103,"Венеция":2579882,"Челябинск":292332]
+    
+}

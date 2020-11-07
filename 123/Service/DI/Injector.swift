@@ -9,6 +9,7 @@
 import Foundation
 import Swinject
 import SwinjectStoryboard
+import SideMenu
 
 class Injector: Assembly {
     func assemble(container: Container) {
@@ -32,6 +33,7 @@ class Injector: Assembly {
             CitySelectorViewModel(manager: Routing<WeatherAPI>(), location: r.resolve(LocationManagerProtocol.self)!, coreData: r.resolve(CoreDataProtocol.self)!)
         }.inObjectScope(.container)
         container.storyboardInitCompleted(UINavigationController.self) { _, _ in }
+        container.storyboardInitCompleted(SideMenuNavigationController.self) { _, _ in }
         container.storyboardInitCompleted(CitySelector.self) { r,c in
             c.viewModel = r.resolve(CitySelectorProtocol.self)!
         }

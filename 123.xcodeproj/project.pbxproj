@@ -43,9 +43,9 @@
 		3137B8A8253C7D0B004CBA8F /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137B8A7253C7D0B004CBA8F /* NetworkManager.swift */; };
 		31382D83246CC46A0051AECC /* CustomSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31382D82246CC46A0051AECC /* CustomSegmentedControl.swift */; };
 		313917F42471C2660011EFCD /* PagesMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313917F32471C2660011EFCD /* PagesMainView.swift */; };
-		313B17F8253A26920012F16D /* SimpleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313B17F7253A26920012F16D /* SimpleModel.swift */; };
 		313B510D2469E5070059161C /* PagesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313B510C2469E5070059161C /* PagesViewCell.swift */; };
 		31612F552528E87D00FA72EE /* Injector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31612F542528E87D00FA72EE /* Injector.swift */; };
+		317D9393254C9C96006E7FC1 /* SimpleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317D9392254C9C96006E7FC1 /* SimpleModel.swift */; };
 		319BDBAA254894F400567C79 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319BDBA9254894F400567C79 /* ImageModel.swift */; };
 		31B7F71724166E3500BCB7C9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B7F71624166E3500BCB7C9 /* CoreDataManager.swift */; };
 		EC8868CE84D8F2A8C1A700B6 /* Pods_123.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A32B0AEB15FBAB1190529B /* Pods_123.framework */; };
@@ -92,9 +92,9 @@
 		3137B8A7253C7D0B004CBA8F /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		31382D82246CC46A0051AECC /* CustomSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentedControl.swift; sourceTree = "<group>"; };
 		313917F32471C2660011EFCD /* PagesMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesMainView.swift; sourceTree = "<group>"; };
-		313B17F7253A26920012F16D /* SimpleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleModel.swift; path = ../../../../SimpleModel.swift; sourceTree = "<group>"; };
 		313B510C2469E5070059161C /* PagesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesViewCell.swift; sourceTree = "<group>"; };
 		31612F542528E87D00FA72EE /* Injector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injector.swift; sourceTree = "<group>"; };
+		317D9392254C9C96006E7FC1 /* SimpleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleModel.swift; path = ../../../../Documents/SimpleModel.swift; sourceTree = "<group>"; };
 		319BDBA9254894F400567C79 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		31B7F71624166E3500BCB7C9 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		3F4E9E69F64CE596A359D091 /* Pods-123.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-123.release.xcconfig"; path = "Target Support Files/Pods-123/Pods-123.release.xcconfig"; sourceTree = "<group>"; };
@@ -175,7 +175,7 @@
 		31324A83240EF39F0077C339 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				313B17F7253A26920012F16D /* SimpleModel.swift */,
+				317D9392254C9C96006E7FC1 /* SimpleModel.swift */,
 				31324A8C240EF5F50077C339 /* CityModel.swift */,
 				3131CC3B241BAFC2005C9314 /* DailyForecast.swift */,
 				319BDBA9254894F400567C79 /* ImageModel.swift */,
@@ -453,6 +453,7 @@
 				31324A77240EF3960077C339 /* PizdecProject.xcdatamodeld in Sources */,
 				3137B8A8253C7D0B004CBA8F /* NetworkManager.swift in Sources */,
 				3133B8402434E15A00C4EE93 /* BackgroundView.swift in Sources */,
+				317D9393254C9C96006E7FC1 /* SimpleModel.swift in Sources */,
 				3131CC3C241BAFC2005C9314 /* DailyForecast.swift in Sources */,
 				3137B8A4253C5546004CBA8F /* Router.swift in Sources */,
 				31320306245B5B6600E3C054 /* MainControllerView.swift in Sources */,
@@ -463,7 +464,6 @@
 				3131BFD325419D3200BCA235 /* Assembler.swift in Sources */,
 				31324A71240EF3960077C339 /* MainViewController.swift in Sources */,
 				3137B89B253C5266004CBA8F /* HTTP.swift in Sources */,
-				313B17F8253A26920012F16D /* SimpleModel.swift in Sources */,
 				3124B9F224445AD500303BB9 /* PageManagerViewModel.swift in Sources */,
 				3132946E245CA6FD00B4DC85 /* TableViewCell.swift in Sources */,
 				3131BFD525419D5500BCA235 /* SwinjectStoryboard.swift in Sources */,
