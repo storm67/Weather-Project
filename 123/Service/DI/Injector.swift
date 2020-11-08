@@ -27,7 +27,7 @@ class Injector: Assembly {
             MainControllerViewModel(networkService: Routing<WeatherAPI>())
         }.inObjectScope(.container)
         container.register(PageViewModelProtocol.self) { r in
-            PagerViewModel(cdp: r.resolve(CoreDataProtocol.self)!)
+            PagerViewModel(cdp: r.resolve(CoreDataProtocol.self)!, manager: r.resolve(PageManagerProtocol.self)!)
         }.inObjectScope(.container)
         container.register(CitySelectorProtocol.self) { r in
             CitySelectorViewModel(manager: Routing<WeatherAPI>(), location: r.resolve(LocationManagerProtocol.self)!, coreData: r.resolve(CoreDataProtocol.self)!)

@@ -11,17 +11,32 @@ import UIKit
 import Swinject
 import SideMenu
 
-final class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
+final class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate, SideMenuNavigationControllerDelegate {
     
-    var currentPage: Int {
+    fileprivate var blurEffect: UIVisualEffectView! {
+        didSet {
+        self.blurEffect.layer.opacity = 0
+        }
+    }
+    
+    fileprivate var pageControl = UIPageControl()
+    fileprivate var pages = [UIViewController]()
+    fileprivate var currentPage: Int {
         get {
             pageControl.currentPage
         }
     }
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    var manager: PageViewModelProtocol!
+    
     let menu: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "menu"), for: .normal)
+        button.setImage(UIImage.init(systemName:"list.dash"), for: .normal)
+        button.tintColor = .black
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(sideMenuAction), for: .touchUpInside)
         return button
@@ -32,23 +47,18 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         button.setImage(UIImage(named: "search"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(buttonTapAction), for: .touchUpInside)
+        button.isHidden = true
         return button
     }()
     
-     override var prefersStatusBarHidden: Bool {
-            return true
-    }
-    
-    var manager: PageViewModelProtocol!
     
     required init?(coder aDecoder: NSCoder) {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
     
-    var pageControl = UIPageControl()
-    var pages = [UIViewController]()
-    
     func setupPageControl() {
+        var count = 0
+        if count == 0 {
         self.view.addSubview(pageControl)
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -59,24 +69,23 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         self.pageControl.pageIndicatorTintColor = UIColor.lightGray
         self.pageControl.currentPageIndicatorTintColor = UIColor.black
         pageControl.backgroundColor = UIColor.clear
+        }
+        count += 1
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        layout()
+        let blur = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
+        blurEffect = UIVisualEffectView(effect: blur)
+        self.view.addSubview(blurEffect)
+        self.dataSource = self
+        self.delegate = self
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        pages = []
-        setUp()
-        setViewControllers([pages[0]], direction: .forward, animated: true, completion: nil)
-        self.dataSource = self
-        self.delegate = self
-        setupPageControl()
-        layout()
-        for subview in self.view.subviews {
-            if let scrollView = subview as? UIScrollView {
-                scrollView.delegate = self
-                break;
-            }
-        }
+        toStart()
     }
     
     override func viewDidLayoutSubviews() {
@@ -89,6 +98,19 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     func setUp() {
         manager.fetchData { [weak self] (md) in
             self?.pages = md
+        }
+    }
+    
+    func toStart() {
+        pages = []
+        setUp()
+        setupPageControl()
+        setViewControllers([pages[0]], direction: .forward, animated: true, completion: nil)
+        for subview in self.view.subviews {
+            if let scrollView = subview as? UIScrollView {
+                scrollView.delegate = self
+                break;
+            }
         }
     }
     
@@ -115,10 +137,10 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     }
     
     @objc fileprivate func sideMenuAction() {
-        let menu = storyboard!.instantiateViewController(withIdentifier: "SideMenu") as! SideMenuNavigationController
+        let menu = storyboard?.instantiateViewController(withIdentifier: "SideMenu") as! SideMenuNavigationController
         menu.isNavigationBarHidden = true
-        menu.animationOptions = .curveEaseInOut
         menu.presentationStyle = .menuSlideIn
+        menu.dismissOnPresent = true
         present(menu, animated: true, completion: nil)
     }
     
@@ -161,6 +183,32 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
             targetContentOffset.pointee = CGPoint(x: scrollView.bounds.size.width, y: 0);
         } else if (currentPage == pages.count - 1 && scrollView.contentOffset.x >= scrollView.bounds.size.width) {
             targetContentOffset.pointee = CGPoint(x: scrollView.bounds.size.width, y: 0);
+        }
+    }
+    
+    func sideMenuDidDisappear(menu: SideMenuNavigationController, animated: Bool) {
+        if manager.check() {
+            DispatchQueue.global().sync {
+            self.setUp()
+            self.pageControl.numberOfPages = self.pages.count
+            self.setViewControllers([self.pages[0]], direction: .forward, animated: false, completion: nil)
+            }
+        }
+    }
+    
+    func sideMenuWillDisappear(menu: SideMenuNavigationController, animated: Bool) {
+        menu.enableSwipeToDismissGesture = false
+        UIView.animate(withDuration: 0.4) {
+                self.blurEffect.layer.opacity = 0
+            }
+    }
+    
+    func sideMenuWillAppear(menu: SideMenuNavigationController, animated: Bool) {
+        menu.enableSwipeToDismissGesture = false
+        blurEffect.autoresizingMask = [.flexibleBottomMargin]
+        blurEffect.frame = self.view.bounds
+        UIView.animate(withDuration: 0.4) {
+            self.blurEffect.layer.opacity = 0.3
         }
     }
 }

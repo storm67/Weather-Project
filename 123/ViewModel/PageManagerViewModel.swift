@@ -12,7 +12,7 @@ import UIKit
 final class PageManagerViewModel: PageManagerProtocol {
     
     var manager: CoreDataProtocol
-    
+    var index = 0
     var pages = [City]()
     
     func cellViewModel(index: Int) -> City? {
@@ -22,6 +22,14 @@ final class PageManagerViewModel: PageManagerProtocol {
     
     func model() -> [City] {
         return manager.city
+    }
+    
+    func enabled() -> Bool {
+    if index >= 1 {
+        index -= 1
+        return true
+    }
+        return false
     }
     
     func count() -> Int {
@@ -45,11 +53,13 @@ final class PageManagerViewModel: PageManagerProtocol {
         for (index, name) in manager.city.enumerated() {
             name.position = Double(index)
         }
+        index += 1
     }
     
     func delete(_ indexPath: IndexPath) {
         manager.deleteData(indexPath: indexPath)
         manager.city.remove(at: indexPath.row)
+        index += 1
     }
     init(manager: CoreDataProtocol) {
         self.manager = manager
@@ -58,6 +68,7 @@ final class PageManagerViewModel: PageManagerProtocol {
 }
 
 protocol PageManagerProtocol {
+    func enabled() -> Bool
     func delete(_ indexPath: IndexPath)
     func refresh(_ sourceIndexPath: IndexPath,_ item: City,_ destinationIndexPath: IndexPath)
     func rearrange(complete: @escaping () -> ())

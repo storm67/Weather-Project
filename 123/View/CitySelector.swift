@@ -17,6 +17,7 @@ final class CitySelector: UIViewController, UITableViewDelegate,  UISearchBarDel
     @IBOutlet weak var tableView: UITableView!
     
     fileprivate let searchController = UISearchController(searchResultsController: nil)
+    
     var viewModel: CitySelectorProtocol! 
     
     let tagListView: TagListView = {

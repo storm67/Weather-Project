@@ -13,7 +13,7 @@ final class MainControllerView: UIView {
     
     var segmentedControl: CustomSegmentedControl = {
         let interfaceSegmented = CustomSegmentedControl()
-        interfaceSegmented.setButtonTitles(buttonTitles: ["12 часов","5 дней"])
+        interfaceSegmented.setButtonTitles(buttonTitles: ["5 дней","12 часов"])
         interfaceSegmented.selectorViewColor = .white
         interfaceSegmented.selectorTextColor = .white
         interfaceSegmented.backgroundColor = UIColor(hexFromString: "#929aef")
@@ -70,6 +70,15 @@ final class MainControllerView: UIView {
         label.minimumScaleFactor = 0.5
         label.font = label.font.withSize(25)
         label.clipsToBounds = true
+        return label
+    }()
+    
+    let chartText: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Графики"
+        label.textColor = .white
+        label.font = UIFont(name: "Papyrus", size: 18)
         return label
     }()
     
@@ -134,10 +143,11 @@ final class MainControllerView: UIView {
     
     func layout() {
         addSubview(headerView)
-        scrollView.addSubview(map)
         addSubview(scrollView)
-        scrollView.addSubview(secondView)
         addSubview(headerOfMainView)
+        scrollView.addSubview(map)
+        scrollView.addSubview(charts)
+        scrollView.addSubview(secondView)
         scrollView.addSubview(tableView)
         scrollView.contentSize = CGSize(width:frame.size.width, height: 1111)
         headerView.addSubview(segmentedControl)
@@ -145,14 +155,16 @@ final class MainControllerView: UIView {
         headerView.addSubview(tempLabel)
         headerOfMainView.addSubview(locationIcon)
         headerOfMainView.addSubview(location)
-        scrollView.addSubview(charts)
+        secondView.addSubview(chartText)
         NSLayoutConstraint.activate([
-        secondView.centerXAnchor.constraint(equalTo: charts.safeAreaLayoutGuide.centerXAnchor),
-        secondView.topAnchor.constraint(equalTo: charts.safeAreaLayoutGuide.bottomAnchor),
+        secondView.centerXAnchor.constraint(equalTo: tableView.safeAreaLayoutGuide.centerXAnchor),
+        secondView.topAnchor.constraint(equalTo: tableView.safeAreaLayoutGuide.bottomAnchor, constant: 20),
         secondView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
-        secondView.heightAnchor.constraint(equalToConstant: 50),
-        charts.centerXAnchor.constraint(equalTo: tableView.safeAreaLayoutGuide.centerXAnchor),
-        charts.topAnchor.constraint(equalTo: tableView.safeAreaLayoutGuide.bottomAnchor),
+        secondView.heightAnchor.constraint(equalToConstant: 30),
+        chartText.centerYAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.centerYAnchor, constant: 2),
+        chartText.leadingAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+        charts.centerXAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.centerXAnchor),
+        charts.topAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.bottomAnchor),
         charts.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
         charts.heightAnchor.constraint(equalToConstant: 150),
         tableView.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),

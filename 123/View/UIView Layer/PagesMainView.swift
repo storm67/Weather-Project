@@ -27,7 +27,7 @@ final class PagesMainView: UIView {
     
     let toolbar: UIToolbar = {
         let toolbar = UIToolbar()
-        toolbar.barTintColor = .black
+        toolbar.barTintColor = UIColor(hexFromString: "#929aef")
         toolbar.backgroundColor = .orange
         toolbar.tintColor = .white
         toolbar.translatesAutoresizingMaskIntoConstraints = false
@@ -37,7 +37,7 @@ final class PagesMainView: UIView {
     let editingButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(.white, for: .normal)
-        button.setTitle("Изменить", for: .normal)
+        button.setImage(UIImage.init(systemName:"ellipsis"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(editNow), for: .touchUpInside)
@@ -47,19 +47,17 @@ final class PagesMainView: UIView {
     let addButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(.black, for: .normal)
-        button.setImage(UIImage.init(systemName:"plus.square.on.square")?.imageResize(sizeChange: CGSize(width: 33, height: 33)), for: .normal)
+        button.setImage(UIImage.init(systemName:"plus"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(getNewCity), for: .touchUpInside)
-        button.clipsToBounds = true
-        button.layer.cornerRadius = button.frame.height/2
         return button
     }()
     
     let getBackButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(.black, for: .normal)
-        button.setImage(UIImage.init(systemName:"arrowtriangle.right.fill"), for: .normal)
+        button.setImage(UIImage.init(systemName:"arrow.left"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(getBackCity), for: .touchUpInside)
@@ -71,28 +69,30 @@ final class PagesMainView: UIView {
     func layout() {
         addSubview(toolbar)
         addSubview(tableView)
-        tableView.addSubview(addButton)
+        toolbar.addSubview(addButton)
         toolbar.addSubview(getBackButton)
         toolbar.addSubview(editingButton)
         NSLayoutConstraint.activate([
-            getBackButton.leftAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.leftAnchor, constant: 320),
-            getBackButton.topAnchor.constraint(equalTo: toolbar.topAnchor, constant: 0),
-            getBackButton.rightAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.rightAnchor, constant: 0),
+            getBackButton.leftAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.leftAnchor, constant: 5),
+            getBackButton.topAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.topAnchor, constant: 0),
+            getBackButton.rightAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.rightAnchor, constant: -200),
             getBackButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: 0),
-            editingButton.leftAnchor.constraint(equalTo: toolbar.leftAnchor, constant: 10),
+            editingButton.leftAnchor.constraint(equalTo: toolbar.leftAnchor, constant: 40),
             editingButton.topAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.topAnchor, constant: 10),
-            editingButton.rightAnchor.constraint(greaterThanOrEqualTo: toolbar.rightAnchor, constant: -320),
+            editingButton.rightAnchor.constraint(equalTo: toolbar.rightAnchor, constant: -165),
             editingButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: -10),
             toolbar.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
-            toolbar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0),
+            toolbar.topAnchor.constraint(equalTo: topAnchor, constant: 0),
             toolbar.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
             toolbar.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: 0),
             tableView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
             tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 40),
             tableView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
-            addButton.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 325),
-            addButton.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 560)
+            addButton.leadingAnchor.constraint(equalTo: toolbar.leadingAnchor, constant: 200),
+            addButton.topAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.topAnchor, constant: 0),
+            addButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: 0),
+            addButton.trailingAnchor.constraint(equalTo: toolbar.trailingAnchor, constant: -10)
         ])
     }
     

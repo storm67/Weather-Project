@@ -38,6 +38,7 @@ class CoreDataManager: CoreDataProtocol {
         }
         return true
     }
+    
     func fetchData(completion:@escaping ([SimpleModel]) -> Void) {
         
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "City")
@@ -98,25 +99,3 @@ protocol CoreDataProtocol {
     var city: [City] { get set }
 }
 
-class PagerViewModel: PageViewModelProtocol {
-    var coreData: CoreDataProtocol
-    
-    init(cdp: CoreDataProtocol) {
-        self.coreData = cdp
-    }
-    
-    func fetchData(completion:@escaping ([UIViewController]) -> Void) {
-        coreData.fetchData { (md) in
-            var controllers = [UIViewController]()
-            let viewModel = Assembler.sharedAssembler.resolver.resolve(ViewModelProtocol.self)!
-            for item in md {
-                controllers.append(MainViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon, position: item.position),viewModel: viewModel))
-            }
-            completion(controllers)
-        }
-    }
-}
-
-protocol PageViewModelProtocol {
-    func fetchData(completion:@escaping ([UIViewController]) -> Void)
-}

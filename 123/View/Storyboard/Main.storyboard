@@ -26,16 +26,15 @@
         <!--Pages View Controller-->
         <scene sceneID="J7s-Sw-SlS">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Kd5-ej-Gi0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="PagesViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="bVp-21-AH8" customClass="PagesViewController" customModule="_23" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oVs-DW-u8S">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="alj-0P-XON">
-                                <rect key="frame" x="166" y="323" width="78" height="38"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Привет" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zXD-qf-XEn">
+                                <rect key="frame" x="102" y="261" width="59" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="32"/>
+                                <fontDescription key="fontDescription" name="Papyrus" family="Papyrus" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -45,6 +44,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="gFJ-v4-NWf"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kd5-ej-Gi0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="15487.200000000001" y="97.601199400299862"/>
         </scene>

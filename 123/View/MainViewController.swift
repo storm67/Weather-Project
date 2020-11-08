@@ -15,9 +15,11 @@ final class MainViewController: UIViewController {
     fileprivate func view() -> MainControllerView {
         return view as! MainControllerView
     }
+    
     fileprivate var simpleModel: SimpleModel?
     fileprivate var weather = [Convertible]()
     public var viewModel: ViewModelProtocol!
+    
     override func loadView() {
         view = MainControllerView()
     }

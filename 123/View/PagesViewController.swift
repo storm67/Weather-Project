@@ -53,15 +53,15 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
         view().tableView.isEditing = !view().tableView.isEditing
         switch view().tableView.isEditing {
         case true:
-            view().editingButton.setTitle("Сохранить", for: .normal)
+    view().editingButton.setImage(UIImage.init(systemName:"checkmark"), for: .normal)
         case false:
-            view().editingButton.setTitle("Изменить", for: .normal)
+    view().editingButton.setImage(UIImage.init(systemName:"ellipsis"), for: .normal)
         }
     }
     
     func getBack() {
         navigationController?.popViewController(animated: true)
-     }
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.count()
