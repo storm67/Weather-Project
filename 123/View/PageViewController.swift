@@ -26,11 +26,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
             pageControl.currentPage
         }
     }
-    
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
+
     var manager: PageViewModelProtocol!
     
     let menu: UIButton = {
@@ -141,6 +137,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         menu.isNavigationBarHidden = true
         menu.presentationStyle = .menuSlideIn
         menu.dismissOnPresent = true
+        menu.menuWidth = 330
         present(menu, animated: true, completion: nil)
     }
     

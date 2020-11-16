@@ -13,11 +13,12 @@ import SwiftChart
 final class PagesMainView: UIView {
     
     weak var delegate: GetEdit?
-    
+
     let tableView: UITableView = {
         var myTableView = UITableView()
-        myTableView.separatorColor = .black
-        myTableView.rowHeight = 95
+        myTableView.separatorColor = .white
+        myTableView.backgroundColor = UIColor(hexFromString: "#929aef")
+        myTableView.rowHeight = 125
         myTableView.tableFooterView = UIView(frame: .zero)
         myTableView.register(PagesViewCell.self, forCellReuseIdentifier: "cell")
         myTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -75,11 +76,11 @@ final class PagesMainView: UIView {
         NSLayoutConstraint.activate([
             getBackButton.leftAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.leftAnchor, constant: 5),
             getBackButton.topAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.topAnchor, constant: 0),
-            getBackButton.rightAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.rightAnchor, constant: -200),
+            getBackButton.rightAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.rightAnchor, constant: -290),
             getBackButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: 0),
-            editingButton.leftAnchor.constraint(equalTo: toolbar.leftAnchor, constant: 40),
+            editingButton.leftAnchor.constraint(equalTo: toolbar.leftAnchor, constant: 50),
             editingButton.topAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.topAnchor, constant: 10),
-            editingButton.rightAnchor.constraint(equalTo: toolbar.rightAnchor, constant: -165),
+            editingButton.rightAnchor.constraint(equalTo: toolbar.rightAnchor, constant: -255),
             editingButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: -10),
             toolbar.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
             toolbar.topAnchor.constraint(equalTo: topAnchor, constant: 0),
@@ -89,11 +90,13 @@ final class PagesMainView: UIView {
             tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 40),
             tableView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
-            addButton.leadingAnchor.constraint(equalTo: toolbar.leadingAnchor, constant: 200),
+            addButton.leadingAnchor.constraint(equalTo: toolbar.leadingAnchor, constant: 280),
             addButton.topAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.topAnchor, constant: 0),
             addButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: 0),
-            addButton.trailingAnchor.constraint(equalTo: toolbar.trailingAnchor, constant: -10)
+            addButton.trailingAnchor.constraint(equalTo: toolbar.trailingAnchor, constant: 0)
         ])
+        layer.masksToBounds = true
+        layer.cornerRadius = 15
     }
     
     required init?(coder: NSCoder) {

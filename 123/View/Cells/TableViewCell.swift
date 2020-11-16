@@ -15,6 +15,7 @@ final class CustomCell: UITableViewCell {
         get {
             return super.frame
         }
+        
         set (newFrame) {
             var frame = newFrame
             let newWidth = frame.width * 0.93 // get 80% width here
@@ -25,6 +26,7 @@ final class CustomCell: UITableViewCell {
             frame.size.height -= 2 * 5
             super.frame = frame
         }
+        
     }
     
     let backView: UIView = {
@@ -34,10 +36,10 @@ final class CustomCell: UITableViewCell {
     }()
     
     var imgView: UIImageView = {
-        let label = UIImageView()
-        label.image = UIImage(named: "cloud")?.imageResize(sizeChange: CGSize(width: 32,height: 32))
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+        let image = UIImageView()
+        image.image = UIImage(named: "cloud")?.imageResize(sizeChange: CGSize(width: 32,height: 32))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
     }()
     
     let tempLabel: UILabel = {
@@ -47,30 +49,41 @@ final class CustomCell: UITableViewCell {
         return label
     }()
     
+    var maskLayer: UIView = {
+        let image = UIView()
+        image.clipsToBounds = true
+        image.backgroundColor = .none
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        backgroundColor = .clear
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String!)
-    {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String!) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(backView)
-        backView.addSubview(imgView)
-        backView.addSubview(tempLabel)        
+        backView.addSubview(tempLabel)
+        backView.addSubview(maskLayer)
+        addSubview(imgView)
         self.contentView.layer.borderWidth = 1.0
         self.contentView.layer.borderColor = UIColor.clear.cgColor
         self.contentView.layer.masksToBounds = true
-        self.layer.masksToBounds = false
         self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.layer.cornerRadius).cgPath
         NSLayoutConstraint.activate([
             tempLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 14),
             tempLabel.leadingAnchor.constraint(lessThanOrEqualTo: contentView.leadingAnchor, constant: 335),
             tempLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            imgView.topAnchor.constraint(lessThanOrEqualTo: contentView.topAnchor, constant: 10),
-            imgView.leadingAnchor.constraint(lessThanOrEqualTo: contentView.leadingAnchor, constant: 265),
-            imgView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -50),
-            imgView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -10),
+            imgView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            imgView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 265),
+            imgView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -70),
+            imgView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
+            maskLayer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 34),
+            maskLayer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 270),
+            maskLayer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -75),
+            maskLayer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15),
         ])
         backgroundColor = .clear
         contentView.backgroundColor = .white
@@ -84,14 +97,13 @@ final class CustomCell: UITableViewCell {
     var viewModel: Convertible? {
         didSet {
             guard let viewModel = viewModel else { return }
-            print(viewModel.dayIconPhrase)
             DispatchQueue.main.async {
                 self.textLabel?.text = "\(viewModel.date)"
                 self.tempLabel.text = "\(viewModel.temperature.convertToCelsius())°"
                 self.detailTextLabel?.text = viewModel.standardDate
-                self.imgView.image = self.back.switchImage(&self.imgView, viewModel.dayIconPhrase)
+                self.imgView.image = self.back.switchImage(self.imgView, viewModel.dayIconPhrase)
+                self.back.addRain(self.maskLayer)
             }
         }
     }
-    
 }

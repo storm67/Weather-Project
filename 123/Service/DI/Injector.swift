@@ -13,7 +13,6 @@ import SideMenu
 
 class Injector: Assembly {
     func assemble(container: Container) {
-
         container.register(LocationManagerProtocol.self) { r in
             LocationManager()
         }.inObjectScope(.container)

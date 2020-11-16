@@ -13,11 +13,10 @@ class PagesViewCell: UITableViewCell {
     
     var name: UILabel = {
     let text = UILabel()
-    text.textColor = .black
+    text.textColor = .white
     text.translatesAutoresizingMaskIntoConstraints = false
     return text
     }()
-    
     
     var viewModel: City! {
         didSet {
@@ -30,6 +29,7 @@ class PagesViewCell: UITableViewCell {
     {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         layout()
+        backgroundColor = UIColor(hexFromString: "#929aef")
     }
     
     fileprivate func layout() {
@@ -45,4 +45,5 @@ class PagesViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
 }

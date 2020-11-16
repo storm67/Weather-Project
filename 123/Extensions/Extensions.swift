@@ -78,3 +78,17 @@ func switchController(vc: UIViewController, duration: CFTimeInterval, type: CATr
     view.window!.layer.add(transition, forKey: kCATransition)
     present(customVcTransition, animated: false, completion: nil)
 }}
+
+extension UIView {
+
+    func dropShadow() {
+        layer.masksToBounds = false
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.5
+        layer.shadowOffset = CGSize(width: -1, height: 1)
+        layer.shadowRadius = 1
+        layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.main.scale
+    }
+}

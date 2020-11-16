@@ -137,6 +137,7 @@ extension CitySelector: UITableViewDataSource {
         searchController.searchBar.delegate = self
         view.addSubview(locationButton)
     }
+    
     func layout() {
         tableView.clipsToBounds = true
         tableView.rowHeight = 52

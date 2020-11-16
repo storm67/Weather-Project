@@ -10,6 +10,5 @@ pod 'Swinject'
 pod 'SwinjectStoryboard'
 pod "SwiftChart"
 pod 'SideMenu'
-pod "URWeatherView"
 
 end

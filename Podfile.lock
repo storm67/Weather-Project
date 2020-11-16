@@ -1,5 +1,4 @@
 PODS:
-  - lottie-ios-extension (1.5.1.1)
   - SideMenu (6.5.0)
   - SwiftChart (1.0.1)
   - SwiftyJSON (4.3.0)
@@ -7,11 +6,6 @@ PODS:
   - SwinjectStoryboard (2.2.0):
     - Swinject (~> 2.6)
   - TagListView (1.4.0)
-  - URWeatherView (0.7.0):
-    - lottie-ios-extension
-    - URWeatherView/Core (= 0.7.0)
-  - URWeatherView/Core (0.7.0):
-    - lottie-ios-extension
 
 DEPENDENCIES:
   - SideMenu
@@ -20,29 +14,24 @@ DEPENDENCIES:
   - Swinject
   - SwinjectStoryboard
   - TagListView (~> 1.0)
-  - URWeatherView
 
 SPEC REPOS:
   trunk:
-    - lottie-ios-extension
     - SideMenu
     - SwiftChart
     - SwiftyJSON
     - Swinject
     - SwinjectStoryboard
     - TagListView
-    - URWeatherView
 
 SPEC CHECKSUMS:
-  lottie-ios-extension: 219b261ba9f3d6a0cda7cf84bbfb545aa5806153
   SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   SwiftChart: ba767a678d568a5ee22d419e146a0582865e1aff
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
   Swinject: ddf78b8486dd9b71a667b852cad919ab4484478e
   SwinjectStoryboard: 32512ef16c2b0ff5b8f823b23539c4a50f6d3383
   TagListView: 987b0bdbb16cd9d9e7c0e2ec32aff37ecba8b173
-  URWeatherView: 4a716a83149f788220ec156047e4d0e8517835bf
 
-PODFILE CHECKSUM: 55b0a90c66c84c369643933dce4228e0a7631776
+PODFILE CHECKSUM: 1fc7633c023180202d41ece38d9c3ea9dcdd340a
 
 COCOAPODS: 1.9.0
