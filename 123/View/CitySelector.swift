@@ -12,7 +12,7 @@ import Foundation
 import UIKit
 import TagListView
 
-final class CitySelector: UIViewController, UITableViewDelegate,  UISearchBarDelegate, UISearchResultsUpdating, TagListViewDelegate {
+final class CitySelector: UIViewController, UITableViewDelegate, UISearchBarDelegate, UISearchResultsUpdating, TagListViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     

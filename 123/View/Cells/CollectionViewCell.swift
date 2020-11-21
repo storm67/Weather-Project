@@ -1,17 +1,15 @@
 //
-//  TableViewCell.swift
+//  CollectionViewCell.swift
 //  123
 //
-//  Created by gdml on 01/05/2020.
+//  Created by Andrey on 20/11/2020.
 //  Copyright © 2020 gdml. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-final class CustomCell: UITableViewCell {
-    let back = BackgroundView()
-    
+class CollectionViewCell: UICollectionViewCell {
     override var frame: CGRect {
         get {
             return super.frame
@@ -63,8 +61,7 @@ final class CustomCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String!) {
-        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+    func layout() {
         contentView.addSubview(backView)
         backView.addSubview(tempLabel)
         backView.addSubview(maskLayer)
@@ -95,14 +92,20 @@ final class CustomCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        layout()
+    }
+    
     var viewModel: Convertible? {
         didSet {
             guard let viewModel = viewModel else { return }
             DispatchQueue.main.async {
-                self.textLabel?.text = "\(viewModel.date)"
+                let back = BackgroundView()
+//                self.textLabel?.text = "\(viewModel.date)"
                 self.tempLabel.text = "\(viewModel.temperature.convertToCelsius())°"
-                self.detailTextLabel?.text = viewModel.standardDate
-                self.imgView.image = self.back.switchImage(self.imgView, viewModel.dayIconPhrase)
+//                self.detailTextLabel?.text = viewModel.standardDate
+                self.imgView.image = back.switchImage(self.imgView, viewModel.dayIconPhrase)
             }
         }
     }

@@ -52,6 +52,28 @@ final class BackgroundView: NSObject {
     view.layer.add(rotation, forKey: "rotationAnimation")
     }
     
+    func random() -> UIImage {
+        let random = Int.random(in: 1...14)
+        switch random {
+        case 1: return UIImage(named: "Altern")!
+        case 2: return UIImage(named: "DayMountain")!
+        case 3: return UIImage(named: "DesertMountain")!
+        case 4: return UIImage(named: "Evening")!
+        case 5: return UIImage(named: "EveningLast")!
+        case 6: return UIImage(named: "MountainEvening")!
+        case 7: return UIImage(named: "MountainsSmoke")!
+        case 8: return UIImage(named: "Night1")!
+        case 9: return UIImage(named: "NightMountain")!
+        case 10: return UIImage(named: "NorthernLights")!
+        case 11: return UIImage(named: "Paris")!
+        case 12: return UIImage(named: "PreDay")!
+        case 13: return UIImage(named: "riverForest")!
+        case 14: return UIImage(named: "UFO")!
+        default:
+        return UIImage()
+        }
+    }
+    
     func addRain(_ view: UIView) {
         rain = RainController(view: view, frame: view.frame)
         rain.createBackground()

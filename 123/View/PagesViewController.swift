@@ -31,6 +31,7 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         addPrimitiveData()
+        navigationController?.isNavigationBarHidden = true
         view().delegate = self
         view().tableView.dataSource = self
         view().tableView.delegate = self
@@ -38,7 +39,7 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
     
     func getNewCity() {
         let vc = storyboard?.instantiateViewController(identifier: "CitySelector") as! CitySelector
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func addPrimitiveData() {

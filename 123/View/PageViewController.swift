@@ -11,7 +11,7 @@ import UIKit
 import Swinject
 import SideMenu
 
-final class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate, SideMenuNavigationControllerDelegate {
+final class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate, SideMenuNavigationControllerDelegate{
     
     fileprivate var blurEffect: UIVisualEffectView! {
         didSet {
@@ -42,7 +42,6 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         let button = UIButton()
         button.setImage(UIImage(named: "search"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(buttonTapAction), for: .touchUpInside)
         button.isHidden = true
         return button
     }()
@@ -51,7 +50,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     required init?(coder aDecoder: NSCoder) {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
-    
+
     func setupPageControl() {
         var count = 0
         if count == 0 {
@@ -71,6 +70,9 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.navigationController?.isNavigationBarHidden = true
+        self.navigationController?.navigationBar.isHidden = true
         layout()
         let blur = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
         blurEffect = UIVisualEffectView(effect: blur)
@@ -127,18 +129,14 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         widthConstraint.isActive = true
     }
     
-    @objc fileprivate func buttonTapAction() {
-        let vc = storyboard?.instantiateViewController(identifier: "PagesViewController") as! PagesViewController
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
     @objc fileprivate func sideMenuAction() {
-        let menu = storyboard?.instantiateViewController(withIdentifier: "SideMenu") as! SideMenuNavigationController
-        menu.isNavigationBarHidden = true
-        menu.presentationStyle = .menuSlideIn
-        menu.dismissOnPresent = true
-        menu.menuWidth = 330
-        present(menu, animated: true, completion: nil)
+        let menu = storyboard?.instantiateViewController(withIdentifier: "PagesViewController") as! PagesViewController
+        let nav = SideMenuNavigationController(rootViewController: menu)
+        nav.presentationStyle = .menuSlideIn
+        nav.menuWidth = 330
+        nav.pushStyle = .popWhenPossible
+        guard let window = self.view.window, let root = window.rootViewController else { return }
+        root.present(nav, animated: true, completion: nil)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
