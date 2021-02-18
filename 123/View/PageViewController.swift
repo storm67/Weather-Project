@@ -79,6 +79,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         self.view.addSubview(blurEffect)
         self.dataSource = self
         self.delegate = self
+        self.navigationController?.navigationBar.isTranslucent = false
     }
     
     override func viewWillAppear(_ animated: Bool) {

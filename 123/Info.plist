@@ -82,7 +82,9 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Uni Sans Heavy.otf</string>
+		<string>OpenSans-ExtraBold.ttf</string>
+		<string>UniSansHeavyCaps.otf</string>
+		<string>Uni Sans Thin.otf</string>
 	</array>
 </dict>
 </plist>

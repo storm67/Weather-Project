@@ -16,33 +16,28 @@ final class BackgroundView: NSObject {
     func switchImage<T>(_ imageView: T, _ image: String) -> UIImage where T: UIView {
         switch image.description {
         case let str where str.contains("ив") || str.contains("ожд"):
-            //rotation(imageView)
-            NSLayoutConstraint.activate([
-            imageView.heightAnchor.constraint(equalToConstant: 25),
-            imageView.widthAnchor.constraint(equalToConstant: 25)
-            ])
+            return UIImage(named: "12")!
+        case let str where str.contains("Солн"):
             return UIImage(named: "1")!
-        case let str where str.contains("олн"):
-            //rotation(imageView)
-            NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalToConstant: 35),
-            imageView.heightAnchor.constraint(equalToConstant: 30)
-            ])
-            return UIImage(named: "1")!
-        case let str where str.contains("бла"):
-            //addRain(imageView)
-            NSLayoutConstraint.activate([
-                imageView.heightAnchor.constraint(equalToConstant: 20),
-                imageView.widthAnchor.constraint(equalToConstant: 25)
-            ])
-            return UIImage(named: "3")!
-        case let str where str.contains("жд"):
-            rotation(imageView)
+        case let str where str.contains("Преимущественно облачно"):
+            return UIImage(named: "6")!
+        case let str where str.contains("Переменная облачность") || str.contains("Небольшая облачность"):
+            return UIImage(named: "4")!
+        case let str where str.contains("Снег"):
+            return UIImage(named: "15")!
+        case let str where str.contains("Небольшой снег"):
+            return UIImage(named: "20")!
+        case let str where str.contains("Холодно"):
+            return UIImage(named: "snowflake")!
+        case let str where str.contains("Небольшая облачность, небольшой снег"):
+            return UIImage(named: "20")!
+        case let str where str.contains("Преимущественно ясно"):
             return UIImage(named: "1")!
         default:
             return UIImage()
         }
-}
+    }
+    
     func rotation(_ view: UIView) {
     let rotation: CABasicAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
     rotation.toValue = NSNumber(value: Double.pi * 2)

@@ -17,6 +17,8 @@ struct Convertible {
     var realFeel: Int
     var wind: Int
     var standardDate: String
+    var air: Int
+    var temperatureMax: Int
 }
 
 

@@ -59,12 +59,22 @@ final class MainViewController: UIViewController {
     
     fileprivate func update() {
         guard let model = simpleModel else { return }
-        viewModel.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one in
+        viewModel.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one, quality  in
             DispatchQueue.main.async {
                 if model.lat == nil {
-            self?.view().updateData("\(one.temperature.convertToCelsius())°","\(one.dayIconPhrase)", "Текущее местоположение", (self?.back.random())!)
+                    self?.view().updateData(temp: "\(one.temperature.convertToCelsius())°",
+                        city: "\(one.dayIconPhrase)",
+                        value: "Текущее местоположение",
+                        image: (self?.back.random())!,
+                        air: one.air,
+                        index: quality[0].value)
                 } else {
-                    self?.view().updateData("\(one.temperature.convertToCelsius())°", "\(one.dayIconPhrase)", model.name, (self?.back.random())!)
+                    self?.view().updateData(temp: "\(one.temperature.convertToCelsius())°",
+                        city: "\(one.dayIconPhrase)",
+                        value: model.name,
+                        image: (self?.back.random())!,
+                        air: one.air,
+                        index: quality[0].value)
                     self?.view().locationIcon.isHidden = true
                 }
                 self?.weather = weather
@@ -81,19 +91,18 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
         cell.viewModel = viewModel.cellViewModel(index: indexPath.row)
         cell.selectionStyle = .none
+//        if cell == 4 {
+//            cell.maskLayer.isHidden = true
+//        }
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return view().headerView
     }
     
 }
 
-extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 3
     }
@@ -104,7 +113,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize.init(width: view.frame.width, height: 250)
+        return CGSize.init(width: 55, height: collectionView.bounds.size.height)
     }
     
     
