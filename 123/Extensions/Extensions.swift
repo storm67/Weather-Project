@@ -91,7 +91,30 @@ extension UIView {
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.main.scale
     }
-    
+        func addColors(colors: [UIColor], withPercentage percentages: [Double]) {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = self.bounds
+        var colorsArray: [CGColor] = []
+        var locationsArray: [NSNumber] = []
+        var total = 0.0
+        locationsArray.append(0.0)
+        for (index, color) in colors.enumerated() {
+            colorsArray.append(color.cgColor)
+            colorsArray.append(color.cgColor)
+            if index+1 < percentages.count {
+                total += percentages[index]
+                let location: NSNumber = NSNumber(value: total/100)
+                locationsArray.append(location)
+                locationsArray.append(location)
+            }
+        }
+        locationsArray.append(1.0)
+        gradientLayer.colors = colorsArray
+        gradientLayer.locations = locationsArray
+        self.backgroundColor = .clear
+        self.layer.addSublayer(gradientLayer)
+        
+    }
 }
 
 extension UIImage {

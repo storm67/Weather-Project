@@ -12,20 +12,24 @@ import SwiftyJSON
 final class DailyForecast: Decodable {
     var date: String
     var temperature: Int
+    var temperatureMax: Int
     var dayIcon: Int
     var nightIcon: Int
     var dayIconPhrase: String
     var nightIconPhrase: String
     var realFeel: Int
     var wind: Int
+    var airQuality: Int
     init(dictionary: JSON) {
         date = dictionary["Date"].stringValue
         temperature = dictionary["Temperature"]["Minimum"]["Value"].intValue
+        temperatureMax = dictionary["Temperature"]["Maximum"]["Value"].intValue
         dayIcon = dictionary["Day"]["Icon"].intValue
         nightIcon = dictionary["Night"]["Icon"].intValue
         dayIconPhrase = dictionary["Day"]["IconPhrase"].stringValue
         nightIconPhrase = dictionary["Night"]["IconPhrase"].stringValue
         realFeel = dictionary["RealFeelTemperature"]["Minimum"]["Value"].intValue
         wind = dictionary["Wind"]["Speed"]["Value"].intValue
+        airQuality = 3
     }
 }

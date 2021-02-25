@@ -26,11 +26,11 @@ protocol SelectRow: class {
 }
 
 protocol ViewModelProtocol {
-    typealias type = ([Convertible], Convertible) -> Void
-    func newDebug(key: Int?, lat: Double?, lon: Double?, completion: @escaping (type))
+    typealias Completion = ([Convertible], Convertible, [AirQuality]) -> Void
+    func newDebug(key: Int?, lat: Double?, lon: Double?, completion: @escaping (Completion))
     func returnit()
     func cellViewModel(index: Int) -> Convertible?
-    func weatherFiveDayRequest(key: Int,completion: @escaping (type))
+    func weatherFiveDayRequest(key: Int,completion: @escaping (Completion))
     var weather: [Convertible] { get set }
 }
 
