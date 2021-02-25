@@ -21,6 +21,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     
     fileprivate var pageControl = UIPageControl()
     fileprivate var pages = [UIViewController]()
+    
     fileprivate var currentPage: Int {
         get {
             pageControl.currentPage
@@ -28,6 +29,8 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     }
 
     var manager: PageViewModelProtocol!
+    
+    var nextViewController = UIViewController()
     
     let menu: UIButton = {
         let button = UIButton()
@@ -78,7 +81,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         blurEffect = UIVisualEffectView(effect: blur)
         self.view.addSubview(blurEffect)
         self.dataSource = self
-        self.delegate = self
+        delegate = self
         self.navigationController?.navigationBar.isTranslucent = false
     }
     
@@ -104,7 +107,8 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         pages = []
         setUp()
         setupPageControl()
-        setViewControllers([pages[0]], direction: .forward, animated: true, completion: nil)
+        setViewControllers([pages[0]], direction: .forward, animated: true, completion: { _ in
+        })
         for subview in self.view.subviews {
             if let scrollView = subview as? UIScrollView {
                 scrollView.delegate = self
@@ -141,6 +145,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        viewController.loadViewIfNeeded()
         if let viewControllerIndex = self.pages.firstIndex(of: viewController) {
             if viewControllerIndex != 0 {
                 return self.pages[viewControllerIndex - 1]

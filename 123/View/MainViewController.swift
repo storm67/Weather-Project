@@ -10,7 +10,7 @@ import UIKit
 import Swinject
 import SwiftChart
 
-final class MainViewController: UIViewController {
+final class MainViewController: UIViewController, SunChanger {
     
     var back = BackgroundView()
     
@@ -34,6 +34,7 @@ final class MainViewController: UIViewController {
         view().tableView.delegate = self
         view().collection.delegate = self
         view().collection.dataSource = self
+        view().delegate = self
         update()
         let char = ChartSeries(data: [(x: 0, y: 0),
                                       (x: 3, y: 4),
@@ -62,19 +63,24 @@ final class MainViewController: UIViewController {
         viewModel.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one, quality  in
             DispatchQueue.main.async {
                 if model.lat == nil {
-                    self?.view().updateData(temp: "\(one.temperature.convertToCelsius())°",
-                        city: "\(one.dayIconPhrase)",
-                        value: "Текущее местоположение",
-                        image: (self?.back.random())!,
-                        air: one.air,
-                        index: quality[0].value)
+                    self?.view().updateData(one.dayIconPhrase,
+                        "\(one.dayIconPhrase)",
+                        "Текущее местоположение",
+                        (self?.back.random())!,
+                        one.air,
+                        quality[0].value,
+                        one.temperature,
+                        -1, one.sunrise, one.sunset
+                        )
                 } else {
-                    self?.view().updateData(temp: "\(one.temperature.convertToCelsius())°",
-                        city: "\(one.dayIconPhrase)",
-                        value: model.name,
-                        image: (self?.back.random())!,
-                        air: one.air,
-                        index: quality[0].value)
+                    self?.view().updateData(one.dayIconPhrase,
+                        "\(one.dayIconPhrase)",
+                        model.name,
+                        (self?.back.random())!,
+                        one.air,
+                        quality[0].value,
+                        one.temperature,
+                        -1, one.sunrise, one.sunset)
                     self?.view().locationIcon.isHidden = true
                 }
                 self?.weather = weather
@@ -82,6 +88,10 @@ final class MainViewController: UIViewController {
             }
             }
         )}
+    
+    func sunChanger(_ sunrise: Int, _ sunset: Int) {
+        
+    }
 }
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {

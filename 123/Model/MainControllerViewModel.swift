@@ -92,7 +92,9 @@ final class MainControllerViewModel: ViewModelProtocol {
                                 wind: first.wind,
                                 standardDate: second,
                                 air: first.airQuality,
-                                temperatureMax: first.temperatureMax)
+                                temperatureMax: first.temperatureMax,
+                                sunrise: first.sunRise,
+                                sunset: first.sunset)
                 }
                 self.weather = weatherX
                 completion(weatherX, weatherX[0], quality)

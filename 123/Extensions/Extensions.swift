@@ -20,11 +20,26 @@ extension String {
         return finish
     }
     
+    
+    
 }
 extension Int {
     
-    func convertToCelsius() -> Int {
-        return abs(Int(self - 32) * Int(5.0) / Int(9.0))
+    func convertToHours() -> Int {
+        let date = NSDate(timeIntervalSince1970: TimeInterval(self))
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date as Date)
+        let minute = calendar.component(.hour, from: date as Date)
+        return hour + minute
+    }
+    
+    func returnTime() -> String {
+        let date = NSDate(timeIntervalSince1970: TimeInterval(self))
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date as Date)
+        let minute = calendar.component(.minute, from: date as Date)
+        let compare = String(format:"%d:%02d", hour, minute)
+        return compare
     }
     
 }
@@ -65,6 +80,27 @@ extension UIColor {
             alpha: alpha
         )
     }
+    
+    func switcher(_ num: Int) -> UIColor {
+        switch num {
+        case 0...35:
+       return .green
+        case 35...75:
+        return .yellow
+        case 75...105:
+        return .orange
+        case 105...140:
+        return .systemRed
+        case 140...210:
+        return .magenta
+        case 210...:
+        return .red
+        default:
+       break
+        }
+        return .white
+    }
+    
 }
 extension UINavigationController {
     
@@ -132,3 +168,5 @@ extension UIImage {
         return UIColor(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, alpha: CGFloat(bitmap[3]) / 255)
     }
 }
+
+

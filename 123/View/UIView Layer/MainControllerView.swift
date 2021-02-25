@@ -10,7 +10,11 @@ import SwiftChart
 
 final class MainControllerView: UIView {
     
+    let back = BackgroundView()
     var number = 0
+    var letters = [String.SubSequence]()
+    var endAngle: CGFloat = 0
+    weak var delegate: SunChanger?
     
     var segmentedControl: CustomSegmentedControl = {
         let interfaceSegmented = CustomSegmentedControl()
@@ -33,7 +37,7 @@ final class MainControllerView: UIView {
     
     var circle: Circle = {
         let circle = Circle(frame: .zero, strokeColor: .white)
-        circle.backgroundColor = .none
+        circle.fillColor = .white
         circle.isOpaque = false
         return circle
     }()
@@ -44,6 +48,8 @@ final class MainControllerView: UIView {
         state.textColor = .white
         state.translatesAutoresizingMaskIntoConstraints = false
         state.font = UIFont(name: "Verdana-Bold", size: 16)
+        state.lineBreakMode = .byWordWrapping
+        state.numberOfLines = 0
         return state
     }()
     
@@ -51,6 +57,7 @@ final class MainControllerView: UIView {
         let image = UIImageView()
         image.image = UIImage(named: "1")
         image.translatesAutoresizingMaskIntoConstraints = false
+        image.contentMode = .scaleAspectFit
         return image
     }()
     
@@ -58,7 +65,7 @@ final class MainControllerView: UIView {
         let imageBackgr = UIImageView()
         imageBackgr.contentMode = .scaleAspectFill
         imageBackgr.layer.masksToBounds = true
-        imageBackgr.layer.cornerRadius = 15
+        imageBackgr.layer.cornerRadius = 5
         imageBackgr.translatesAutoresizingMaskIntoConstraints = false
         return imageBackgr
     }()
@@ -215,44 +222,21 @@ final class MainControllerView: UIView {
         return label
     }()
     
-    var tempLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Москва"
-        label.font = UIFont.boldSystemFont(ofSize: 35.0)
-        label.textColor = .white
-        return label
-    }()
-    
-    let cityLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "15°"
-        label.textColor = .white
-        label.sizeToFit()
-        label.adjustsFontSizeToFitWidth = true
-        label.numberOfLines = 1
-        label.minimumScaleFactor = 0.5
-        label.font = label.font.withSize(25)
-        label.clipsToBounds = true
-        return label
-    }()
-    
     let day: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Четверг"
+        label.text = "15 Дек. 2020"
         label.textColor = .white
-        label.font = UIFont(name: "Verdana-Bold", size: 20)
+        label.font = UIFont(name: "AvenirNext-Regular", size: 15)
         return label
     }()
     
     let date: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "15 Дек. 2020"
+        label.text = "Четверг"
         label.textColor = .white
-        label.font = UIFont(name: "AvenirNext-Regular", size: 15)
+        label.font = UIFont(name: "Verdana-Bold", size: 20)
         return label
     }()
     
@@ -313,7 +297,7 @@ final class MainControllerView: UIView {
         view.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.masksToBounds = false
-        view.layer.cornerRadius = 13
+        view.layer.cornerRadius = 5
         view.layer.shadowColor = UIColor.gray.cgColor
         view.layer.shadowOpacity = 0.3
         view.layer.shadowOffset = CGSize.zero
@@ -347,18 +331,10 @@ final class MainControllerView: UIView {
         return view
     }()
     
-    let sunlightStatus: UIView = {
-        let view = SunView()
-        view.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.masksToBounds = false
-        view.layer.cornerRadius = 5
-        return view
-    }()
+    let sunlightStatus = SunView()
     
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    required init?(coder aDecoder: NSCoder) {
+       super.init(coder: aDecoder)
     }
     
     override init(frame: CGRect) {
@@ -456,9 +432,8 @@ final class MainControllerView: UIView {
             location.topAnchor.constraint(equalTo: headerOfMainView.safeAreaLayoutGuide.topAnchor, constant: -5),
             location.bottomAnchor.constraint(equalTo: headerOfMainView.safeAreaLayoutGuide.bottomAnchor, constant: -5),
             tempOriginal.leftAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.leftAnchor, constant: 20),
-            tempOriginal.topAnchor.constraint(equalTo: imageView.safeAreaLayoutGuide.bottomAnchor, constant: 30),
             tempOriginal.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -250),
-            tempOriginal.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -30),
+            tempOriginal.bottomAnchor.constraint(equalTo: state.topAnchor, constant: 0),
             collection.leftAnchor.constraint(equalTo: imageBackgr.safeAreaLayoutGuide.rightAnchor, constant: 20),
             collection.topAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.topAnchor, constant: 110),
             collection.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -15),
@@ -471,17 +446,16 @@ final class MainControllerView: UIView {
             day.topAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.topAnchor, constant: 10),
             day.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -250),
             date.leftAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.leftAnchor, constant: 20),
-            date.topAnchor.constraint(lessThanOrEqualTo: day.safeAreaLayoutGuide.bottomAnchor, constant: 10),
+            date.topAnchor.constraint(equalTo: day.safeAreaLayoutGuide.bottomAnchor, constant: 0),
             date.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -250),
             imageView.leftAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.leftAnchor, constant: 20),
             imageView.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -330),
-            imageView.topAnchor.constraint(lessThanOrEqualTo: date.safeAreaLayoutGuide.topAnchor, constant: 110),
-            imageView.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -85),
+            imageView.topAnchor.constraint(lessThanOrEqualTo: date.safeAreaLayoutGuide.bottomAnchor, constant: 90),
+            imageView.bottomAnchor.constraint(equalTo: tempOriginal.safeAreaLayoutGuide.topAnchor, constant: 0),
             imageView.heightAnchor.constraint(equalToConstant: 40),
             state.leftAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.leftAnchor, constant: 20),
-            state.topAnchor.constraint(lessThanOrEqualTo: tempOriginal.safeAreaLayoutGuide.bottomAnchor, constant: 0),
             state.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -250),
-            state.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -10),
+            state.bottomAnchor.constraint(greaterThanOrEqualTo: secondView.bottomAnchor, constant: -10),
             imageBackgr.leftAnchor.constraint(equalTo: secondView.leftAnchor, constant: 0),
             imageBackgr.topAnchor.constraint(equalTo: secondView.topAnchor, constant: 0),
             imageBackgr.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -220),
@@ -513,40 +487,39 @@ final class MainControllerView: UIView {
             descriptionQuality.rightAnchor.constraint(greaterThanOrEqualTo: airIndicatorView.rightAnchor, constant: -107),
             descriptionQuality.bottomAnchor.constraint(equalTo: airIndicatorView.bottomAnchor, constant: -60),
         ])
+        sunlightStatus.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
+        sunlightStatus.translatesAutoresizingMaskIntoConstraints = false
+        sunlightStatus.layer.masksToBounds = false
+        sunlightStatus.layer.cornerRadius = 5
     }
     
     
-    func updateData(temp: String,city: String,value: String,image: UIImage, air: Int, index: Int) {
-        DispatchQueue.main.async {
-            self.tempLabel.text = temp
-            self.cityLabel.text = city
+    func updateData(_ state: String,_ city: String,_ value: String,_ image: UIImage,_ air: Int,_ index: Int,_ indexMain: Int,_ sun: CGFloat, _ sunrise: Int, _ sunset: Int) {
+        
+            self.letters = state.split { !$0.isLetter }
+            print(letters)
+            DispatchQueue.main.async {
+            if self.letters.count == 1 {
+                self.state.text = "\(self.letters[0])"
+            } else if self.letters.count >= 2 {
+                self.state.text = "\(self.letters[0]) \(self.letters[1])"
+            } else if self.letters.contains("Преимущественно") {
+                self.state.text = "\(self.letters[1])"
+            }
             self.location.setTitle(value, for: .normal)
             self.imageBackgr.image = image
             self.indexNumber.text = "\(index)"
             self.number = index
+            self.tempOriginal.text = "\(indexMain)°"
             self.circle.frame = CGRect(x: 0 + index, y: 105, width: 15, height: 15)
-            self.indexNumber.textColor = self.switcher()
+            self.indexNumber.textColor = UIColor().switcher(index)
+            self.imageView.image = self.back.switchImage(self.imageView, state)
+            self.imageView.sizeToFit()
+            SunView.endAngle = sun
+            self.sunlightStatus.setNeedsDisplay()
+            self.sunlightStatus.firstTime.text = "\(sunrise.returnTime())"
+            self.sunlightStatus.secondTime.text = "\(sunset.returnTime())"
         }
-    }
-    
-    func switcher() -> UIColor {
-        switch number {
-        case 0...35:
-       return .green
-        case 35...75:
-        return .yellow
-        case 75...105:
-        return .orange
-        case 105...140:
-        return .systemRed
-        case 140...210:
-        return .magenta
-        case 210...:
-        return .red
-        default:
-       break
-        }
-        return .white
     }
     
 }

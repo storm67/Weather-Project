@@ -12,7 +12,10 @@ import UIKit
 class Circle: UIView {
     let fillLayer = CAShapeLayer()
     var strokeColor: UIColor
-    var fillColor: UIColor
+    var fillColor: UIColor = .white
+    lazy var float: CGFloat = frame.height / 2
+    lazy var circlePath = UIBezierPath(arcCenter: CGPoint(x: frame.width, y: frame.height), radius: float, startAngle: CGFloat(0), endAngle: CGFloat.pi * 2, clockwise: true)
+    
     init(frame: CGRect, strokeColor: UIColor, fillColor: UIColor = .clear) {
         self.strokeColor = strokeColor
         self.fillColor = fillColor
@@ -25,13 +28,12 @@ class Circle: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        let circlePath = UIBezierPath(arcCenter: CGPoint(x: frame.width, y: frame.height), radius: frame.height / 2, startAngle: CGFloat(0), endAngle: CGFloat.pi * 2, clockwise: true)
         strokeColor.setStroke()
         fillColor.setFill()
         circlePath.lineWidth = 1
         circlePath.stroke()
         fillLayer.path = circlePath.cgPath
-        fillLayer.fillColor = UIColor.white.cgColor
+        fillLayer.fillColor = fillColor.cgColor
         layer.addSublayer(fillLayer)
     }
 

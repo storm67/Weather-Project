@@ -44,8 +44,6 @@ class AirQualityView: UIView {
     func layout() {
     addSubview(good)
     addSubview(danger)
-    NSLayoutConstraint.activate([
-    ])
     }
     
     required init?(coder aDecoder: NSCoder) {

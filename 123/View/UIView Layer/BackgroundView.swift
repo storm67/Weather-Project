@@ -59,7 +59,7 @@ final class BackgroundView: NSObject {
         case 7: return UIImage(named: "MountainsSmoke")!
         case 8: return UIImage(named: "Night1")!
         case 9: return UIImage(named: "NightMountain")!
-        case 10: return UIImage(named: "NorthernLights")!
+        case 10: return UIImage(named: "NightMountain")!
         case 11: return UIImage(named: "Paris")!
         case 12: return UIImage(named: "PreDay")!
         case 13: return UIImage(named: "riverForest")!

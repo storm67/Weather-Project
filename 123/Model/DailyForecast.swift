@@ -20,6 +20,8 @@ final class DailyForecast: Decodable {
     var realFeel: Int
     var wind: Int
     var airQuality: Int
+    var sunRise: Int
+    var sunset: Int
     init(dictionary: JSON) {
         date = dictionary["Date"].stringValue
         temperature = dictionary["Temperature"]["Minimum"]["Value"].intValue
@@ -31,5 +33,7 @@ final class DailyForecast: Decodable {
         realFeel = dictionary["RealFeelTemperature"]["Minimum"]["Value"].intValue
         wind = dictionary["Wind"]["Speed"]["Value"].intValue
         airQuality = 3
+        sunRise = dictionary["Sun"]["EpochRise"].intValue
+        sunset = dictionary["Sun"]["EpochSet"].intValue
     }
 }

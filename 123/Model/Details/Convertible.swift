@@ -19,6 +19,8 @@ struct Convertible {
     var standardDate: String
     var air: Int
     var temperatureMax: Int
+    var sunrise: Int
+    var sunset: Int
 }
 
 
