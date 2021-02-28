@@ -69,7 +69,7 @@ class CollectionViewCell: UICollectionViewCell {
                 let back = BackgroundView()
                 self.tempLabel.text = "\(viewModel.temperature)°"
                 self.imgView.image = back.switchImage(self.imgView, viewModel.dayIconPhrase)
-                print(self.viewModel?.dayIconPhrase)
+                print(self.viewModel?.dayIconPhrase as Any)
             }
         }
     }

@@ -15,11 +15,13 @@ struct CityModel: Decodable {
     let country: String
     let republic: String
     let key: Int
+    let timeZone: String
     init(mod: JSON) {
         cityName = mod["LocalizedName"].stringValue
         region = mod["Region"]["LocalizedName"].stringValue
         country = mod["Country"]["LocalizedName"].stringValue
         republic = mod["LocalizedName"]["LocalizedType"].stringValue
         key = mod["Key"].intValue
+        timeZone = mod["TimeZone"]["Name"].stringValue
     }
 }

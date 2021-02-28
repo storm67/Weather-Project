@@ -39,9 +39,9 @@ final class LocationManager: NSObject, LocationManagerProtocol {
         }
     
     
-    fileprivate var locationHandler: (( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?)->())?
+    fileprivate var locationHandler: (( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?, _ timeZone: TimeZone)->())?
     
-    public func getLocation(onCompletion:@escaping ( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?)->()) {
+    public func getLocation(onCompletion:@escaping ( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?, _ timeZone: TimeZone)->()) {
         
         self.locationHandler = onCompletion
         
@@ -76,8 +76,8 @@ extension LocationManager: CLLocationManagerDelegate {
             if let location = locations.first {
             let geocoder = CLGeocoder()
             geocoder.reverseGeocodeLocation(location) { placemarks, error in
-                guard let placemarks = placemarks?[0], let town = placemarks.locality else { return }
-                handler(location.coordinate,town, nil)
+                guard let placemarks = placemarks?[0], let town = placemarks.locality, let timeZone = placemarks.timeZone else { return }
+                handler(location.coordinate,town, nil, timeZone)
                 }
             manager.delegate = nil
             manager.stopUpdatingHeading()
@@ -86,16 +86,11 @@ extension LocationManager: CLLocationManagerDelegate {
         }
     }
     
-    // MARK: - Location Did Fail
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        
-    }
-    
 }
 
 protocol LocationManagerProtocol: class {
     func requestLocation()
-    func getLocation(onCompletion:@escaping ( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?)->())
+    func getLocation(onCompletion:@escaping ( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?, _ timeZone: TimeZone)->())
     var data: Bool { get set }
     var access: Bool { get }
 }

@@ -50,7 +50,6 @@
 		313CE89A255DC2A70005FA6B /* Rain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313CE899255DC2A70005FA6B /* Rain.swift */; };
 		31612F552528E87D00FA72EE /* Injector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31612F542528E87D00FA72EE /* Injector.swift */; };
 		317C707C258D3A0700CEE84E /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317C707B258D3A0700CEE84E /* GradientButton.swift */; };
-		319BDBAA254894F400567C79 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319BDBA9254894F400567C79 /* ImageModel.swift */; };
 		319E8A2425D9A9F20072C352 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 319E8A2325D9A9C00072C352 /* OpenSans-ExtraBold.ttf */; };
 		31B7F71724166E3500BCB7C9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B7F71624166E3500BCB7C9 /* CoreDataManager.swift */; };
 		31E76AD425896C88006ED18A /* CitySelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E76AD325896C88006ED18A /* CitySelectorViewModel.swift */; };
@@ -109,7 +108,6 @@
 		313CE899255DC2A70005FA6B /* Rain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rain.swift; sourceTree = "<group>"; };
 		31612F542528E87D00FA72EE /* Injector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injector.swift; sourceTree = "<group>"; };
 		317C707B258D3A0700CEE84E /* GradientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
-		319BDBA9254894F400567C79 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		319E8A2125D9A8250072C352 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-BoldItalic.ttf"; path = "../../Open_Sans/OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		319E8A2325D9A9C00072C352 /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-ExtraBold.ttf"; path = "../../Open_Sans/OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; };
 		31B7F71624166E3500BCB7C9 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -201,7 +199,6 @@
 				31324A8C240EF5F50077C339 /* CityModel.swift */,
 				3131CC3B241BAFC2005C9314 /* DailyForecast.swift */,
 				3120230125AB2D83003D8F8C /* AirQuality.swift */,
-				319BDBA9254894F400567C79 /* ImageModel.swift */,
 				312E37DE24100D65001136A5 /* Details */,
 				31E76ADB25896D81006ED18A /* SimpleModel.swift */,
 			);
@@ -516,7 +513,6 @@
 				3137B897253C45D3004CBA8F /* EndPoint.swift in Sources */,
 				31324A6D240EF3960077C339 /* AppDelegate.swift in Sources */,
 				31E76AD825896CD6006ED18A /* PageManagerViewModel.swift in Sources */,
-				319BDBAA254894F400567C79 /* ImageModel.swift in Sources */,
 				31313445242925350061A552 /* Convertible.swift in Sources */,
 				31324A8D240EF5F50077C339 /* CityModel.swift in Sources */,
 				31324AB5240F133A0077C339 /* DataSender.swift in Sources */,

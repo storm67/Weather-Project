@@ -494,8 +494,7 @@ final class MainControllerView: UIView {
     }
     
     
-    func updateData(_ state: String,_ city: String,_ value: String,_ image: UIImage,_ air: Int,_ index: Int,_ indexMain: Int,_ sun: CGFloat, _ sunrise: Int, _ sunset: Int) {
-        
+    func updateData(_ state: String,_ city: String,_ value: String,_ image: UIImage,_ air: Int,_ index: Int,_ indexMain: Int,_ sun: CGFloat, _ sunrise: Int, _ sunset: Int, _ timeZone: String) {
             self.letters = state.split { !$0.isLetter }
             print(letters)
             DispatchQueue.main.async {
@@ -515,10 +514,25 @@ final class MainControllerView: UIView {
             self.indexNumber.textColor = UIColor().switcher(index)
             self.imageView.image = self.back.switchImage(self.imageView, state)
             self.imageView.sizeToFit()
-            SunView.endAngle = sun
             self.sunlightStatus.setNeedsDisplay()
             self.sunlightStatus.firstTime.text = "\(sunrise.returnTime())"
             self.sunlightStatus.secondTime.text = "\(sunset.returnTime())"
+            self.setUp(1614563400, 1614515520, timeZone)
+        }
+    }
+    
+    func setUp(_ f: Int, _ s: Int, _ timeZone: String) {
+        let angle: CGFloat = 0.03
+        let now = Int.now()
+        //let a = f.convertToHours(identifier: "")
+        let b = s.convertToHours(identifier: timeZone)
+        let value = ((CGFloat(now) / CGFloat(b)) * 100) * angle
+        SunView.endAngle = -value
+        print(-value)
+        let zone = TimeZone.abbreviationDictionary
+        let timeZoneIdentifiers = TimeZone.knownTimeZoneIdentifiers
+        let allCities = timeZoneIdentifiers.compactMap { identifier in
+            return identifier.split(separator: "/").last
         }
     }
     

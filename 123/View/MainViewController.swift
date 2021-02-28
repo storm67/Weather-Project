@@ -70,7 +70,7 @@ final class MainViewController: UIViewController, SunChanger {
                         one.air,
                         quality[0].value,
                         one.temperature,
-                        -1, one.sunrise, one.sunset
+                        -1, one.sunrise, one.sunset, model.timeZone
                         )
                 } else {
                     self?.view().updateData(one.dayIconPhrase,
@@ -80,7 +80,7 @@ final class MainViewController: UIViewController, SunChanger {
                         one.air,
                         quality[0].value,
                         one.temperature,
-                        -1, one.sunrise, one.sunset)
+                        -2, one.sunrise, one.sunset, model.timeZone)
                     self?.view().locationIcon.isHidden = true
                 }
                 self?.weather = weather
@@ -101,7 +101,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
         cell.viewModel = viewModel.cellViewModel(index: indexPath.row)
         cell.selectionStyle = .none
 //        if cell == 4 {

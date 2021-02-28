@@ -104,7 +104,7 @@ final class CustomCell: UITableViewCell {
                 self.secondTemp.text = "\(viewModel.temperature)°"
                 self.detailTextLabel?.text = viewModel.standardDate
                 self.imgView.image = self.back.switchImage(self.imgView, viewModel.dayIconPhrase)
-                print(self.viewModel?.dayIconPhrase)
+                print(self.viewModel?.dayIconPhrase as Any)
                 self.imgView.sizeToFit()
             }
         }

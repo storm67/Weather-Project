@@ -56,7 +56,6 @@ extension CitySelector: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         if let cell = tableView.dequeueReusableCell(withIdentifier: CitySelectorViewModel.cellID) as? CellView {
             cell.viewModel = self.viewModel.cellViewModel(index: indexPath.row)
             return cell
@@ -67,7 +66,7 @@ extension CitySelector: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selected = viewModel.searchElements[indexPath.row]
         searchController.searchBar.text = nil
-        if viewModel.createData(name: selected.name) {
+        if viewModel.createData(name: selected.name, timeZone: selected.timeZone) {
         let view = storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
         navigationController?.pushViewController(view, animated: true)
         }
@@ -83,7 +82,8 @@ extension CitySelector: UITableViewDataSource {
     
     func tagPressed(_ title: String, _ number: Int, tagView: TagView, sender: TagListView) {
         guard number != 0 else { return }
-        if viewModel.createDataFromTag(name: title, key: number) {
+        let timeZone = viewModel.getTimeZone(title)
+        if viewModel.createDataFromTag(name: title, key: number, timeZone: timeZone) {
         let view = storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
         navigationController?.pushViewController(view, animated: true)
         }
@@ -149,9 +149,10 @@ extension CitySelector: UITableViewDataSource {
     
     func getLocation() {
         viewModel.getLocation()
-        viewModel.setLocation { [weak self] (location, name, error) in
+        viewModel.setLocation { [weak self] (location, name, error, timeZone) in
         guard location != nil else { return }
-        self?.viewModel.createFromLocation(name: name, lat: location?.latitude, lon: location?.longitude)
+        guard let timeZone = timeZone.abbreviation() else { return }
+        self?.viewModel.createFromLocation(name: name, lat: location?.latitude, lon: location?.longitude, timeZone: timeZone)
         guard let access = self?.viewModel.checkAccess(access: true) else { return }
         if access {
             let view = self?.storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController

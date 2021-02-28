@@ -30,7 +30,7 @@ class PagerViewModel: PageViewModelProtocol {
             var controllers = [UIViewController]()
             let viewModel = Assembler.sharedAssembler.resolver.resolve(ViewModelProtocol.self)!
             for item in md {
-                controllers.append(MainViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon, position: item.position),viewModel: viewModel))
+                controllers.append(MainViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon, position: item.position, timeZone: item.timeZone),viewModel: viewModel))
             }
             completion(controllers)
         }

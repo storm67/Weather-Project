@@ -14,11 +14,13 @@ class SimpleModel {
     var lat: Double?
     var lon: Double?
     var position: Int
-    init(name: String, key: Int?, lat: Double?, lon: Double?, position: Int) {
+    var timeZone: String
+    init(name: String, key: Int?, lat: Double?, lon: Double?, position: Int, timeZone: String) {
         self.name = name
         self.key = key
         self.lat = lat
         self.lon = lon
         self.position = position
+        self.timeZone = timeZone
     }
 }

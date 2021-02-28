@@ -19,7 +19,6 @@ protocol EndPoint {
 
 
 enum WeatherAPI {
-    case getMainImage(id:Int, query: String)
     case getCityData(text: String)
     case getFiveDayWeather(city: String)
     case getCityByLocation(lat: Double, lon: Double)
@@ -29,7 +28,6 @@ extension WeatherAPI: EndPoint {
     
     var environmentBaseURL : String {
         switch self {
-        case .getMainImage: return "https://api.unsplash.com/search"
         case .getFiveDayWeather: return "http://dataservice.accuweather.com"
         case .getCityData:
             return "http://dataservice.accuweather.com"
@@ -45,8 +43,6 @@ extension WeatherAPI: EndPoint {
     
     var path: String {
         switch self {
-        case .getMainImage:
-            return "photos"
         case .getCityData:
             return "locations/v1/cities/search"
         case .getFiveDayWeather(let text):
@@ -62,12 +58,6 @@ extension WeatherAPI: EndPoint {
     
     var task: HTTPTask {
         switch self {
-        case .getMainImage(let page, let query):
-            return .requestParameters(bodyParameters: nil,
-                                      bodyEncoding: .urlEncoding,
-                                      urlParameters: ["page":page,
-                                                      "query":query,
-                                      "client_id":NetworkManager.correct])
         case .getFiveDayWeather:
             return .requestParameters(bodyParameters: nil,
                                       bodyEncoding: .urlEncoding,
