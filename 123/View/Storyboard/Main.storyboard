@@ -120,7 +120,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="jin-SO-NJu" kind="relationship" relationship="rootViewController" id="KrS-QD-5kJ"/>
+                        <segue destination="jin-SO-NJu" kind="relationship" relationship="rootViewController" id="ONc-wm-nwW"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="clH-E1-kBQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

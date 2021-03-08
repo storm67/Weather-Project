@@ -9,14 +9,11 @@
 import Foundation
 import UIKit
 
-protocol SunChanger: class {
-    func sunChanger(_ sunrise: Int, _ sunset: Int)
-}
-
 class SunView: UIView {
+    
     fileprivate var path = UIBezierPath()
     fileprivate let graph = UIView(frame: CGRect(x: 15, y: 125, width: 360, height: 1))
-    static var endAngle: CGFloat?
+    var endAngle: CGFloat?
     
     let firstTime: UILabel = {
         let firstTime = UILabel()
@@ -94,6 +91,10 @@ class SunView: UIView {
         secondTime.rightAnchor.constraint(equalTo: rightAnchor, constant: -75),
         secondTime.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])
+        backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
+        translatesAutoresizingMaskIntoConstraints = false
+        layer.masksToBounds = true
+        layer.cornerRadius = 5
        }
     
      required init?(coder aDecoder: NSCoder) {
@@ -109,7 +110,7 @@ class SunView: UIView {
     func state() -> UIBezierPath {
         let centre = CGPoint(x: bounds.size.width/2, y: 125)
         let path = UIBezierPath(arcCenter: centre, radius: 100.0, startAngle: .pi, endAngle: 2.0 * .pi, clockwise: true)
-        let dashes: [ CGFloat ] = [ 4.0, 6.0 ]
+        let dashes: [CGFloat] = [4.0, 6.0]
         path.setLineDash(dashes, count: dashes.count, phase: 0.0)
         UIColor.white.setStroke()
         path.lineWidth = 2
@@ -118,7 +119,7 @@ class SunView: UIView {
     }
     
     func setStroke() -> UIBezierPath {
-        guard let angle = SunView.endAngle else { return UIBezierPath() }
+        guard let angle = endAngle else { return UIBezierPath() }
         let centre = CGPoint(x: bounds.size.width/2, y: 125)
         path = UIBezierPath(arcCenter: centre, radius: 100.0, startAngle: .pi, endAngle: angle, clockwise: true)
         let dashes: [ CGFloat ] = [ 4.0, 6.0 ]
@@ -135,9 +136,10 @@ class SunView: UIView {
     flightAnimation.speed = 0
     flightAnimation.timeOffset = 1.99
     flightAnimation.duration = 2
+    flightAnimation.isRemovedOnCompletion = false
     imageView.layer.add(flightAnimation, forKey: "position")
     imageView.setNeedsDisplay()
     }
-
     
+
 }

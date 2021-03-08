@@ -17,7 +17,7 @@ class AirQualityView: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Хорошее"
-        label.font = UIFont(name: "UniSansHeavyCaps", size: 16)
+        label.font = UIFont(name: "Arial-BoldMT", size: 10)
         label.textColor = .white
         return label
     }()
@@ -26,7 +26,7 @@ class AirQualityView: UIView {
            let label = UILabel()
            label.translatesAutoresizingMaskIntoConstraints = false
            label.text = "Плохое"
-           label.font = UIFont(name: "UniSansHeavyCaps", size: 16)
+           label.font = UIFont(name: "Arial-BoldMT", size: 10)
            label.textColor = .white
            return label
    }()
@@ -39,11 +39,21 @@ class AirQualityView: UIView {
         let colors: [UIColor] = [.red, .magenta, .systemRed, .orange, .yellow, .green]
         let percentages: [Double] = [40, 20, 10, 10, 10, 10]
         graph.addColors(colors: colors, withPercentage: percentages)
+        layout()
     }
     
     func layout() {
     addSubview(good)
     addSubview(danger)
+    NSLayoutConstraint.activate([
+    good.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 14),
+    good.topAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.topAnchor, constant: 125),
+    good.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+    danger.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 335),
+    danger.topAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.topAnchor, constant: 125),
+    danger.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
+    danger.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+    ])
     }
     
     required init?(coder aDecoder: NSCoder) {

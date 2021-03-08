@@ -12,8 +12,7 @@ final class CellViewModel {
 let name: String
 let key: Int
 let country: String
-let timeZone: String
-    
+let timeZone: Int
     init(reg: CityModel) {
         self.timeZone = reg.timeZone
         self.name = reg.cityName

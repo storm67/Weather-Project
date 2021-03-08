@@ -72,9 +72,10 @@ extension WeatherAPI: EndPoint {
                                                       "q":"\(lat),\(lon)"])
         case .getCityData(let text):
             return .requestParameters(bodyParameters: nil,
-            bodyEncoding: .urlEncoding,
+                                      bodyEncoding: .urlEncoding,
             urlParameters: ["apikey":NetworkManager.MovieAPIKey,
-            "q":text])
+                            "q":text,
+                            "language":"ru"])
         }
     }
     

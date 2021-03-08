@@ -26,32 +26,33 @@ extension String {
 
 extension Int {
     
-    static func now() -> Int {
+    static func now(timeOffset: Int) -> Int {
+    let time = timeOffset * 3600
     let date = Date()
-    let calendar = Calendar.current
+    var calendar = Calendar.current
+    calendar.timeZone = TimeZone(secondsFromGMT: time)!
     let hour = calendar.component(.hour, from: date)
     let minute = calendar.component(.minute, from: date)
-    let gross = (hour * 60) + minute
-    return gross
+    return (hour * 60) + minute
     }
     
-    func convertToHours(identifier: String) -> Int {
+    func convertToHours(time: Int) -> Int {
         let date = NSDate(timeIntervalSince1970: TimeInterval(self))
         var calendar = Calendar.current
-        guard let timeZone = TimeZone(identifier: identifier) else { return 0 }
-        calendar.timeZone = timeZone
+        calendar.timeZone = TimeZone(secondsFromGMT: time * 3600)!
         let hour = calendar.component(.hour, from: date as Date)
         let minute = calendar.component(.minute, from: date as Date)
-        print(minute)
         return (hour * 60) + minute
     }
     
-    func returnTime() -> String {
+    //Рефакторинг
+    func returnTime(time: Int) -> String {
         let date = NSDate(timeIntervalSince1970: TimeInterval(self))
-        let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: date as Date)
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone(secondsFromGMT: time * 3600)!
+        let hours = calendar.component(.hour, from: date as Date)
         let minute = calendar.component(.minute, from: date as Date)
-        let compare = String(format:"%d:%02d", hour, minute)
+        let compare = String(format:"%d:%02d", hours, minute)
         return compare
     }
     

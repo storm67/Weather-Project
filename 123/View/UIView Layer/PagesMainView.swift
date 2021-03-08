@@ -17,7 +17,7 @@ final class PagesMainView: UIView {
     let tableView: UITableView = {
         var myTableView = UITableView()
         myTableView.separatorColor = .white
-        myTableView.backgroundColor = UIColor(hexFromString: "#929aef")
+        myTableView.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
         myTableView.rowHeight = 125
         myTableView.tableFooterView = UIView(frame: .zero)
         myTableView.register(PagesViewCell.self, forCellReuseIdentifier: "cell")

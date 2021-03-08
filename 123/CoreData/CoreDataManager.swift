@@ -18,8 +18,9 @@ class CoreDataManager: CoreDataProtocol {
     var city: [City] = []
     
     @discardableResult
-    func createData(name: String, key: Double?, lat: Double?, lon: Double?, timeZone: String) -> Bool {
+    func createData(name: String, key: Double?, lat: Double?, lon: Double?, timeZoneOffset: Int) -> Bool {
         let object = City(context: context)
+        print(city)
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = City.fetchRequest()
         let count = try? self.context.count(for: fetchRequest)
         object.setValue(name, forKey: "name")
@@ -27,7 +28,8 @@ class CoreDataManager: CoreDataProtocol {
         object.setValue(lat, forKey: "lat")
         object.setValue(lon, forKey: "lon")
         object.setValue(count, forKey: "position")
-        object.setValue(timeZone, forKey: "timeZone")
+        object.setValue(timeZoneOffset, forKey: "timeZoneOffset")
+        //let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         background.perform {
             do {
                 self.city.append(object)
@@ -52,8 +54,7 @@ class CoreDataManager: CoreDataProtocol {
             var item = [SimpleModel]()
             for data in city {
                 guard let name = data.name else { return }
-                guard let timeZone = data.timeZone else { return }
-                item.append(SimpleModel(name: name, key: Int(data.cityId), lat: data.lat, lon: data.lon, position: Int(data.position), timeZone: timeZone)
+                item.append(SimpleModel(name: name, key: Int(data.cityId), lat: data.lat, lon: data.lon, position: Int(data.position), timeZone: Int(data.timeZoneOffset))
                 )}
             completion(item)
         } catch {
@@ -79,10 +80,8 @@ class CoreDataManager: CoreDataProtocol {
         do {
             try context.save()
             print("Data Deleted")
-            
         } catch {
             print("Failed to delete data: ", error.localizedDescription)
-            
         }
     }
     
@@ -97,7 +96,7 @@ protocol CoreDataProtocol {
     func deleteData(indexPath: IndexPath)
     func resetable(completion:@escaping () -> Void)
     func fetchData(completion:@escaping ([SimpleModel]) -> Void)
-    func createData(name: String, key: Double?, lat: Double?, lon: Double?, timeZone: String) -> Bool
+    func createData(name: String, key: Double?, lat: Double?, lon: Double?, timeZoneOffset: Int) -> Bool
     var city: [City] { get set }
 }
 

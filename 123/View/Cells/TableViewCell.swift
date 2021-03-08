@@ -63,7 +63,6 @@ final class CustomCell: UITableViewCell {
         detailTextLabel?.textColor = .white
         contentView.addSubview(backView)
         backView.addSubview(tempLabel)
-        backView.addSubview(maskLayer)
         backView.addSubview(secondTemp)
         backView.addSubview(imgView)
         self.contentView.layer.borderColor = UIColor.clear.cgColor
@@ -80,10 +79,6 @@ final class CustomCell: UITableViewCell {
         tempLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
         tempLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 210),
         tempLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -60),
-        maskLayer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: frame.height * 2),
-        maskLayer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-        maskLayer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
-        maskLayer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
         ])
         backgroundColor = .clear
         contentView.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)

@@ -10,7 +10,7 @@ import UIKit
 import Swinject
 import SwiftChart
 
-final class MainViewController: UIViewController, SunChanger {
+final class MainViewController: UIViewController {
     
     var back = BackgroundView()
     
@@ -26,7 +26,6 @@ final class MainViewController: UIViewController, SunChanger {
         view = MainControllerView()
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.isNavigationBarHidden = true
@@ -34,17 +33,7 @@ final class MainViewController: UIViewController, SunChanger {
         view().tableView.delegate = self
         view().collection.delegate = self
         view().collection.dataSource = self
-        view().delegate = self
         update()
-        let char = ChartSeries(data: [(x: 0, y: 0),
-                                      (x: 3, y: 4),
-                                      (x: 4, y: 2),
-                                      (x: 5, y: 2.3),
-                                      (x: 7, y: 3),
-                                      (x: 8, y: 2.2),
-                                      (x: 9, y: 2.5)])
-        char.area = true
-        view().charts.add(char)
     }
     
     convenience init(model: SimpleModel, viewModel: ViewModelProtocol) {
@@ -85,13 +74,12 @@ final class MainViewController: UIViewController, SunChanger {
                 }
                 self?.weather = weather
                 self?.view().tableView.reloadData()
+                self?.view().layoutIfNeeded()
+                self?.view().setNeedsDisplay()
             }
             }
         )}
     
-    func sunChanger(_ sunrise: Int, _ sunset: Int) {
-        
-    }
 }
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
@@ -113,8 +101,9 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -123,8 +112,15 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize.init(width: 55, height: collectionView.bounds.size.height)
+        return CGSize.init(width: 35, height: collectionView.bounds.size.height)
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
     
 }

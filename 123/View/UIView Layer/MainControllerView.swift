@@ -10,11 +10,9 @@ import SwiftChart
 
 final class MainControllerView: UIView {
     
-    let back = BackgroundView()
-    var number = 0
-    var letters = [String.SubSequence]()
-    var endAngle: CGFloat = 0
-    weak var delegate: SunChanger?
+    fileprivate let back = BackgroundView()
+    fileprivate var letters = [String.SubSequence]()
+    fileprivate lazy var sunlightStatus = SunView()
     
     var segmentedControl: CustomSegmentedControl = {
         let interfaceSegmented = CustomSegmentedControl()
@@ -33,7 +31,7 @@ final class MainControllerView: UIView {
         labelDate.translatesAutoresizingMaskIntoConstraints = false
         labelDate.font = UIFont(name: "UniSansHeavyCaps", size: 37)
         return labelDate
-        }()
+    }()
     
     var circle: Circle = {
         let circle = Circle(frame: .zero, strokeColor: .white)
@@ -61,7 +59,7 @@ final class MainControllerView: UIView {
         return image
     }()
     
-    var imageBackgr: UIImageView = {
+    var imageBackground: UIImageView = {
         let imageBackgr = UIImageView()
         imageBackgr.contentMode = .scaleAspectFill
         imageBackgr.layer.masksToBounds = true
@@ -84,19 +82,10 @@ final class MainControllerView: UIView {
         return tableView
     }()
     
-    var charts: Chart = {
-        let chart = Chart()
-        chart.showXLabelsAndGrid = false
-        chart.showYLabelsAndGrid = false
-        chart.translatesAutoresizingMaskIntoConstraints = false
-        return chart
-    }()
-    
     var collection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.backgroundColor = .white
         collection.layer.cornerRadius = 5
         collection.layer.masksToBounds = true
         collection.isScrollEnabled = false
@@ -164,24 +153,6 @@ final class MainControllerView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "0 км/ч"
         label.font = UIFont.boldSystemFont(ofSize: 16.0)
-        label.textColor = .white
-        return label
-    }()
-    
-    var good: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Хорошее"
-        label.font = UIFont(name: "Arial-BoldMT", size: 10)
-        label.textColor = .white
-        return label
-    }()
-    
-    var danger: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Плохое"
-        label.font = UIFont(name: "Arial-BoldMT", size: 10)
         label.textColor = .white
         return label
     }()
@@ -254,7 +225,7 @@ final class MainControllerView: UIView {
     let location: UIButton = {
         let button = UIButton()
         button.setTitleColor(.black, for: .normal)
-        button.setTitle("Т", for: .normal)
+        button.setTitle("", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -262,7 +233,7 @@ final class MainControllerView: UIView {
     let locationMask: UIButton = {
         let button = UIButton()
         button.setTitleColor(.black, for: .normal)
-        button.setTitle("Т", for: .normal)
+        button.setTitle("", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -331,10 +302,8 @@ final class MainControllerView: UIView {
         return view
     }()
     
-    let sunlightStatus = SunView()
-    
     required init?(coder aDecoder: NSCoder) {
-       super.init(coder: aDecoder)
+        super.init(coder: aDecoder)
     }
     
     override init(frame: CGRect) {
@@ -347,13 +316,12 @@ final class MainControllerView: UIView {
         addSubview(scrollView)
         addSubview(headerOfMainView)
         scrollView.addSubview(tempOriginal)
-        scrollView.addSubview(charts)
         scrollView.addSubview(headerView)
         scrollView.addSubview(airIndicatorView)
         scrollView.addSubview(secondView)
         scrollView.addSubview(tableView)
         scrollView.contentSize = CGSize(width:frame.size.width, height: 1355)
-        secondView.addSubview(imageBackgr)
+        secondView.addSubview(imageBackground)
         secondView.addSubview(imageView)
         secondView.addSubview(tempOriginal)
         secondView.addSubview(day)
@@ -370,8 +338,6 @@ final class MainControllerView: UIView {
         scrollView.addSubview(locationIcon)
         headerOfMainView.addSubview(location)
         scrollView.addSubview(sunlightStatus)
-        airIndicatorView.addSubview(good)
-        airIndicatorView.addSubview(danger)
         airIndicatorView.addSubview(index)
         airIndicatorView.addSubview(indexNumber)
         airIndicatorView.addSubview(qualityText)
@@ -390,34 +356,27 @@ final class MainControllerView: UIView {
             headerOfMainView.centerXAnchor.constraint(equalTo: centerXAnchor),
             headerOfMainView.heightAnchor.constraint(equalToConstant: 80),
             headerOfMainView.widthAnchor.constraint(equalToConstant: 400),
-            secondView.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
+            secondView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             secondView.topAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 40),
             secondView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
             secondView.heightAnchor.constraint(equalToConstant: 270),
-            precipitation.leftAnchor.constraint(equalTo: imageBackgr.safeAreaLayoutGuide.rightAnchor, constant: 20),
-            precipitation.topAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.topAnchor, constant: -35),
-            precipitation.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -35),
-            precipitation.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -170),
-            precipitationText.leftAnchor.constraint(equalTo: imageBackgr.safeAreaLayoutGuide.rightAnchor, constant: 180),
-            precipitationText.topAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.topAnchor, constant: -33),
-            precipitationText.rightAnchor.constraint(lessThanOrEqualTo: secondView.rightAnchor, constant: 0),
-            precipitationText.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -170),
-            humidity.leftAnchor.constraint(equalTo: imageBackgr.safeAreaLayoutGuide.rightAnchor, constant: 20),
-            humidity.topAnchor.constraint(equalTo: precipitation.safeAreaLayoutGuide.topAnchor, constant: 0),
+            precipitation.leftAnchor.constraint(equalTo: imageBackground.safeAreaLayoutGuide.rightAnchor, constant: 20),
+            precipitation.topAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.topAnchor, constant: 20),
+            precipitation.rightAnchor.constraint(equalTo: precipitationText.rightAnchor, constant: -90),
+            precipitation.bottomAnchor.constraint(equalTo: humidity.bottomAnchor, constant: -25),
+            precipitationText.topAnchor.constraint(equalTo: precipitation.topAnchor),
+            precipitationText.rightAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.rightAnchor, constant: -20),
+            precipitationText.bottomAnchor.constraint(equalTo: humidityText.bottomAnchor, constant: -25),
+            humidity.leftAnchor.constraint(equalTo: imageBackground.safeAreaLayoutGuide.rightAnchor, constant: 20),
             humidity.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -35),
-            humidity.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -115),
-            humidityText.leftAnchor.constraint(equalTo: imageBackgr.safeAreaLayoutGuide.rightAnchor, constant: 170),
-            humidityText.topAnchor.constraint(equalTo: precipitationText.safeAreaLayoutGuide.topAnchor, constant: -53),
-            humidityText.rightAnchor.constraint(lessThanOrEqualTo: secondView.rightAnchor, constant: -15),
-            humidityText.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -60),
-            wind.leftAnchor.constraint(equalTo: imageBackgr.safeAreaLayoutGuide.rightAnchor, constant: 20),
-            wind.topAnchor.constraint(equalTo: humidity.safeAreaLayoutGuide.topAnchor, constant: -10),
+            humidity.bottomAnchor.constraint(equalTo: wind.bottomAnchor, constant: -25),
+            humidityText.rightAnchor.constraint(lessThanOrEqualTo: secondView.rightAnchor, constant: -20),
+            humidityText.bottomAnchor.constraint(equalTo: windText.bottomAnchor, constant: -25),
+            wind.leftAnchor.constraint(equalTo: imageBackground.safeAreaLayoutGuide.rightAnchor, constant: 20),
             wind.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -35),
-            wind.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -50),
-            windText.leftAnchor.constraint(equalTo: imageBackgr.safeAreaLayoutGuide.rightAnchor, constant: 152),
-            windText.topAnchor.constraint(equalTo: humidity.safeAreaLayoutGuide.topAnchor, constant: -20),
-            windText.rightAnchor.constraint(lessThanOrEqualTo: secondView.rightAnchor, constant: 0),
-            windText.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -40),
+            wind.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -180),
+            windText.rightAnchor.constraint(lessThanOrEqualTo: secondView.safeAreaLayoutGuide.rightAnchor, constant: -20),
+            windText.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -180),
             tableView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             tableView.topAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.bottomAnchor, constant: 30),
             tableView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
@@ -426,53 +385,42 @@ final class MainControllerView: UIView {
             scrollView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
             scrollView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
-//            locationIcon.topAnchor.constraint(equalTo: location.topAnchor, constant: 10),
-//            locationIcon.leadingAnchor.constraint(equalTo: location.leadingAnchor, constant: -25),
             location.centerXAnchor.constraint(equalTo: headerOfMainView.centerXAnchor),
             location.topAnchor.constraint(equalTo: headerOfMainView.safeAreaLayoutGuide.topAnchor, constant: -5),
             location.bottomAnchor.constraint(equalTo: headerOfMainView.safeAreaLayoutGuide.bottomAnchor, constant: -5),
-            tempOriginal.leftAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.leftAnchor, constant: 20),
-            tempOriginal.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -250),
+            tempOriginal.leftAnchor.constraint(equalTo: imageBackground.safeAreaLayoutGuide.leftAnchor, constant: 20),
+            tempOriginal.rightAnchor.constraint(equalTo: imageBackground.rightAnchor, constant: -50),
             tempOriginal.bottomAnchor.constraint(equalTo: state.topAnchor, constant: 0),
-            collection.leftAnchor.constraint(equalTo: imageBackgr.safeAreaLayoutGuide.rightAnchor, constant: 20),
-            collection.topAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.topAnchor, constant: 110),
+            collection.leftAnchor.constraint(equalTo: imageBackground.safeAreaLayoutGuide.rightAnchor, constant: 20),
+            collection.topAnchor.constraint(equalTo: wind.safeAreaLayoutGuide.bottomAnchor, constant: 35),
             collection.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -15),
             collection.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -55),
-            nextScreen.leftAnchor.constraint(equalTo: imageBackgr.safeAreaLayoutGuide.rightAnchor, constant: 20),
+            nextScreen.leftAnchor.constraint(equalTo: imageBackground.safeAreaLayoutGuide.rightAnchor, constant: 20),
             nextScreen.topAnchor.constraint(equalTo: collection.safeAreaLayoutGuide.bottomAnchor, constant: 15),
             nextScreen.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -15),
             nextScreen.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -10),
-            day.leftAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.leftAnchor, constant: 20),
-            day.topAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.topAnchor, constant: 10),
-            day.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -250),
-            date.leftAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.leftAnchor, constant: 20),
+            day.leftAnchor.constraint(equalTo: imageBackground.safeAreaLayoutGuide.leftAnchor, constant: 20),
+            day.topAnchor.constraint(equalTo: imageBackground.safeAreaLayoutGuide.topAnchor, constant: 10),
+            day.rightAnchor.constraint(equalTo: imageBackground.rightAnchor, constant: -50),
+            date.leftAnchor.constraint(equalTo: imageBackground.safeAreaLayoutGuide.leftAnchor, constant: 20),
             date.topAnchor.constraint(equalTo: day.safeAreaLayoutGuide.bottomAnchor, constant: 0),
-            date.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -250),
-            imageView.leftAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.leftAnchor, constant: 20),
-            imageView.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -330),
+            date.rightAnchor.constraint(equalTo: imageBackground.rightAnchor, constant: -50),
+            imageView.leftAnchor.constraint(equalTo: imageBackground.safeAreaLayoutGuide.leftAnchor, constant: 0),
+            imageView.rightAnchor.constraint(equalTo: imageBackground.rightAnchor, constant: -85),
             imageView.topAnchor.constraint(lessThanOrEqualTo: date.safeAreaLayoutGuide.bottomAnchor, constant: 90),
             imageView.bottomAnchor.constraint(equalTo: tempOriginal.safeAreaLayoutGuide.topAnchor, constant: 0),
             imageView.heightAnchor.constraint(equalToConstant: 40),
-            state.leftAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.leftAnchor, constant: 20),
-            state.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -250),
-            state.bottomAnchor.constraint(greaterThanOrEqualTo: secondView.bottomAnchor, constant: -10),
-            imageBackgr.leftAnchor.constraint(equalTo: secondView.leftAnchor, constant: 0),
-            imageBackgr.topAnchor.constraint(equalTo: secondView.topAnchor, constant: 0),
-            imageBackgr.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -220),
-            imageView.widthAnchor.constraint(equalToConstant: 25),
-            imageBackgr.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: 0),
+            state.leftAnchor.constraint(equalTo: imageBackground.safeAreaLayoutGuide.leftAnchor, constant: 20),
+            state.rightAnchor.constraint(equalTo: imageBackground.rightAnchor, constant: -40),
+            state.bottomAnchor.constraint(greaterThanOrEqualTo: imageBackground.bottomAnchor, constant: -15),
+            imageBackground.leftAnchor.constraint(equalTo: secondView.safeAreaLayoutGuide.leftAnchor),
+            imageBackground.topAnchor.constraint(equalTo: secondView.topAnchor, constant: 0),
+            imageBackground.rightAnchor.constraint(equalTo: wind.rightAnchor, constant: -180),
+            imageBackground.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: 0),
             airIndicatorView.topAnchor.constraint(equalTo: tableView.safeAreaLayoutGuide.bottomAnchor, constant: 25),
             airIndicatorView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
             airIndicatorView.heightAnchor.constraint(equalToConstant: 151),
             airIndicatorView.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
-            danger.leftAnchor.constraint(equalTo: airIndicatorView.safeAreaLayoutGuide.leftAnchor, constant: 335),
-            danger.topAnchor.constraint(lessThanOrEqualTo: airIndicatorView.safeAreaLayoutGuide.topAnchor, constant: 125),
-            danger.rightAnchor.constraint(equalTo: airIndicatorView.rightAnchor, constant: 0),
-            danger.bottomAnchor.constraint(equalTo: airIndicatorView.bottomAnchor, constant: -10),
-            good.leftAnchor.constraint(equalTo: airIndicatorView.safeAreaLayoutGuide.leftAnchor, constant: 14),
-            good.topAnchor.constraint(lessThanOrEqualTo: airIndicatorView.safeAreaLayoutGuide.topAnchor, constant: 125),
-            good.rightAnchor.constraint(equalTo: airIndicatorView.rightAnchor, constant: 0),
-            good.bottomAnchor.constraint(equalTo: airIndicatorView.bottomAnchor, constant: -10),
             index.topAnchor.constraint(lessThanOrEqualTo: airIndicatorView.safeAreaLayoutGuide.topAnchor, constant: 8),
             index.leftAnchor.constraint(equalTo: airIndicatorView.safeAreaLayoutGuide.leftAnchor, constant: 14),
             indexNumber.leftAnchor.constraint(equalTo: airIndicatorView.safeAreaLayoutGuide.leftAnchor, constant: 14),
@@ -487,53 +435,50 @@ final class MainControllerView: UIView {
             descriptionQuality.rightAnchor.constraint(greaterThanOrEqualTo: airIndicatorView.rightAnchor, constant: -107),
             descriptionQuality.bottomAnchor.constraint(equalTo: airIndicatorView.bottomAnchor, constant: -60),
         ])
-        sunlightStatus.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
-        sunlightStatus.translatesAutoresizingMaskIntoConstraints = false
-        sunlightStatus.layer.masksToBounds = false
-        sunlightStatus.layer.cornerRadius = 5
     }
     
     
-    func updateData(_ state: String,_ city: String,_ value: String,_ image: UIImage,_ air: Int,_ index: Int,_ indexMain: Int,_ sun: CGFloat, _ sunrise: Int, _ sunset: Int, _ timeZone: String) {
-            self.letters = state.split { !$0.isLetter }
-            print(letters)
-            DispatchQueue.main.async {
+    func updateData(_ state: String,_ city: String,_ value: String,_ image: UIImage,_ air: Int,_ index: Int,_ indexMain: Int,_ sun: CGFloat, _ sunrise: Int, _ sunset: Int, _ timeZone: Int) {
+        self.letters = state.split { !$0.isLetter }
+        print(letters)
+        DispatchQueue.main.async {
             if self.letters.count == 1 {
                 self.state.text = "\(self.letters[0])"
             } else if self.letters.count >= 2 {
                 self.state.text = "\(self.letters[0]) \(self.letters[1])"
-            } else if self.letters.contains("Преимущественно") {
-                self.state.text = "\(self.letters[1])"
+            }; if self.letters.contains("Преимущественно") {
+                self.state.text = "\(self.letters[1].capitalized)"
             }
             self.location.setTitle(value, for: .normal)
-            self.imageBackgr.image = image
+            self.imageBackground.image = image
             self.indexNumber.text = "\(index)"
-            self.number = index
             self.tempOriginal.text = "\(indexMain)°"
             self.circle.frame = CGRect(x: 0 + index, y: 105, width: 15, height: 15)
             self.indexNumber.textColor = UIColor().switcher(index)
             self.imageView.image = self.back.switchImage(self.imageView, state)
             self.imageView.sizeToFit()
             self.sunlightStatus.setNeedsDisplay()
-            self.sunlightStatus.firstTime.text = "\(sunrise.returnTime())"
-            self.sunlightStatus.secondTime.text = "\(sunset.returnTime())"
-            self.setUp(1614563400, 1614515520, timeZone)
+            self.sunlightStatus.firstTime.text = "\(sunrise.returnTime(time: timeZone))"
+            self.sunlightStatus.secondTime.text = "\(sunset.returnTime(time: timeZone))"
+            self.setUp(sunrise, sunset, timeZone)
         }
     }
     
-    func setUp(_ f: Int, _ s: Int, _ timeZone: String) {
-        let angle: CGFloat = 0.03
-        let now = Int.now()
-        //let a = f.convertToHours(identifier: "")
-        let b = s.convertToHours(identifier: timeZone)
-        let value = ((CGFloat(now) / CGFloat(b)) * 100) * angle
-        SunView.endAngle = -value
-        print(-value)
-        let zone = TimeZone.abbreviationDictionary
-        let timeZoneIdentifiers = TimeZone.knownTimeZoneIdentifiers
-        let allCities = timeZoneIdentifiers.compactMap { identifier in
-            return identifier.split(separator: "/").last
+    func setUp(_ f: Int, _ s: Int, _ timeZone: Int) {
+        let angle: CGFloat = 0.031
+        let now = Int.now(timeOffset: timeZone)
+        let start = f.convertToHours(time: timeZone)
+        let finish = s.convertToHours(time: timeZone)
+        let value = 3.1 - ((CGFloat(now) / CGFloat(finish)) * 100) * angle
+        let less = now < start ? true : false
+        let more = now > finish ? true : false
+        if less {
+            sunlightStatus.endAngle = -3.1
+        } else {
+            sunlightStatus.endAngle = -value
+        }
+        if more {
+            sunlightStatus.endAngle = 0
         }
     }
-    
 }

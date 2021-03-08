@@ -66,7 +66,7 @@ extension CitySelector: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selected = viewModel.searchElements[indexPath.row]
         searchController.searchBar.text = nil
-        if viewModel.createData(name: selected.name, timeZone: selected.timeZone) {
+        if viewModel.createData(name: selected.name, key: selected.key, timeZone: selected.timeZone) {
         let view = storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
         navigationController?.pushViewController(view, animated: true)
         }
@@ -80,13 +80,17 @@ extension CitySelector: UITableViewDataSource {
         })
     }
     
+    //поправить Каиро
     func tagPressed(_ title: String, _ number: Int, tagView: TagView, sender: TagListView) {
         guard number != 0 else { return }
-        let timeZone = viewModel.getTimeZone(title)
-        if viewModel.createDataFromTag(name: title, key: number, timeZone: timeZone) {
-        let view = storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
-        navigationController?.pushViewController(view, animated: true)
+        viewModel.getTimeZone(title, completion: {
+        if self.viewModel.createDataFromTag(name: title, key: number, timeZone: $0) {
+        DispatchQueue.main.async {
+        let view = self.storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
+        self.navigationController?.pushViewController(view, animated: true)
         }
+        }
+        })
         tagView.isSelected = !tagView.isSelected
     }
     
@@ -104,6 +108,7 @@ extension CitySelector: UITableViewDataSource {
             tagListView.isHidden = false
         }
     }
+    
     func addTag() {
         view.addSubview(tagListView)
         view.addSubview(locationButton)
@@ -149,10 +154,11 @@ extension CitySelector: UITableViewDataSource {
     
     func getLocation() {
         viewModel.getLocation()
-        viewModel.setLocation { [weak self] (location, name, error, timeZone) in
+        //поправить
+        viewModel.setLocation { [weak self] (location, name, error, _) in
         guard location != nil else { return }
-        guard let timeZone = timeZone.abbreviation() else { return }
-        self?.viewModel.createFromLocation(name: name, lat: location?.latitude, lon: location?.longitude, timeZone: timeZone)
+        let timeZoneOffset = TimeZone.current.secondsFromGMT()
+        self?.viewModel.createFromLocation(name: name, lat: location?.latitude, lon: location?.longitude, timeZone: timeZoneOffset)
         guard let access = self?.viewModel.checkAccess(access: true) else { return }
         if access {
             let view = self?.storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController

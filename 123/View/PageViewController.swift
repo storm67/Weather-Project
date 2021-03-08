@@ -11,17 +11,15 @@ import UIKit
 import Swinject
 import SideMenu
 
-final class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate, SideMenuNavigationControllerDelegate{
+final class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate, SideMenuNavigationControllerDelegate {
     
     fileprivate var blurEffect: UIVisualEffectView! {
         didSet {
         self.blurEffect.layer.opacity = 0
         }
     }
-    
     fileprivate var pageControl = UIPageControl()
     fileprivate var pages = [UIViewController]()
-    
     fileprivate var currentPage: Int {
         get {
             pageControl.currentPage
@@ -193,6 +191,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
             self.setUp()
             self.pageControl.numberOfPages = self.pages.count
             self.setViewControllers([self.pages[0]], direction: .forward, animated: false, completion: nil)
+            self.pageControl.currentPage = 0
             }
         }
     }
@@ -212,4 +211,5 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
             self.blurEffect.layer.opacity = 0.3
         }
     }
+
 }

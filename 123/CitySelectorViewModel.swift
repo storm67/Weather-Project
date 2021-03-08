@@ -27,12 +27,13 @@ final class CitySelectorViewModel: CitySelectorProtocol {
             completion()
         }
     }
-    func createData(name: String, timeZone: String) -> Bool {
-        return coreDataManager.createData(name: name, key: nil, lat: nil, lon: nil, timeZone: timeZone)
+    
+    func createData(name: String, key: Int, timeZone: Int) -> Bool {
+        return coreDataManager.createData(name: name, key: Double(key), lat: nil, lon: nil, timeZoneOffset: timeZone)
     }
 
-    func createDataFromTag(name: String, key: Int, timeZone: String) -> Bool {
-        return coreDataManager.createData(name: name, key: Double(key), lat: nil, lon: nil, timeZone: timeZone)
+    func createDataFromTag(name: String, key: Int, timeZone: Int) -> Bool {
+        return coreDataManager.createData(name: name, key: Double(key), lat: nil, lon: nil, timeZoneOffset: timeZone)
     }
 
     func checkAccess(access: Bool) -> Bool {
@@ -61,20 +62,16 @@ final class CitySelectorViewModel: CitySelectorProtocol {
         }
 
 
-    func createFromLocation(name: String, lat: Double?, lon: Double?, timeZone: String) {
-        coreDataManager.createData(name: name, key: nil, lat: lat, lon: lon, timeZone: timeZone)
+    func createFromLocation(name: String, lat: Double?, lon: Double?, timeZone: Int) {
+        coreDataManager.createData(name: name, key: nil, lat: lat, lon: lon, timeZoneOffset: timeZone)
         }
     
-    func getTimeZone(_ title: String) -> String {
-        var timeZone = ""
+    func getTimeZone(_ title: String, completion: @escaping (Int) -> (Void)) {
         networkManager.request(.getCityData(text: title)) { (data) in
         let converted = JSON(data).arrayValue
         let model = converted.map { CityModel(mod: $0) }
-        model.forEach { data in
-        timeZone = data.timeZone
+        completion(model[0].timeZone)
         }
-    }
-        return timeZone
 }
 
     init(manager: Routing<WeatherAPI>,
@@ -89,15 +86,15 @@ final class CitySelectorViewModel: CitySelectorProtocol {
     protocol CitySelectorProtocol {
         func checkCity(by searchText: String, completion: @escaping () -> Void)
         func cellViewModel(index: Int) -> CellViewModel?
-        func createData(name: String, timeZone: String) -> Bool
+        func createData(name: String, key: Int, timeZone: Int) -> Bool
         func getLocation()
-        func createDataFromTag(name: String, key: Int, timeZone: String) -> Bool
+        func createDataFromTag(name: String, key: Int, timeZone: Int) -> Bool
         func setLocation(onCompletion:@escaping ( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?, _ timeZone: TimeZone)->())
-        func createFromLocation(name: String, lat: Double?, lon: Double?, timeZone: String)
+        func createFromLocation(name: String, lat: Double?, lon: Double?, timeZone: Int)
         func checkAccess(access: Bool) -> Bool
         init(manager: Routing<WeatherAPI>,
         location: LocationManagerProtocol,
         coreData: CoreDataProtocol)
         var searchElements: [CellViewModel] { get }
-        func getTimeZone(_ title: String) -> String
+        func getTimeZone(_ title: String, completion: @escaping (Int) -> (Void))
 }
