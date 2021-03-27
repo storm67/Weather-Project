@@ -11,15 +11,9 @@ import UIKit
 
 class CollectionViewCell: UICollectionViewCell {
     
-    let backView: UIView = {
-        let View = UIView()
-        View.translatesAutoresizingMaskIntoConstraints = false
-        return View
-    }()
-    
     var imgView: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "cloud")?.imageResize(sizeChange: CGSize(width: 32,height: 32))
+        image.image = UIImage(named: "13")
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
@@ -27,29 +21,30 @@ class CollectionViewCell: UICollectionViewCell {
     let tempLabel: UILabel = {
         let label = UILabel()
         label.text = "15°"
-        label.textColor = .black
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var maskLayer: UIView = {
-        let image = UIView()
-        image.clipsToBounds = true
-        image.backgroundColor = .none
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
-    }()
-    
     func layout() {
-        backView.addSubview(tempLabel)
-        backView.addSubview(maskLayer)
-        addSubview(imgView)
-        self.contentView.layer.borderWidth = 1.0
-        self.contentView.layer.borderColor = UIColor.clear.cgColor
+//        contentView.addSubview(tempLabel)
+//        contentView.addSubview(imgView)
+        NSLayoutConstraint.activate([
+//        imgView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 10),
+//        imgView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+//        imgView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10),
+//        imgView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
+//        tempLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 10),
+//        tempLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
+//        tempLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10),
+//        tempLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
+        ])
+        self.layer.masksToBounds = true
+        self.layer.cornerRadius = 8
+        self.contentView.layer.borderWidth = 0
+        self.contentView.layer.borderColor = UIColor.white.cgColor
         self.contentView.layer.masksToBounds = true
-        self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.layer.cornerRadius).cgPath
-        backgroundColor = .clear
-        contentView.backgroundColor = .white
+        backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         contentView.layer.cornerRadius = 8
     }
     

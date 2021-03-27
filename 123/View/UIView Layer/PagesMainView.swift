@@ -17,7 +17,7 @@ final class PagesMainView: UIView {
     let tableView: UITableView = {
         var myTableView = UITableView()
         myTableView.separatorColor = .white
-        myTableView.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
+        myTableView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         myTableView.rowHeight = 125
         myTableView.tableFooterView = UIView(frame: .zero)
         myTableView.register(PagesViewCell.self, forCellReuseIdentifier: "cell")
@@ -28,7 +28,7 @@ final class PagesMainView: UIView {
     
     let toolbar: UIToolbar = {
         let toolbar = UIToolbar()
-        toolbar.barTintColor = UIColor(hexFromString: "#929aef")
+        toolbar.barTintColor = .white
         toolbar.backgroundColor = .orange
         toolbar.tintColor = .white
         toolbar.translatesAutoresizingMaskIntoConstraints = false
@@ -37,8 +37,8 @@ final class PagesMainView: UIView {
     
     let editingButton: UIButton = {
         let button = UIButton()
-        button.setTitleColor(.white, for: .normal)
-        button.setImage(UIImage.init(systemName:"ellipsis"), for: .normal)
+        button.tintColor = .black
+        button.setImage(UIImage.init(systemName:"ellipsis")?.withTintColor(.black, renderingMode: .alwaysTemplate), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(editNow), for: .touchUpInside)
@@ -47,8 +47,8 @@ final class PagesMainView: UIView {
     
     let addButton: UIButton = {
         let button = UIButton()
-        button.setTitleColor(.black, for: .normal)
-        button.setImage(UIImage.init(systemName:"plus"), for: .normal)
+        button.tintColor = .black
+        button.setImage(UIImage.init(systemName:"plus")?.withTintColor(.black, renderingMode: .alwaysTemplate), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(getNewCity), for: .touchUpInside)
@@ -57,8 +57,8 @@ final class PagesMainView: UIView {
     
     let getBackButton: UIButton = {
         let button = UIButton()
-        button.setTitleColor(.black, for: .normal)
-        button.setImage(UIImage.init(systemName:"arrow.left"), for: .normal)
+        button.tintColor = .black
+        button.setImage(UIImage.init(systemName:"arrow.left")?.withTintColor(.black, renderingMode: .alwaysTemplate), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(getBackCity), for: .touchUpInside)

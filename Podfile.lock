@@ -1,4 +1,7 @@
 PODS:
+  - MLLineChart (2.0.5):
+    - MLLineChart/Core (= 2.0.5)
+  - MLLineChart/Core (2.0.5)
   - SideMenu (6.5.0)
   - SwiftChart (1.0.1)
   - SwiftyJSON (4.3.0)
@@ -8,6 +11,7 @@ PODS:
   - TagListView (1.4.0)
 
 DEPENDENCIES:
+  - MLLineChart
   - SideMenu
   - SwiftChart
   - SwiftyJSON (~> 4.0)
@@ -17,6 +21,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - MLLineChart
     - SideMenu
     - SwiftChart
     - SwiftyJSON
@@ -25,6 +30,7 @@ SPEC REPOS:
     - TagListView
 
 SPEC CHECKSUMS:
+  MLLineChart: fc98eeacac4a92265b50b9f2c1e975879843f4e8
   SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   SwiftChart: ba767a678d568a5ee22d419e146a0582865e1aff
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
@@ -32,6 +38,6 @@ SPEC CHECKSUMS:
   SwinjectStoryboard: 32512ef16c2b0ff5b8f823b23539c4a50f6d3383
   TagListView: 987b0bdbb16cd9d9e7c0e2ec32aff37ecba8b173
 
-PODFILE CHECKSUM: 1fc7633c023180202d41ece38d9c3ea9dcdd340a
+PODFILE CHECKSUM: 2e8d38cbd7fad8ea025a6c64357842f78ffbf1b7
 
 COCOAPODS: 1.10.0

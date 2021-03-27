@@ -1,0 +1,6 @@
+framework module MLLineChart {
+  umbrella header "MLLineChart-umbrella.h"
+
+  export *
+  module * { export * }
+}

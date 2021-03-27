@@ -11,16 +11,15 @@ import UIKit
 
 class SunView: UIView {
     
-    fileprivate var path = UIBezierPath()
-    fileprivate let graph = UIView(frame: CGRect(x: 15, y: 125, width: 360, height: 1))
+    fileprivate var path: QuadBezier!
     var endAngle: CGFloat?
     
     let firstTime: UILabel = {
         let firstTime = UILabel()
         firstTime.text = "07:00"
-        firstTime.textColor = .orange
+        firstTime.textColor = .systemOrange
         firstTime.translatesAutoresizingMaskIntoConstraints = false
-        firstTime.font = UIFont(name: "Verdana-Bold", size: 11)
+        firstTime.font = UIFont(name: "Verdana-Bold", size: 9)
         firstTime.textAlignment = .center
         return firstTime
     }()
@@ -28,118 +27,170 @@ class SunView: UIView {
     let secondTime: UILabel = {
         let secondTime = UILabel()
         secondTime.text = "16:00"
-        secondTime.textColor = .orange
+        secondTime.textColor = .systemOrange
         secondTime.translatesAutoresizingMaskIntoConstraints = false
-        secondTime.font = UIFont(name: "Verdana-Bold", size: 11)
+        secondTime.font = UIFont(name: "Verdana-Bold", size: 9)
         secondTime.textAlignment = .center
         return secondTime
     }()
     
+    let sunView: UILabel = {
+        let sunView = UILabel()
+        sunView.text = "СОЛНЦЕ"
+        sunView.textColor = .black
+        sunView.translatesAutoresizingMaskIntoConstraints = false
+        sunView.font = sunView.font.withSize(15)
+        sunView.textAlignment = .center
+        return sunView
+    }()
+    
     var circleFirst: Circle = {
-           let circle = Circle(frame: .zero, strokeColor: .orange)
-           circle.fillColor = .systemOrange
-           circle.backgroundColor = .none
-           circle.isOpaque = false
-           circle.translatesAutoresizingMaskIntoConstraints = false
-           return circle
+        let circle = Circle(frame: .zero, strokeColor: .orange)
+        circle.fillColor = .systemOrange
+        circle.backgroundColor = .none
+        circle.isOpaque = false
+        circle.translatesAutoresizingMaskIntoConstraints = false
+        return circle
     }()
     
     var circleSecond: Circle = {
-           let circle = Circle(frame: .zero, strokeColor: .white)
-           circle.float = 3
-           circle.fillColor = .systemOrange
-           circle.backgroundColor = .systemOrange
-           circle.isOpaque = false
-           circle.translatesAutoresizingMaskIntoConstraints = false
-           return circle
+        let circle = Circle(frame: .zero, strokeColor: .white)
+        circle.fillColor = .systemOrange
+        circle.backgroundColor = .systemOrange
+        circle.isOpaque = false
+        circle.translatesAutoresizingMaskIntoConstraints = false
+        return circle
     }()
     
     var imageView: UIImageView = {
-           let image = UIImageView()
-           image.image = UIImage(named: "1")
-           image.translatesAutoresizingMaskIntoConstraints = false
-           image.contentMode = .scaleAspectFit
-           return image
-       }()
-
+        let image = UIImageView()
+        image.image = UIImage(named: "1")
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.contentMode = .scaleAspectFit
+        return image
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        graph.backgroundColor = .white
-        addSubview(graph)
-        addSubview(circleFirst)
-        addSubview(circleSecond)
+        addSubview(sunView)
         addSubview(firstTime)
         addSubview(secondTime)
         addSubview(imageView)
         NSLayoutConstraint.activate([
-        imageView.heightAnchor.constraint(equalToConstant: 20),
-        imageView.widthAnchor.constraint(equalToConstant: 20),
-        circleFirst.leftAnchor.constraint(equalTo: leftAnchor, constant: 93),
-        circleFirst.topAnchor.constraint(equalTo: topAnchor, constant: 120),
-        circleFirst.rightAnchor.constraint(equalTo: rightAnchor, constant: -297),
-        circleFirst.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -25),
-        circleSecond.leftAnchor.constraint(equalTo: leftAnchor, constant: 295),
-        circleSecond.topAnchor.constraint(equalTo: topAnchor, constant: 122),
-        circleSecond.rightAnchor.constraint(equalTo: rightAnchor, constant: -96),
-        circleSecond.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -25),
-        firstTime.leftAnchor.constraint(equalTo: leftAnchor, constant: 55),
-        firstTime.topAnchor.constraint(equalTo: topAnchor, constant: 130),
-        firstTime.rightAnchor.constraint(equalTo: rightAnchor, constant: -255),
-        firstTime.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-        secondTime.leftAnchor.constraint(equalTo: leftAnchor, constant: 278),
-        secondTime.topAnchor.constraint(equalTo: topAnchor, constant: 130),
-        secondTime.rightAnchor.constraint(equalTo: rightAnchor, constant: -75),
-        secondTime.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            sunView.leftAnchor.constraint(equalTo: leftAnchor, constant: 10),
+            sunView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            imageView.heightAnchor.constraint(equalToConstant: 20),
+            imageView.widthAnchor.constraint(equalToConstant: 20),
+            firstTime.leftAnchor.constraint(equalTo: leftAnchor, constant: 70),
+            firstTime.topAnchor.constraint(equalTo: topAnchor, constant: 95),
+            firstTime.rightAnchor.constraint(equalTo: secondTime.rightAnchor, constant: -195),
+            firstTime.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            secondTime.topAnchor.constraint(equalTo: topAnchor, constant: 95),
+            secondTime.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])
-        backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
+        backgroundColor = .clear
         translatesAutoresizingMaskIntoConstraints = false
         layer.masksToBounds = true
         layer.cornerRadius = 5
-       }
+    }
     
-     required init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-       }
+    }
+    
+    let pathLayer: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.lineWidth = 2
+        layer.strokeColor = UIColor.orange.cgColor
+        layer.fillColor = UIColor.clear.cgColor
+        return layer
+    }()
+    
+    let maskLayer: CALayer = {
+        let layer = CALayer()
+        layer.backgroundColor = UIColor.black.cgColor
+        return layer
+    }()
     
     override func draw(_ rect: CGRect) {
+        path = setStroke()
+        guard let path = path else { return }
+        pathLayer.path = path.path.cgPath
+        pathLayer.mask = maskLayer
         state()
-        setStroke()
-        animator()
-       }
+        layer.addSublayer(pathLayer)
+        //animator()
+        imageView.center = path.point(at: 0.5)
+        updateMask(at: imageView.center)
+    }
+    
+    
+    func updateMask(at point: CGPoint) {
+        var f = bounds
+        f.size.width = point.x
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        maskLayer.frame = f
+        CATransaction.commit()
+    }
     
     func state() -> UIBezierPath {
-        let centre = CGPoint(x: bounds.size.width/2, y: 125)
-        let path = UIBezierPath(arcCenter: centre, radius: 100.0, startAngle: .pi, endAngle: 2.0 * .pi, clockwise: true)
+        let path = UIBezierPath()
+        let p0 = CGPoint(x: 55, y: 95)
+        let p2 = CGPoint(x: frame.size.width/2, y: 0)
+        let p1 = CGPoint(x: frame.size.width/1.15, y: 95)
+        path.move(to: p1)
+        path.addQuadCurve(to: p0, controlPoint: p2)
         let dashes: [CGFloat] = [4.0, 6.0]
         path.setLineDash(dashes, count: dashes.count, phase: 0.0)
-        UIColor.white.setStroke()
+        UIColor.black.setStroke()
         path.lineWidth = 2
         path.stroke()
         return path
     }
     
-    func setStroke() -> UIBezierPath {
-        guard let angle = endAngle else { return UIBezierPath() }
+    func setStroke() -> QuadBezier? {
+        guard let angle = endAngle else { return nil }
         let centre = CGPoint(x: bounds.size.width/2, y: 125)
-        path = UIBezierPath(arcCenter: centre, radius: 100.0, startAngle: .pi, endAngle: angle, clockwise: true)
-        let dashes: [ CGFloat ] = [ 4.0, 6.0 ]
-        path.setLineDash(dashes, count: dashes.count, phase: 0.0)
-        UIColor.orange.setStroke()
-        path.lineWidth = 2
-        path.stroke()
-        return path
+        let p0 = CGPoint(x: 55, y: 95)
+        let p2 = CGPoint(x: frame.size.width/2, y: 0)
+        let p1 = CGPoint(x: frame.size.width/1.15, y: 95)
+        let pather = QuadBezier(point1: p0, point2: p1, controlPoint: p2)
+        return pather
     }
     
     func animator() {
-    let flightAnimation = CAKeyframeAnimation(keyPath: "position")
-    flightAnimation.path = path.cgPath
-    flightAnimation.speed = 0
-    flightAnimation.timeOffset = 1.99
-    flightAnimation.duration = 2
-    flightAnimation.isRemovedOnCompletion = false
-    imageView.layer.add(flightAnimation, forKey: "position")
-    imageView.setNeedsDisplay()
+        let flightAnimation = CAKeyframeAnimation(keyPath: "position")
+        flightAnimation.path = path.path.cgPath
+        flightAnimation.speed = 0
+        flightAnimation.timeOffset = 0
+        flightAnimation.duration = 0.1
+        flightAnimation.isRemovedOnCompletion = false
+        imageView.layer.add(flightAnimation, forKey: "position")
+        imageView.setNeedsDisplay()
     }
     
+    
+    
+}
 
+struct QuadBezier {
+    var point1: CGPoint
+    var point2: CGPoint
+    var controlPoint: CGPoint
+    
+    var path: UIBezierPath {
+        let path = UIBezierPath()
+        path.move(to: point1)
+        path.addQuadCurve(to: point2, controlPoint: controlPoint)
+        return path
+    }
+    
+    func point(at t: CGFloat) -> CGPoint {
+        let t1 = 1 - t
+        return CGPoint(
+            x: t1 * t1 * point1.x + 2 * t * t1 * controlPoint.x + t * t * point2.x,
+            y: t1 * t1 * point1.y + 2 * t * t1 * controlPoint.y + t * t * point2.y
+        )
+    }
 }

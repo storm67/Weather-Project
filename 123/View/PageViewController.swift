@@ -32,7 +32,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     
     let menu: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage.init(systemName:"list.dash"), for: .normal)
+        button.setImage(UIImage(named: "slider"), for: .normal)
         button.tintColor = .black
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(sideMenuAction), for: .touchUpInside)
@@ -122,11 +122,11 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         searchIcon.topAnchor.constraint(equalTo: menu.topAnchor, constant: 3).isActive = true
         searchIcon.widthAnchor.constraint(equalToConstant: 28).isActive = true
         searchIcon.heightAnchor.constraint(equalToConstant: 28).isActive = true
-        menu.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5).isActive = true
+        menu.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -5).isActive = true
         menu.leadingAnchor.constraint(lessThanOrEqualTo: view.leadingAnchor, constant: 380).isActive = true
         menu.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
-        menu.widthAnchor.constraint(equalToConstant: 31).isActive = true
-        menu.heightAnchor.constraint(equalToConstant: 31).isActive = true
+        menu.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        menu.heightAnchor.constraint(equalToConstant: 35).isActive = true
         let widthConstraint = menu.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 10)
         widthConstraint.priority = UILayoutPriority(rawValue: 999)
         widthConstraint.isActive = true
@@ -136,7 +136,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         let menu = storyboard?.instantiateViewController(withIdentifier: "PagesViewController") as! PagesViewController
         let nav = SideMenuNavigationController(rootViewController: menu)
         nav.presentationStyle = .menuSlideIn
-        nav.menuWidth = 330
+        nav.menuWidth = 290
         nav.pushStyle = .popWhenPossible
         guard let window = self.view.window, let root = window.rootViewController else { return }
         root.present(nav, animated: true, completion: nil)

@@ -22,7 +22,7 @@ final class CustomCell: UITableViewCell {
         let label = UILabel()
         label.text = "15°"
         label.font = UIFont(name: "OpenSans-ExtraBold", size: 23)
-        label.textColor = .white
+        label.textColor = .black
         label.textAlignment = .right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -32,7 +32,7 @@ final class CustomCell: UITableViewCell {
         let label = UILabel()
         label.text = "15°"
         label.font = UIFont(name: "Helvetica-Light", size: 20)
-        label.textColor = #colorLiteral(red: 0.6563639045, green: 0.6503195763, blue: 0.7251070142, alpha: 1)
+        label.textColor = .black
         label.textAlignment = .right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -41,7 +41,7 @@ final class CustomCell: UITableViewCell {
     var maskLayer: UIView = {
         let image = UIView()
         image.clipsToBounds = true
-        image.backgroundColor = .white
+        image.backgroundColor = .black
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
@@ -78,10 +78,10 @@ final class CustomCell: UITableViewCell {
         imgView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
         tempLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
         tempLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 210),
-        tempLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -60),
+        tempLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -65),
         ])
         backgroundColor = .clear
-        contentView.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
+        contentView.backgroundColor = .clear
         createCircle()
         setNeedsDisplay()
     }
@@ -111,7 +111,7 @@ final class CustomCell: UITableViewCell {
         shapeLayer.opacity = 0.2
         shapeLayer.path = circlePath.cgPath
         // Change the fill color
-        shapeLayer.fillColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        shapeLayer.fillColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         // You can change the stroke color
         // You can change the line width
         shapeLayer.lineWidth = 3.0

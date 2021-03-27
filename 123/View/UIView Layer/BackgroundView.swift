@@ -16,7 +16,7 @@ final class BackgroundView: NSObject {
     func switchImage<T>(_ imageView: T, _ image: String) -> UIImage where T: UIView {
         switch image.description {
         case let str where str.contains("ив") || str.contains("ожд"):
-            return UIImage(named: "12")!
+            return UIImage(named: "test")!
         case let str where str.contains("Солн"):
             return UIImage(named: "1")!
         case let str where str.contains("Преимущественно облачно"):

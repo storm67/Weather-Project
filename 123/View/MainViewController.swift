@@ -8,7 +8,6 @@
 
 import UIKit
 import Swinject
-import SwiftChart
 
 final class MainViewController: UIViewController {
     
@@ -21,7 +20,7 @@ final class MainViewController: UIViewController {
     fileprivate var simpleModel: SimpleModel?
     fileprivate var weather = [Convertible]()
     public var viewModel: ViewModelProtocol!
-    
+    private let values: [Double] = [49.5, 80.0, 70.8, 100.0, 43.0, 30.0, 60.0]
     override func loadView() {
         view = MainControllerView()
     }
@@ -31,9 +30,8 @@ final class MainViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
         view().tableView.dataSource = self
         view().tableView.delegate = self
-        view().collection.delegate = self
-        view().collection.dataSource = self
         update()
+
     }
     
     convenience init(model: SimpleModel, viewModel: ViewModelProtocol) {
@@ -51,6 +49,8 @@ final class MainViewController: UIViewController {
         guard let model = simpleModel else { return }
         viewModel.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one, quality  in
             DispatchQueue.main.async {
+                self?.weather = weather
+                self?.view().tableView.reloadData()
                 if model.lat == nil {
                     self?.view().updateData(one.dayIconPhrase,
                         "\(one.dayIconPhrase)",
@@ -72,10 +72,6 @@ final class MainViewController: UIViewController {
                         -2, one.sunrise, one.sunset, model.timeZone)
                     self?.view().locationIcon.isHidden = true
                 }
-                self?.weather = weather
-                self?.view().tableView.reloadData()
-                self?.view().layoutIfNeeded()
-                self?.view().setNeedsDisplay()
             }
             }
         )}
@@ -103,7 +99,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -112,15 +108,20 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize.init(width: 35, height: collectionView.bounds.size.height)
+        return CGSize.init(width: 57, height: collectionView.bounds.size.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 10
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets{
+
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
 }

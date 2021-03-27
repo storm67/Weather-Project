@@ -18,7 +18,7 @@ class AirQualityView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Хорошее"
         label.font = UIFont(name: "Arial-BoldMT", size: 10)
-        label.textColor = .white
+        label.textColor = .black
         return label
     }()
     
@@ -27,7 +27,7 @@ class AirQualityView: UIView {
            label.translatesAutoresizingMaskIntoConstraints = false
            label.text = "Плохое"
            label.font = UIFont(name: "Arial-BoldMT", size: 10)
-           label.textColor = .white
+           label.textColor = .black
            return label
    }()
     
@@ -50,8 +50,7 @@ class AirQualityView: UIView {
     good.topAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.topAnchor, constant: 125),
     good.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
     danger.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 335),
-    danger.topAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.topAnchor, constant: 125),
-    danger.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
+    danger.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 125),
     danger.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
     ])
     }

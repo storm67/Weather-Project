@@ -10,5 +10,6 @@ pod 'Swinject'
 pod 'SwinjectStoryboard'
 pod "SwiftChart"
 pod 'SideMenu'
+pod "MLLineChart"
 
 end

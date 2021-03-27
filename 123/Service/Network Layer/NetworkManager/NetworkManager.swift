@@ -20,7 +20,7 @@ enum NetworkResponse: Error {
 
 
 struct NetworkManager {
-    static let MovieAPIKey = "RGPl6FQF79N5BGN4A95lzw8SP2whf7iO"
+    static let MovieAPIKey = "yvNHknH7kAfFMyBpNS66kCuz1CNDPaMO"
     static let correct = "kR4oPovT6RYCVnia0W8mJOiraFGmrvNZMNi3BBGBhdA"
 }
 

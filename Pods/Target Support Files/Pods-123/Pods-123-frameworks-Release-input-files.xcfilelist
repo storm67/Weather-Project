@@ -1,4 +1,5 @@
 ${PODS_ROOT}/Target Support Files/Pods-123/Pods-123-frameworks.sh
+${BUILT_PRODUCTS_DIR}/MLLineChart/MLLineChart.framework
 ${BUILT_PRODUCTS_DIR}/SideMenu/SideMenu.framework
 ${BUILT_PRODUCTS_DIR}/SwiftChart/SwiftChart.framework
 ${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework

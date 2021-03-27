@@ -11,6 +11,7 @@
 		31168F8825A7C7BB00A0271E /* UniSansHeavyCaps.otf in Resources */ = {isa = PBXBuildFile; fileRef = 31168F8525A7C51C00A0271E /* UniSansHeavyCaps.otf */; };
 		3120230025AB2969003D8F8C /* Uni Sans Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 312022FF25AB2969003D8F8C /* Uni Sans Thin.otf */; };
 		3120230225AB2D83003D8F8C /* AirQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3120230125AB2D83003D8F8C /* AirQuality.swift */; };
+		3123A574260DD19D00930CA2 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3123A573260DD19D00930CA2 /* StatsView.swift */; };
 		312AB40225B4828C00CDCF9A /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312AB40125B4828C00CDCF9A /* Circle.swift */; };
 		312B3F3B25A78FF5008F7427 /* AirQualityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312B3F3A25A78FF5008F7427 /* AirQualityView.swift */; };
 		312C6ACD24618033007AAC03 /* PagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312C6ACC24618033007AAC03 /* PagesViewController.swift */; };
@@ -46,6 +47,7 @@
 		31382D83246CC46A0051AECC /* CustomSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31382D82246CC46A0051AECC /* CustomSegmentedControl.swift */; };
 		313917F42471C2660011EFCD /* PagesMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313917F32471C2660011EFCD /* PagesMainView.swift */; };
 		3139C78525D7FB62006AEEA2 /* SunView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3139C78425D7FB62006AEEA2 /* SunView.swift */; };
+		313AB10B2609034A00694E51 /* Charts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313AB10A2609034A00694E51 /* Charts.swift */; };
 		313B510D2469E5070059161C /* PagesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313B510C2469E5070059161C /* PagesViewCell.swift */; };
 		313CE89A255DC2A70005FA6B /* Rain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313CE899255DC2A70005FA6B /* Rain.swift */; };
 		31612F552528E87D00FA72EE /* Injector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31612F542528E87D00FA72EE /* Injector.swift */; };
@@ -67,6 +69,7 @@
 		31168F8525A7C51C00A0271E /* UniSansHeavyCaps.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = UniSansHeavyCaps.otf; sourceTree = "<group>"; };
 		312022FF25AB2969003D8F8C /* Uni Sans Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Uni Sans Thin.otf"; path = "../../Uni_Sans_(graphicsland.ru)/Uni Sans Thin.otf"; sourceTree = "<group>"; };
 		3120230125AB2D83003D8F8C /* AirQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirQuality.swift; sourceTree = "<group>"; };
+		3123A573260DD19D00930CA2 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		312AB40125B4828C00CDCF9A /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 		312B3F3A25A78FF5008F7427 /* AirQualityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirQualityView.swift; sourceTree = "<group>"; };
 		312C6ACC24618033007AAC03 /* PagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesViewController.swift; sourceTree = "<group>"; };
@@ -104,6 +107,7 @@
 		31382D82246CC46A0051AECC /* CustomSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentedControl.swift; sourceTree = "<group>"; };
 		313917F32471C2660011EFCD /* PagesMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesMainView.swift; sourceTree = "<group>"; };
 		3139C78425D7FB62006AEEA2 /* SunView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunView.swift; sourceTree = "<group>"; };
+		313AB10A2609034A00694E51 /* Charts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Charts.swift; sourceTree = "<group>"; };
 		313B510C2469E5070059161C /* PagesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesViewCell.swift; sourceTree = "<group>"; };
 		313CE899255DC2A70005FA6B /* Rain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rain.swift; sourceTree = "<group>"; };
 		31612F542528E87D00FA72EE /* Injector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injector.swift; sourceTree = "<group>"; };
@@ -334,6 +338,8 @@
 				312B3F3A25A78FF5008F7427 /* AirQualityView.swift */,
 				31382D82246CC46A0051AECC /* CustomSegmentedControl.swift */,
 				317C707B258D3A0700CEE84E /* GradientButton.swift */,
+				313AB10A2609034A00694E51 /* Charts.swift */,
+				3123A573260DD19D00930CA2 /* StatsView.swift */,
 			);
 			path = Elements;
 			sourceTree = "<group>";
@@ -506,11 +512,13 @@
 				3131BFD325419D3200BCA235 /* Assembler.swift in Sources */,
 				31324A71240EF3960077C339 /* MainViewController.swift in Sources */,
 				3120230225AB2D83003D8F8C /* AirQuality.swift in Sources */,
+				3123A574260DD19D00930CA2 /* StatsView.swift in Sources */,
 				3137B89B253C5266004CBA8F /* HTTP.swift in Sources */,
 				3132946E245CA6FD00B4DC85 /* TableViewCell.swift in Sources */,
 				313CE89A255DC2A70005FA6B /* Rain.swift in Sources */,
 				3131BFD525419D5500BCA235 /* SwinjectStoryboard.swift in Sources */,
 				3137B897253C45D3004CBA8F /* EndPoint.swift in Sources */,
+				313AB10B2609034A00694E51 /* Charts.swift in Sources */,
 				31324A6D240EF3960077C339 /* AppDelegate.swift in Sources */,
 				31E76AD825896CD6006ED18A /* PageManagerViewModel.swift in Sources */,
 				31313445242925350061A552 /* Convertible.swift in Sources */,
