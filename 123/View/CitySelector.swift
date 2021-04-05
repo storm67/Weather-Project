@@ -157,7 +157,7 @@ extension CitySelector: UITableViewDataSource {
         //поправить
         viewModel.setLocation { [weak self] (location, name, error, _) in
         guard location != nil else { return }
-        let timeZoneOffset = TimeZone.current.secondsFromGMT()
+        let timeZoneOffset = TimeZone.current.secondsFromGMT() / 3600
         self?.viewModel.createFromLocation(name: name, lat: location?.latitude, lon: location?.longitude, timeZone: timeZoneOffset)
         guard let access = self?.viewModel.checkAccess(access: true) else { return }
         if access {
@@ -173,6 +173,3 @@ extension CitySelector: UITableViewDataSource {
         }
     }
 }
-
-
-

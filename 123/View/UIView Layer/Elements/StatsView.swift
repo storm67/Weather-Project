@@ -69,7 +69,7 @@ class StatsView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    //фикс верстка
     func layout() {
         addSubview(wind)
         addSubview(humidity)
@@ -81,25 +81,35 @@ class StatsView: UIView {
         wind.leftAnchor.constraint(equalTo: leftAnchor, constant: 25),
         wind.topAnchor.constraint(equalTo: topAnchor, constant: 20),
         windLabel.topAnchor.constraint(equalTo: wind.topAnchor, constant: 10),
-        windLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
+        windLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 27),
         windLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
         windLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
         humidity.leftAnchor.constraint(equalTo: wind.leftAnchor, constant: 130),
         humidity.topAnchor.constraint(equalTo: topAnchor, constant: 20),
         humidity.rightAnchor.constraint(equalTo: pressure.rightAnchor, constant: 0),
         humidityLabel.topAnchor.constraint(equalTo: humidity.topAnchor, constant: 10),
-        humidityLabel.leftAnchor.constraint(equalTo: windLabel.leftAnchor, constant: 150),
+        humidityLabel.leftAnchor.constraint(equalTo: windLabel.leftAnchor, constant: 155),
         humidityLabel.rightAnchor.constraint(equalTo: pressureLabel.rightAnchor, constant: -70),
         humidityLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
         pressure.leftAnchor.constraint(equalTo: humidity.leftAnchor, constant: 145),
         pressure.topAnchor.constraint(equalTo: topAnchor, constant: 20),
         pressure.rightAnchor.constraint(equalTo: rightAnchor, constant: -5),
         pressureLabel.topAnchor.constraint(equalTo: wind.topAnchor, constant: 10),
-        pressureLabel.leftAnchor.constraint(equalTo: humidityLabel.leftAnchor, constant: 140),
+        pressureLabel.leftAnchor.constraint(equalTo: humidityLabel.leftAnchor, constant: 145),
         pressureLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -5),
         pressureLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
         ])
     }
+    
+    func update(wind: Int, direction: String, pressure: Int, humidity: Int) {
+        DispatchQueue.main.async {
+            self.wind.text = "Ветер \(direction)"
+            self.windLabel.text = "\(wind) км/ч"
+            self.pressureLabel.text = "\(pressure)"
+            self.humidityLabel.text = "\(humidity)%"
+        }
+    }
+    
 }
 
 

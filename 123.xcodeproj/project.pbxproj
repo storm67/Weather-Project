@@ -37,6 +37,7 @@
 		3132946E245CA6FD00B4DC85 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3132946D245CA6FD00B4DC85 /* TableViewCell.swift */; };
 		3133B8402434E15A00C4EE93 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3133B83F2434E15A00C4EE93 /* BackgroundView.swift */; };
 		3133B8422435134A00C4EE93 /* LocationManagerSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3133B8412435134A00C4EE93 /* LocationManagerSaver.swift */; };
+		3135D61F2619CDCC003EF5D7 /* CustomPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3135D61E2619CDCC003EF5D7 /* CustomPageControl.swift */; };
 		3137B897253C45D3004CBA8F /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137B896253C45D3004CBA8F /* EndPoint.swift */; };
 		3137B89B253C5266004CBA8F /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137B89A253C5266004CBA8F /* HTTP.swift */; };
 		3137B89D253C52A2004CBA8F /* Encode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137B89C253C52A2004CBA8F /* Encode.swift */; };
@@ -49,7 +50,7 @@
 		3139C78525D7FB62006AEEA2 /* SunView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3139C78425D7FB62006AEEA2 /* SunView.swift */; };
 		313AB10B2609034A00694E51 /* Charts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313AB10A2609034A00694E51 /* Charts.swift */; };
 		313B510D2469E5070059161C /* PagesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313B510C2469E5070059161C /* PagesViewCell.swift */; };
-		313CE89A255DC2A70005FA6B /* Rain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313CE899255DC2A70005FA6B /* Rain.swift */; };
+		31519F27261B446700844B8C /* 12HoursForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31519F26261B446600844B8C /* 12HoursForecast.swift */; };
 		31612F552528E87D00FA72EE /* Injector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31612F542528E87D00FA72EE /* Injector.swift */; };
 		317C707C258D3A0700CEE84E /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317C707B258D3A0700CEE84E /* GradientButton.swift */; };
 		319E8A2425D9A9F20072C352 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 319E8A2325D9A9C00072C352 /* OpenSans-ExtraBold.ttf */; };
@@ -97,6 +98,7 @@
 		3132946D245CA6FD00B4DC85 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		3133B83F2434E15A00C4EE93 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		3133B8412435134A00C4EE93 /* LocationManagerSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerSaver.swift; sourceTree = "<group>"; };
+		3135D61E2619CDCC003EF5D7 /* CustomPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPageControl.swift; sourceTree = "<group>"; };
 		3137B896253C45D3004CBA8F /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
 		3137B89A253C5266004CBA8F /* HTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		3137B89C253C52A2004CBA8F /* Encode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encode.swift; sourceTree = "<group>"; };
@@ -109,7 +111,7 @@
 		3139C78425D7FB62006AEEA2 /* SunView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunView.swift; sourceTree = "<group>"; };
 		313AB10A2609034A00694E51 /* Charts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Charts.swift; sourceTree = "<group>"; };
 		313B510C2469E5070059161C /* PagesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesViewCell.swift; sourceTree = "<group>"; };
-		313CE899255DC2A70005FA6B /* Rain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rain.swift; sourceTree = "<group>"; };
+		31519F26261B446600844B8C /* 12HoursForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 12HoursForecast.swift; sourceTree = "<group>"; };
 		31612F542528E87D00FA72EE /* Injector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injector.swift; sourceTree = "<group>"; };
 		317C707B258D3A0700CEE84E /* GradientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
 		319E8A2125D9A8250072C352 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-BoldItalic.ttf"; path = "../../Open_Sans/OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 			children = (
 				31324A8C240EF5F50077C339 /* CityModel.swift */,
 				3131CC3B241BAFC2005C9314 /* DailyForecast.swift */,
+				31519F26261B446600844B8C /* 12HoursForecast.swift */,
 				3120230125AB2D83003D8F8C /* AirQuality.swift */,
 				312E37DE24100D65001136A5 /* Details */,
 				31E76ADB25896D81006ED18A /* SimpleModel.swift */,
@@ -332,7 +335,6 @@
 		314277132597C5A400BC81EB /* Elements */ = {
 			isa = PBXGroup;
 			children = (
-				313CE899255DC2A70005FA6B /* Rain.swift */,
 				312AB40125B4828C00CDCF9A /* Circle.swift */,
 				3139C78425D7FB62006AEEA2 /* SunView.swift */,
 				312B3F3A25A78FF5008F7427 /* AirQualityView.swift */,
@@ -340,6 +342,7 @@
 				317C707B258D3A0700CEE84E /* GradientButton.swift */,
 				313AB10A2609034A00694E51 /* Charts.swift */,
 				3123A573260DD19D00930CA2 /* StatsView.swift */,
+				3135D61E2619CDCC003EF5D7 /* CustomPageControl.swift */,
 			);
 			path = Elements;
 			sourceTree = "<group>";
@@ -515,7 +518,6 @@
 				3123A574260DD19D00930CA2 /* StatsView.swift in Sources */,
 				3137B89B253C5266004CBA8F /* HTTP.swift in Sources */,
 				3132946E245CA6FD00B4DC85 /* TableViewCell.swift in Sources */,
-				313CE89A255DC2A70005FA6B /* Rain.swift in Sources */,
 				3131BFD525419D5500BCA235 /* SwinjectStoryboard.swift in Sources */,
 				3137B897253C45D3004CBA8F /* EndPoint.swift in Sources */,
 				313AB10B2609034A00694E51 /* Charts.swift in Sources */,
@@ -539,7 +541,9 @@
 				31B7F71724166E3500BCB7C9 /* CoreDataManager.swift in Sources */,
 				31E76ADA25896D43006ED18A /* CellView.swift in Sources */,
 				3137B8A1253C54C0004CBA8F /* JSONEncoder.swift in Sources */,
+				31519F27261B446700844B8C /* 12HoursForecast.swift in Sources */,
 				312AB40225B4828C00CDCF9A /* Circle.swift in Sources */,
+				3135D61F2619CDCC003EF5D7 /* CustomPageControl.swift in Sources */,
 				31382D83246CC46A0051AECC /* CustomSegmentedControl.swift in Sources */,
 				3133B8422435134A00C4EE93 /* LocationManagerSaver.swift in Sources */,
 			);

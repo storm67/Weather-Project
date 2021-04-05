@@ -21,6 +21,8 @@ struct Convertible {
     var temperatureMax: Int
     var sunrise: Int
     var sunset: Int
+    var humidity: Int
+    var direction: String
 }
 
 

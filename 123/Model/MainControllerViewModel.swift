@@ -76,12 +76,13 @@ final class MainControllerViewModel: ViewModelProtocol {
         }
         return int
     }
-
+let group = DispatchGroup()
     func weatherFiveDayRequest(key: Int,completion: @escaping (Completion)) {
-        DispatchQueue.global().async {
+        DispatchQueue.global().sync {
             self.networkService.request(.getFiveDayWeather(city: String(key))) { [unowned self] data in
                 let array = JSON(data)["DailyForecasts"].arrayValue.map { DailyForecast(dictionary: $0) }
                 let quality = JSON(data)["DailyForecasts"].arrayValue[0]["AirAndPollen"].arrayValue.map { AirQuality(decoder: $0) }
+                self.getHumidity(key: key) { hd in
                 let weatherX = zip(array,self.dates).map { [unowned self] (first,second) -> Convertible in
                     Convertible(date: self.format(data: first.date),
                                 temperature: first.temperature,
@@ -94,10 +95,22 @@ final class MainControllerViewModel: ViewModelProtocol {
                                 air: first.airQuality,
                                 temperatureMax: first.temperatureMax,
                                 sunrise: first.sunRise,
-                                sunset: first.sunset)
+                                sunset: first.sunset,
+                                humidity: hd,
+                                direction: first.direction)
                 }
                 self.weather = weatherX
                 completion(weatherX, weatherX[0], quality)
+                }
+            }
+        }
+    }
+    
+    func getHumidity(key: Int, void: @escaping (Int) -> Void) {
+        DispatchQueue.global().sync {
+            self.networkService.request(.get12Hours(city: String(key))) { data in
+            let array = JSON(data).arrayValue.map { DailyForecast(dictionary: $0) }
+            void(array[0].humidity)
             }
         }
     }

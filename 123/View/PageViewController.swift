@@ -19,10 +19,22 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         }
     }
     fileprivate var pageControl = UIPageControl()
+    fileprivate var CustomPageControl = PageControl()
     fileprivate var pages = [UIViewController]()
     fileprivate var currentPage: Int {
         get {
             pageControl.currentPage
+        }
+    }
+    fileprivate var citySelector: SideMenuNavigationController {
+        get {
+            let menu = storyboard?.instantiateViewController(withIdentifier: "PagesViewController") as! PagesViewController
+            let nav = SideMenuNavigationController(rootViewController: menu)
+            nav.presentationStyle = .menuSlideIn
+            nav.menuWidth = 290
+            nav.pushStyle = .popWhenPossible
+            nav.modalPresentationStyle = .overCurrentContext
+            return nav
         }
     }
 
@@ -55,16 +67,18 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     func setupPageControl() {
         var count = 0
         if count == 0 {
-        self.view.addSubview(pageControl)
-        pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        pageControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12).isActive = true
         self.pageControl.numberOfPages = pages.count
         self.pageControl.currentPage = 0
-        self.pageControl.tintColor = UIColor.gray
-        self.pageControl.pageIndicatorTintColor = UIColor.lightGray
-        self.pageControl.currentPageIndicatorTintColor = UIColor.black
-        pageControl.backgroundColor = UIColor.clear
+        view.addSubview(CustomPageControl)
+        CustomPageControl.translatesAutoresizingMaskIntoConstraints = false
+        CustomPageControl.backgroundColor = .red
+        CustomPageControl.pages = pages.count
+        CustomPageControl.addCircle()
+        NSLayoutConstraint.activate([
+        CustomPageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        CustomPageControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+        CustomPageControl.widthAnchor.constraint(equalToConstant: 60)
+        ])
         }
         count += 1
     }
@@ -90,10 +104,8 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        pageControl.subviews.forEach {
-            $0.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        }
     }
+    
     
     func setUp() {
         manager.fetchData { [weak self] (md) in
@@ -105,8 +117,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         pages = []
         setUp()
         setupPageControl()
-        setViewControllers([pages[0]], direction: .forward, animated: true, completion: { _ in
-        })
+        setViewControllers([pages[0]], direction: .forward, animated: true, completion: nil)
         for subview in self.view.subviews {
             if let scrollView = subview as? UIScrollView {
                 scrollView.delegate = self
@@ -133,17 +144,11 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     }
     
     @objc fileprivate func sideMenuAction() {
-        let menu = storyboard?.instantiateViewController(withIdentifier: "PagesViewController") as! PagesViewController
-        let nav = SideMenuNavigationController(rootViewController: menu)
-        nav.presentationStyle = .menuSlideIn
-        nav.menuWidth = 290
-        nav.pushStyle = .popWhenPossible
         guard let window = self.view.window, let root = window.rootViewController else { return }
-        root.present(nav, animated: true, completion: nil)
+        root.present(citySelector, animated: true, completion: nil)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        viewController.loadViewIfNeeded()
         if let viewControllerIndex = self.pages.firstIndex(of: viewController) {
             if viewControllerIndex != 0 {
                 return self.pages[viewControllerIndex - 1]
@@ -170,6 +175,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        CustomPageControl.pagesCounter(offset: scrollView.contentOffset, width: scrollView.bounds.size.width)
         if (currentPage == 0 && scrollView.contentOffset.x < scrollView.bounds.size.width) {
             scrollView.contentOffset = CGPoint(x: scrollView.bounds.size.width, y: 0);
         } else if (currentPage == pages.count - 1 && scrollView.contentOffset.x > scrollView.bounds.size.width) {
@@ -189,9 +195,10 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         if manager.check() {
             DispatchQueue.global().sync {
             self.setUp()
-            self.pageControl.numberOfPages = self.pages.count
+            self.CustomPageControl.pages = self.pages.count
             self.setViewControllers([self.pages[0]], direction: .forward, animated: false, completion: nil)
-            self.pageControl.currentPage = 0
+            self.CustomPageControl.currentPage = 0
+            self.CustomPageControl.update()
             }
         }
     }
@@ -211,5 +218,5 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
             self.blurEffect.layer.opacity = 0.3
         }
     }
-
 }
+

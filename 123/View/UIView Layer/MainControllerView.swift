@@ -13,16 +13,7 @@ final class MainControllerView: UIView {
     fileprivate var letters = [String.SubSequence]()
     fileprivate lazy var sunlightStatus = SunView()
     fileprivate var color: UIColor = .black
-    
-    var segmentedControl: CustomSegmentedControl = {
-        let interfaceSegmented = CustomSegmentedControl()
-        interfaceSegmented.setButtonTitles(buttonTitles: ["5 дней","12 часов"])
-        interfaceSegmented.selectorViewColor = .white
-        interfaceSegmented.selectorTextColor = .white
-        interfaceSegmented.backgroundColor = UIColor(hexFromString: "#929aef")
-        interfaceSegmented.translatesAutoresizingMaskIntoConstraints = false
-        return interfaceSegmented
-    }()
+
     
     var tempOriginal: UILabel = {
         let labelDate = UILabel()
@@ -58,8 +49,6 @@ final class MainControllerView: UIView {
         charts.backgroundColor = .white
         return charts
     }()
-    
-    
     
     var tableView: UITableView = {
         var tableView = UITableView()
@@ -268,7 +257,7 @@ final class MainControllerView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layout()
-        backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
+        backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     }
     
     func layout() {
@@ -279,7 +268,7 @@ final class MainControllerView: UIView {
         scrollView.addSubview(secondView)
         scrollView.addSubview(tableView)
         scrollView.addSubview(fiveDaysWeather)
-        scrollView.contentSize = CGSize(width:frame.size.width, height: 1355)
+        scrollView.contentSize = CGSize(width:frame.size.width, height: 1700)
         secondView.addSubview(tempOriginal)
         secondView.addSubview(day)
         secondView.addSubview(state)
@@ -294,12 +283,10 @@ final class MainControllerView: UIView {
         airIndicatorView.addSubview(descriptionQuality)
         circle.frame = CGRect(x: 0, y: 105, width: 12, height: 12)
         airIndicatorView.addSubview(circle)
-        tableView.isHidden = true
         tableView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        segmentedControl.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
         weatherStatusImage.image = UIImage(named: "test")
         NSLayoutConstraint.activate([
-            sunlightStatus.topAnchor.constraint(equalTo: airIndicatorView.bottomAnchor, constant: 25),
+            sunlightStatus.topAnchor.constraint(equalTo: airIndicatorView.topAnchor, constant: 160),
             sunlightStatus.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -25),
             sunlightStatus.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
             sunlightStatus.heightAnchor.constraint(equalToConstant: 130),
@@ -337,18 +324,18 @@ final class MainControllerView: UIView {
             charts.heightAnchor.constraint(equalToConstant: 150),
             charts.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.89),
             charts.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
-//            tableView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-//            tableView.topAnchor.constraint(equalTo: charts.safeAreaLayoutGuide.bottomAnchor, constant: 30),
-//            tableView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
-//            tableView.heightAnchor.constraint(equalToConstant: 450),
+            tableView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            tableView.topAnchor.constraint(equalTo: charts.topAnchor, constant: 150),
+            tableView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            tableView.heightAnchor.constraint(equalToConstant: 450),
             scrollView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
             scrollView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
             scrollView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
             location.centerXAnchor.constraint(equalTo: headerOfMainView.centerXAnchor),
-            location.topAnchor.constraint(equalTo: headerOfMainView.safeAreaLayoutGuide.topAnchor, constant: -5),
+            location.topAnchor.constraint(equalTo: headerOfMainView.safeAreaLayoutGuide.topAnchor, constant: -10),
             location.bottomAnchor.constraint(equalTo: headerOfMainView.safeAreaLayoutGuide.bottomAnchor, constant: -5),
-            airIndicatorView.topAnchor.constraint(equalTo: charts.bottomAnchor, constant: 35),
+            airIndicatorView.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 470),
             airIndicatorView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
             airIndicatorView.heightAnchor.constraint(equalToConstant: 151),
             airIndicatorView.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
@@ -368,7 +355,7 @@ final class MainControllerView: UIView {
     }
     
     
-    func updateData(_ state: String,_ city: String,_ value: String,_ image: UIImage,_ air: Int,_ index: Int,_ indexMain: Int,_ sun: CGFloat, _ sunrise: Int, _ sunset: Int, _ timeZone: Int) {
+    func updateData(_ state: String,_ city: String,_ value: String,_ image: UIImage,_ air: Int,_ index: Int,_ indexMain: Int,_ sun: CGFloat, _ sunrise: Int, _ sunset: Int, _ timeZone: Int, wind: Int,pressure: Int, humidity: Int, direction: String) {
         self.letters = state.split { !$0.isLetter }
         DispatchQueue.main.async {
             if self.letters.count == 1 {
@@ -387,6 +374,7 @@ final class MainControllerView: UIView {
             self.sunlightStatus.firstTime.text = "Восход \(sunrise.returnTime(time: timeZone))"
             self.sunlightStatus.secondTime.text = "Закат \(sunset.returnTime(time: timeZone))"
             self.setUp(sunrise, sunset, timeZone)
+            self.fiveDaysWeather.update(wind: wind, direction: direction, pressure: pressure, humidity: humidity)
         }
     }
     

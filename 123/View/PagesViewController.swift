@@ -35,11 +35,14 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
         view().delegate = self
         view().tableView.dataSource = self
         view().tableView.delegate = self
+        modalPresentationStyle = .fullScreen
     }
     
     func getNewCity() {
         let vc = storyboard?.instantiateViewController(identifier: "CitySelector") as! CitySelector
-        navigationController?.pushViewController(vc, animated: true)
+        guard let controller = self.navigationController, let topView = controller.topViewController else { return }
+        topView.dismiss(animated: true, completion: nil)
+        controller.pushViewController(vc, animated: true)
     }
     
     func addPrimitiveData() {
@@ -54,9 +57,9 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
         view().tableView.isEditing = !view().tableView.isEditing
         switch view().tableView.isEditing {
         case true:
-    view().editingButton.setImage(UIImage.init(systemName:"checkmark"), for: .normal)
+        view().editingButton.setImage(UIImage.init(systemName:"checkmark"), for: .normal)
         case false:
-    view().editingButton.setImage(UIImage.init(systemName:"ellipsis"), for: .normal)
+        view().editingButton.setImage(UIImage.init(systemName:"ellipsis"), for: .normal)
         }
     }
     
@@ -89,5 +92,7 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
+    
+ 
 }
 

@@ -48,7 +48,7 @@ final class CustomCell: UITableViewCell {
     
     var imgView: UIImageView = {
       let image = UIImageView()
-        image.contentMode = .scaleAspectFit
+      image.contentMode = .scaleAspectFit
       image.translatesAutoresizingMaskIntoConstraints = false
       return image
       }()
@@ -59,8 +59,8 @@ final class CustomCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String!) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
-        textLabel?.textColor = .white
-        detailTextLabel?.textColor = .white
+        textLabel?.textColor = .black
+        detailTextLabel?.textColor = .black
         contentView.addSubview(backView)
         backView.addSubview(tempLabel)
         backView.addSubview(secondTemp)
@@ -72,10 +72,10 @@ final class CustomCell: UITableViewCell {
         secondTemp.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 35),
         secondTemp.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 235),
         secondTemp.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-        imgView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 32),
-        imgView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 19),
-        imgView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -348),
-        imgView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
+        imgView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 35),
+        imgView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+        imgView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -360),
+        imgView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -35),
         tempLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
         tempLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 210),
         tempLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -65),

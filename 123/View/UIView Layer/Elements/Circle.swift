@@ -12,7 +12,11 @@ import UIKit
 class Circle: UIView {
     let fillLayer = CAShapeLayer()
     var strokeColor: UIColor
-    var fillColor: UIColor = .white
+    var fillColor: UIColor = .white {
+        willSet {
+            setNeedsDisplay()
+        }
+    }
     lazy var float: CGFloat = frame.height / 2
     lazy var circlePath = UIBezierPath(arcCenter: CGPoint(x: frame.width, y: frame.height), radius: float, startAngle: CGFloat(0), endAngle: CGFloat.pi * 2, clockwise: true)
     

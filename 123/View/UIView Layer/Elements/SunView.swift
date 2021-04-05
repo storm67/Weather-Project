@@ -188,6 +188,8 @@ struct QuadBezier {
     
     func point(at t: CGFloat) -> CGPoint {
         let t1 = 1 - t
+        let xr = t1 * t1 * point1.x + 2 * t * t1 * controlPoint.x + t * t * point2.x
+        let tt = pow(1 - t1, 2) * point1.x + 2 * t1 * (1 - t1) * controlPoint.x + pow(t1,2) * point2.x
         return CGPoint(
             x: t1 * t1 * point1.x + 2 * t * t1 * controlPoint.x + t * t * point2.x,
             y: t1 * t1 * point1.y + 2 * t * t1 * controlPoint.y + t * t * point2.y

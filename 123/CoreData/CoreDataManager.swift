@@ -20,7 +20,6 @@ class CoreDataManager: CoreDataProtocol {
     @discardableResult
     func createData(name: String, key: Double?, lat: Double?, lon: Double?, timeZoneOffset: Int) -> Bool {
         let object = City(context: context)
-        print(city)
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = City.fetchRequest()
         let count = try? self.context.count(for: fetchRequest)
         object.setValue(name, forKey: "name")
@@ -34,6 +33,7 @@ class CoreDataManager: CoreDataProtocol {
             do {
                 self.city.append(object)
                 try self.context.save()
+                //try self.context.execute(deleteRequest)
             }
             catch {
                 print("Failed saving")

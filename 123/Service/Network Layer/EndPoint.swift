@@ -22,22 +22,26 @@ enum WeatherAPI {
     case getCityData(text: String)
     case getFiveDayWeather(city: String)
     case getCityByLocation(lat: Double, lon: Double)
+    case get12Hours(city: String)
 }
 
 extension WeatherAPI: EndPoint {
     
     var environmentBaseURL : String {
         switch self {
-        case .getFiveDayWeather: return "http://dataservice.accuweather.com"
+        case .getFiveDayWeather:
+            return "http://dataservice.accuweather.com"
         case .getCityData:
             return "http://dataservice.accuweather.com"
         case .getCityByLocation:
+            return "http://dataservice.accuweather.com"
+        case .get12Hours:
             return "http://dataservice.accuweather.com"
         }
     }
     
     var baseURL: URL {
-        guard let url = URL(string: environmentBaseURL) else { fatalError("baseURL could not be configured.")}
+        guard let url = URL(string: environmentBaseURL) else { fatalError("baseURL could not be configured.") }
         return url
     }
     
@@ -49,6 +53,8 @@ extension WeatherAPI: EndPoint {
             return "/forecasts/v1/daily/5day/\(text)"
         case .getCityByLocation:
             return "locations/v1/cities/geoposition/search"
+        case .get12Hours(let text):
+            return "forecasts/v1/hourly/12hour/\(text)"
         }
     }
     
@@ -76,6 +82,13 @@ extension WeatherAPI: EndPoint {
             urlParameters: ["apikey":NetworkManager.MovieAPIKey,
                             "q":text,
                             "language":"ru"])
+        case .get12Hours:
+            return .requestParameters(bodyParameters: nil,
+                                      bodyEncoding: .urlEncoding,
+            urlParameters: ["language":"ru",
+                            "details":"true",
+                            "metric":"true",
+                            "apikey":NetworkManager.MovieAPIKey])
         }
     }
     

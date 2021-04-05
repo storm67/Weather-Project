@@ -21,6 +21,7 @@ final class MainViewController: UIViewController {
     fileprivate var weather = [Convertible]()
     public var viewModel: ViewModelProtocol!
     private let values: [Double] = [49.5, 80.0, 70.8, 100.0, 43.0, 30.0, 60.0]
+    
     override func loadView() {
         view = MainControllerView()
     }
@@ -59,9 +60,16 @@ final class MainViewController: UIViewController {
                         one.air,
                         quality[0].value,
                         one.temperature,
-                        -1, one.sunrise, one.sunset, model.timeZone
+                        -1, one.sunrise,
+                        one.sunset,
+                        model.timeZone,
+                        wind: one.wind,
+                        pressure: 3,
+                        humidity: one.humidity,
+                        direction: one.direction
                         )
                 } else {
+                    print(one.humidity)
                     self?.view().updateData(one.dayIconPhrase,
                         "\(one.dayIconPhrase)",
                         model.name,
@@ -69,7 +77,14 @@ final class MainViewController: UIViewController {
                         one.air,
                         quality[0].value,
                         one.temperature,
-                        -2, one.sunrise, one.sunset, model.timeZone)
+                        -2,
+                        one.sunrise,
+                        one.sunset,
+                        model.timeZone,
+                        wind: one.wind,
+                        pressure: 3,
+                        humidity: one.humidity,
+                        direction: one.direction)
                     self?.view().locationIcon.isHidden = true
                 }
             }
@@ -88,9 +103,6 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
         cell.viewModel = viewModel.cellViewModel(index: indexPath.row)
         cell.selectionStyle = .none
-//        if cell == 4 {
-//            cell.maskLayer.isHidden = true
-//        }
         return cell
     }
     

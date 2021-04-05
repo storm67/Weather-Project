@@ -11,40 +11,34 @@ import UIKit
 
 final class BackgroundView: NSObject {
     
-    fileprivate var rain: RainController!
     
     func switchImage<T>(_ imageView: T, _ image: String) -> UIImage where T: UIView {
         switch image.description {
         case let str where str.contains("ив") || str.contains("ожд"):
-            return UIImage(named: "test")!
+            return UIImage(named: "12Black")!
         case let str where str.contains("Солн"):
-            return UIImage(named: "1")!
+            return UIImage(named: "1Black")!
         case let str where str.contains("Преимущественно облачно"):
-            return UIImage(named: "6")!
+            return UIImage(named: "6Black")!
         case let str where str.contains("Переменная облачность") || str.contains("Небольшая облачность"):
-            return UIImage(named: "4")!
+            return UIImage(named: "4Black")!
         case let str where str.contains("Снег"):
-            return UIImage(named: "15")!
+            return UIImage(named: "15Black")!
         case let str where str.contains("Небольшой снег"):
-            return UIImage(named: "20")!
+            return UIImage(named: "20Black")!
         case let str where str.contains("Холодно"):
             return UIImage(named: "snowflake")!
         case let str where str.contains("Небольшая облачность, небольшой снег"):
-            return UIImage(named: "20")!
+            return UIImage(named: "20Black")!
         case let str where str.contains("Преимущественно ясно"):
-            return UIImage(named: "1")!
+            return UIImage(named: "1Black")!
+        case let str where str.contains("Облачно"):
+            return UIImage(named: "4Black")!
+        case let str where str.contains("Грозы"):
+            return UIImage(named: "23Black")!
         default:
             return UIImage()
         }
-    }
-    
-    func rotation(_ view: UIView) {
-    let rotation: CABasicAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
-    rotation.toValue = NSNumber(value: Double.pi * 2)
-    rotation.duration = 25
-    rotation.isCumulative = true
-    rotation.repeatCount = Float.greatestFiniteMagnitude
-    view.layer.add(rotation, forKey: "rotationAnimation")
     }
     
     func random() -> UIImage {
@@ -60,7 +54,7 @@ final class BackgroundView: NSObject {
         case 8: return UIImage(named: "Night1")!
         case 9: return UIImage(named: "NightMountain")!
         case 10: return UIImage(named: "NightMountain")!
-        case 11: return UIImage(named: "Paris")!
+        case 11: return UIImage(named: "EveningLast")!
         case 12: return UIImage(named: "PreDay")!
         case 13: return UIImage(named: "riverForest")!
         case 14: return UIImage(named: "UFO")!
@@ -69,37 +63,6 @@ final class BackgroundView: NSObject {
         }
     }
     
-    func addRain(_ view: UIView) {
-        rain = RainController(view: view, frame: view.frame)
-        rain.createBackground()
-        rain.start()
-    }
-    
-    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
-        let size = image.size
-
-        let widthRatio  = targetSize.width  / size.width
-        let heightRatio = targetSize.height / size.height
-
-        // Figure out what our orientation is, and use that to form the rectangle
-        var newSize: CGSize
-        if(widthRatio > heightRatio) {
-            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
-        } else {
-            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
-        }
-
-        // This is the rect that we've calculated out and this is what is actually used below
-        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
-
-        // Actually do the resizing to the rect using the ImageContext stuff
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-        image.draw(in: rect)
-        guard let newImage = UIGraphicsGetImageFromCurrentImageContext() else { return UIImage() }
-        UIGraphicsEndImageContext()
-
-        return newImage
-    }
 }
 protocol BackViewProtocol {
     func switchImage(_ image: String) -> UIImage
