@@ -33,12 +33,10 @@ class PageControl: UIControl {
         if offset.x == 0 {
             lastPage = currentPage
             currentPage -= 1
-            print(currentPage,lastPage)
         }
         if offset.x == width * 2  {
             lastPage = currentPage
             currentPage += 1
-            print(currentPage,lastPage)
         }
         if currentPage >= 1 {
         circle[currentPage - 1].fillColor = .black
@@ -52,20 +50,36 @@ class PageControl: UIControl {
     func update() {
         for i in 0..<circle.count {
             circle[i].setNeedsDisplay()
+            layoutIfNeeded()
         }
+//        let bool = circle.count == pages ? true : false
+//        if !bool {
+//        for i in circle.count..<pages {
+//        circle[i - 1].removeFromSuperview()
+//        circle[i - 1].setNeedsDisplay()
+//        }
+//        }
+    }
+
+    func delete(_ diff: Int) {
+        
     }
     
     func addCircle() {
+        subviews.forEach { $0.removeFromSuperview() }
         self.image.image = UIImage(systemName: "location.fill")?.withRenderingMode(.alwaysTemplate)
         self.image.tintColor = UIColor.black
         addSubview(self.image)
         var x = bounds.minX
         image.frame = CGRect(x: x + 5, y: bounds.midY - 1, width: 10, height: 10)
-        for v in 0...pages - 2 {
+        circle.removeAll()
+        for v in 0..<pages - 1 {
         circle.append(Circle(frame: .zero, strokeColor: .clear, fillColor: .lightGray))
         addSubview(circle[v])
         x += 5 * 2.5
         circle[v].frame = CGRect(x: Int(x), y: Int(bounds.midY), width: 10, height: 5)
+        circle[v].setNeedsDisplay()
+        layoutIfNeeded()
         }
     }
 }

@@ -42,6 +42,7 @@ final class CitySelector: UIViewController, UITableViewDelegate, UISearchBarDele
         configureSearchController()
         addTag()
         layout()
+        view.backgroundColor = .white
     }
     
    required init?(coder: NSCoder) {
@@ -89,8 +90,8 @@ extension CitySelector: UITableViewDataSource {
         let view = self.storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
         self.navigationController?.pushViewController(view, animated: true)
         }
-        }
-        })
+    }
+})
         tagView.isSelected = !tagView.isSelected
     }
     

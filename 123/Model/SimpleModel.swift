@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SimpleModel {
+@objc final class SimpleModel: NSObject, Codable {
     var name: String
     var key: Int?
     var lat: Double?

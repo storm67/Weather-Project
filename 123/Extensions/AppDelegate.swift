@@ -9,16 +9,21 @@
 import UIKit
 import CoreData
 import CoreLocation
+import SwinjectStoryboard
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
+    lazy var city = [City]()
+    
+    var coredata: CoreDataProtocol!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UINavigationBar.appearance().backgroundColor = .white
-
         return true
     }
+    
     
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.

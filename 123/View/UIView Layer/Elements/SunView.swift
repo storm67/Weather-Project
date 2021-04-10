@@ -150,8 +150,6 @@ class SunView: UIView {
     }
     
     func setStroke() -> QuadBezier? {
-        guard let angle = endAngle else { return nil }
-        let centre = CGPoint(x: bounds.size.width/2, y: 125)
         let p0 = CGPoint(x: 55, y: 95)
         let p2 = CGPoint(x: frame.size.width/2, y: 0)
         let p1 = CGPoint(x: frame.size.width/1.15, y: 95)
@@ -188,8 +186,7 @@ struct QuadBezier {
     
     func point(at t: CGFloat) -> CGPoint {
         let t1 = 1 - t
-        let xr = t1 * t1 * point1.x + 2 * t * t1 * controlPoint.x + t * t * point2.x
-        let tt = pow(1 - t1, 2) * point1.x + 2 * t1 * (1 - t1) * controlPoint.x + pow(t1,2) * point2.x
+        //let tt = pow(1 - t1, 2) * point1.x + 2 * t1 * (1 - t1) * controlPoint.x + pow(t1,2) * point2.x
         return CGPoint(
             x: t1 * t1 * point1.x + 2 * t * t1 * controlPoint.x + t * t * point2.x,
             y: t1 * t1 * point1.y + 2 * t * t1 * controlPoint.y + t * t * point2.y

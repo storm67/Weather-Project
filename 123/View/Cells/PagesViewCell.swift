@@ -18,7 +18,7 @@ class PagesViewCell: UITableViewCell {
     return text
     }()
     
-    var viewModel: City! {
+    var viewModel: SimpleModel! {
         didSet {
             guard let viewModel = viewModel else { return }
             name.text = viewModel.name

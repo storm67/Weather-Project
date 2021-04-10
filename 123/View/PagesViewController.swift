@@ -11,7 +11,6 @@ import UIKit
 import CoreData
 
 protocol GetEdit: class {
-    func throwsEdit()
     func getBack()
     func getNewCity()
 }
@@ -36,6 +35,9 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
         view().tableView.dataSource = self
         view().tableView.delegate = self
         modalPresentationStyle = .fullScreen
+        view().tableView.dragDelegate = self
+        view().tableView.dropDelegate = self
+        view().tableView.dragInteractionEnabled = true
     }
     
     func getNewCity() {
@@ -46,25 +48,18 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func addPrimitiveData() {
+        viewModel.add()
         viewModel.rearrange {
             DispatchQueue.main.async {
                 self.view().tableView.reloadData()
             }
         }
     }
-    
-    func throwsEdit() {
-        view().tableView.isEditing = !view().tableView.isEditing
-        switch view().tableView.isEditing {
-        case true:
-        view().editingButton.setImage(UIImage.init(systemName:"checkmark"), for: .normal)
-        case false:
-        view().editingButton.setImage(UIImage.init(systemName:"ellipsis"), for: .normal)
-        }
-    }
+
     
     func getBack() {
-        navigationController?.popViewController(animated: true)
+        guard let controller = self.navigationController, let topView = controller.topViewController else { return }
+        topView.dismiss(animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -73,26 +68,46 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PagesViewCell
-        cell.viewModel = viewModel.cellViewerModel(indexPath.row)
+        cell.viewModel = viewModel.cellViewModel(indexPath.row)
         return cell
     }
     
-    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let item = viewModel.model()[sourceIndexPath.row]
-        viewModel.refresh(sourceIndexPath, item, destinationIndexPath)
-    }
-    
+
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            viewModel.delete(indexPath)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        }
+        viewModel.delete(indexPath)
+        tableView.deleteRows(at: [indexPath], with: .fade)
     }
     
+    func dragItem(for indexPath: IndexPath) -> UIDragItem {
+        let prefectureName = viewModel.pages[indexPath.row]
+        let itemProvider = NSItemProvider(object: prefectureName)
+        return UIDragItem(itemProvider: itemProvider)
+    }
  
 }
 
+extension PagesViewController: UITableViewDragDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        return [dragItem(for: indexPath)]
+    }
+}
+
+extension PagesViewController: UITableViewDropDelegate {
+    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+    }
+
+    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+        guard let item = coordinator.items.first,
+            let destinationIndexPath = coordinator.destinationIndexPath,
+            let sourceIndexPath = item.sourceIndexPath else { return }
+
+        tableView.performBatchUpdates({ [weak self] in
+            self?.viewModel.refresh(sourceIndexPath, destinationIndexPath)
+            tableView.deleteRows(at: [sourceIndexPath], with: .automatic)
+            tableView.insertRows(at: [destinationIndexPath], with: .automatic)
+            }, completion: nil)
+        coordinator.drop(item.dragItem, toRowAt: destinationIndexPath)
+    }
+    
+}

@@ -52,6 +52,7 @@ class CoreDataManager: CoreDataProtocol {
             let result = try context.fetch(request) as! [City]
             city = result
             var item = [SimpleModel]()
+            print(result)
             for data in city {
                 guard let name = data.name else { return }
                 item.append(SimpleModel(name: name, key: Int(data.cityId), lat: data.lat, lon: data.lon, position: Int(data.position), timeZone: Int(data.timeZoneOffset))
@@ -61,13 +62,13 @@ class CoreDataManager: CoreDataProtocol {
             print("Failed")
         }
     }
+    
     func resetable(completion:@escaping () -> Void) {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "City")
         let sortDescriptor = NSSortDescriptor(key: "position", ascending: true)
         request.sortDescriptors = [sortDescriptor]
         do {
             city = try context.fetch(request) as! [City]
-            print("Data fetched, no issues")
             completion()
         } catch {
             print("Unable to fetch data: ", error.localizedDescription)
@@ -76,7 +77,9 @@ class CoreDataManager: CoreDataProtocol {
     }
     
     func deleteData(indexPath: IndexPath) {
-        context.delete(city[indexPath.row])
+        self.context.delete(self.city[indexPath.row])
+        context.mergePolicy = NSMergePolicy.overwrite
+        context.refreshAllObjects()
         do {
             try context.save()
             print("Data Deleted")
@@ -85,14 +88,37 @@ class CoreDataManager: CoreDataProtocol {
         }
     }
     
-    func cellViewModel(index: Int) -> City? {
-        guard index < city.count else { return nil }
-        return city[index]
+    func move(_ index: Int, _ dest: Int) {
+            let item = city[index]
+            city.remove(at: index)
+            city.insert(item, at: dest)
+            for (index, name) in city.enumerated() {
+                name.position = Double(index)
+            }
+            do {
+                try self.context.save()
+            } catch {
+                print("Failed to move data: ", error.localizedDescription)
+            }
+        }
+    
+    func checker() -> Bool {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "City")
+        request.returnsObjectsAsFaults = false
+        do {
+            let result = try context.fetch(request) as! [City]
+            city = result
+            print(city)
+        } catch {
+            print("Failed")
+        }
+        return city.isEmpty ? true : false
     }
 }
 
 protocol CoreDataProtocol {
-    func cellViewModel(index: Int) -> City?
+    func move(_ index: Int, _ dest: Int)
+    func checker() -> Bool
     func deleteData(indexPath: IndexPath)
     func resetable(completion:@escaping () -> Void)
     func fetchData(completion:@escaping ([SimpleModel]) -> Void)

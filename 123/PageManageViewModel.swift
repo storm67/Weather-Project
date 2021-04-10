@@ -8,6 +8,7 @@
 //
 import Foundation
 import Swinject
+
 class PagerViewModel: PageViewModelProtocol {
 
     var coreData: CoreDataProtocol

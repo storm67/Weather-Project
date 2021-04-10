@@ -116,31 +116,9 @@ extension UIColor {
     }
     
 }
-extension UINavigationController {
-    
-func switchController(vc: UIViewController, duration: CFTimeInterval, type: CATransitionSubtype) {
-    let customVcTransition = vc
-    let transition = CATransition()
-    transition.duration = duration
-    transition.type = CATransitionType.push
-    transition.subtype = type
-    transition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
-    view.window!.layer.add(transition, forKey: kCATransition)
-    present(customVcTransition, animated: false, completion: nil)
-}}
-
 extension UIView {
 
-    func dropShadow() {
-        layer.masksToBounds = false
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.5
-        layer.shadowOffset = CGSize(width: -1, height: 1)
-        layer.shadowRadius = 1
-        layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
-        layer.shouldRasterize = true
-        layer.rasterizationScale = UIScreen.main.scale
-    }
+  
         func addColors(colors: [UIColor], withPercentage percentages: [Double]) {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.bounds
@@ -166,6 +144,7 @@ extension UIView {
         
     }
 }
+
 
 
 

@@ -12,15 +12,11 @@ final class PageManagerViewModel: PageManagerProtocol {
 
     var manager: CoreDataProtocol
     var index = 0
-    var pages = [City]()
+    var pages = [SimpleModel]()
+    
 
-    func cellViewModel(index: Int) -> City? {
-        guard index < pages.count else { return nil }
-        return manager.city[index]
-    }
-
-    func model() -> [City] {
-        return manager.city
+    func model() -> [SimpleModel] {
+        return pages
     }
 
     func enabled() -> Bool {
@@ -32,7 +28,7 @@ final class PageManagerViewModel: PageManagerProtocol {
     }
 
     func count() -> Int {
-        return manager.city.count
+        return pages.count
     }
 
     func rearrange(complete: @escaping () -> ()) {
@@ -40,26 +36,32 @@ final class PageManagerViewModel: PageManagerProtocol {
             complete()
         }
     }
+    
+    func add() {
+        manager.fetchData { item in
+            self.pages = item
+        }
+    }
+    
 
-    func cellViewerModel(_ int: Int) -> City? {
-        manager.cellViewModel(index: int)
+    func cellViewModel(_ index: Int) -> SimpleModel? {
+        guard index < pages.count else { return nil }
+        return pages[index]
     }
 
-    func refresh(_ sourceIndexPath: IndexPath,_ item: City,_ destinationIndexPath: IndexPath) {
-        let item = manager.city[sourceIndexPath.row]
-        manager.city.remove(at: sourceIndexPath.row)
-        manager.city.insert(item, at: destinationIndexPath.row)
-        for (index, name) in manager.city.enumerated() {
-            name.position = Double(index)
-        }
+    func refresh(_ sourceIndexPath: IndexPath,_ destinationIndexPath: IndexPath) {
+        manager.move(sourceIndexPath.row, destinationIndexPath.row)
+        add()
         index += 1
     }
 
     func delete(_ indexPath: IndexPath) {
+        pages.remove(at: indexPath.row)
         manager.deleteData(indexPath: indexPath)
-        manager.city.remove(at: indexPath.row)
         index += 1
     }
+
+    
     init(manager: CoreDataProtocol) {
         self.manager = manager
     }
@@ -69,11 +71,11 @@ final class PageManagerViewModel: PageManagerProtocol {
 protocol PageManagerProtocol {
     func enabled() -> Bool
     func delete(_ indexPath: IndexPath)
-    func refresh(_ sourceIndexPath: IndexPath,_ item: City,_ destinationIndexPath: IndexPath)
+    func refresh(_ sourceIndexPath: IndexPath,_ destinationIndexPath: IndexPath)
     func rearrange(complete: @escaping () -> ())
-    func cellViewModel(index: Int) -> City?
-    var pages: [City] { get set }
+    var pages: [SimpleModel] { get set }
     func count() -> Int
-    func model() -> [City]
-    func cellViewerModel(_ int: Int) -> City?
+    func model() -> [SimpleModel]
+    func cellViewModel(_ index: Int) -> SimpleModel?
+    func add()
 }

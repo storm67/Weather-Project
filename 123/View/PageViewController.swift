@@ -13,19 +13,22 @@ import SideMenu
 
 final class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate, SideMenuNavigationControllerDelegate {
     
+    fileprivate var pageControl = UIPageControl()
+    fileprivate var customPageControl = PageControl()
+    fileprivate var pages = [UIViewController]()
+    
     fileprivate var blurEffect: UIVisualEffectView! {
         didSet {
         self.blurEffect.layer.opacity = 0
         }
     }
-    fileprivate var pageControl = UIPageControl()
-    fileprivate var CustomPageControl = PageControl()
-    fileprivate var pages = [UIViewController]()
+    
     fileprivate var currentPage: Int {
         get {
             pageControl.currentPage
         }
     }
+    
     fileprivate var citySelector: SideMenuNavigationController {
         get {
             let menu = storyboard?.instantiateViewController(withIdentifier: "PagesViewController") as! PagesViewController
@@ -39,8 +42,6 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     }
 
     var manager: PageViewModelProtocol!
-    
-    var nextViewController = UIViewController()
     
     let menu: UIButton = {
         let button = UIButton()
@@ -59,25 +60,20 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         return button
     }()
     
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-    }
-
     func setupPageControl() {
         var count = 0
         if count == 0 {
         self.pageControl.numberOfPages = pages.count
         self.pageControl.currentPage = 0
-        view.addSubview(CustomPageControl)
-        CustomPageControl.translatesAutoresizingMaskIntoConstraints = false
-        CustomPageControl.backgroundColor = .red
-        CustomPageControl.pages = pages.count
-        CustomPageControl.addCircle()
+        view.addSubview(customPageControl)
+        customPageControl.translatesAutoresizingMaskIntoConstraints = false
+        customPageControl.backgroundColor = .red
+        customPageControl.pages = pages.count
+        customPageControl.addCircle()
         NSLayoutConstraint.activate([
-        CustomPageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        CustomPageControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-        CustomPageControl.widthAnchor.constraint(equalToConstant: 60)
+        customPageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        customPageControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+        customPageControl.widthAnchor.constraint(equalToConstant: 60)
         ])
         }
         count += 1
@@ -106,6 +102,13 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         super.viewDidLayoutSubviews()
     }
     
+    override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: .none)
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: .none)
+    }
     
     func setUp() {
         manager.fetchData { [weak self] (md) in
@@ -175,7 +178,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        CustomPageControl.pagesCounter(offset: scrollView.contentOffset, width: scrollView.bounds.size.width)
+        customPageControl.pagesCounter(offset: scrollView.contentOffset, width: scrollView.bounds.size.width)
         if (currentPage == 0 && scrollView.contentOffset.x < scrollView.bounds.size.width) {
             scrollView.contentOffset = CGPoint(x: scrollView.bounds.size.width, y: 0);
         } else if (currentPage == pages.count - 1 && scrollView.contentOffset.x > scrollView.bounds.size.width) {
@@ -195,10 +198,10 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         if manager.check() {
             DispatchQueue.global().sync {
             self.setUp()
-            self.CustomPageControl.pages = self.pages.count
+            self.customPageControl.pages = self.pages.count
             self.setViewControllers([self.pages[0]], direction: .forward, animated: false, completion: nil)
-            self.CustomPageControl.currentPage = 0
-            self.CustomPageControl.update()
+            self.customPageControl.currentPage = 0
+            self.customPageControl.addCircle()
             }
         }
     }

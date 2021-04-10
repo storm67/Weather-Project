@@ -31,6 +31,7 @@ class Injector: Assembly {
         container.register(CitySelectorProtocol.self) { r in
             CitySelectorViewModel(manager: Routing<WeatherAPI>(), location: r.resolve(LocationManagerProtocol.self)!, coreData: r.resolve(CoreDataProtocol.self)!)
         }.inObjectScope(.container)
+        
         container.storyboardInitCompleted(UINavigationController.self) { _, _ in }
         container.storyboardInitCompleted(SideMenuNavigationController.self) { _, _ in }
         container.storyboardInitCompleted(CitySelector.self) { r,c in

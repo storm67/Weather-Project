@@ -76,13 +76,9 @@ final class PagesMainView: UIView {
         toolbar.addSubview(getBackButton)
         toolbar.addSubview(editingButton)
         NSLayoutConstraint.activate([
-            getBackButton.leftAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.leftAnchor, constant: 5),
+            getBackButton.leftAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.leftAnchor, constant: 10),
             getBackButton.topAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.topAnchor, constant: 0),
             getBackButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: 0),
-            editingButton.leftAnchor.constraint(equalTo: getBackButton.leftAnchor, constant: 30),
-            editingButton.topAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.topAnchor, constant: 10),
-            editingButton.rightAnchor.constraint(equalTo: addButton.rightAnchor, constant: -230),
-            editingButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: -10),
             toolbar.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
             toolbar.topAnchor.constraint(equalTo: topAnchor, constant: 0),
             toolbar.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
@@ -93,7 +89,7 @@ final class PagesMainView: UIView {
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
             addButton.topAnchor.constraint(equalTo: toolbar.safeAreaLayoutGuide.topAnchor, constant: 0),
             addButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: 0),
-            addButton.rightAnchor.constraint(equalTo: toolbar.rightAnchor, constant: -5)
+            addButton.rightAnchor.constraint(equalTo: toolbar.rightAnchor, constant: -10)
         ])
         layer.masksToBounds = true
         layer.cornerRadius = 15
@@ -108,7 +104,6 @@ final class PagesMainView: UIView {
     }
     
     @objc func editNow() {
-        delegate?.throwsEdit()
         nextScreen?.nextScreen()
     }
     

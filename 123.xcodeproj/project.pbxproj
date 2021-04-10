@@ -38,6 +38,7 @@
 		3133B8402434E15A00C4EE93 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3133B83F2434E15A00C4EE93 /* BackgroundView.swift */; };
 		3133B8422435134A00C4EE93 /* LocationManagerSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3133B8412435134A00C4EE93 /* LocationManagerSaver.swift */; };
 		3135D61F2619CDCC003EF5D7 /* CustomPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3135D61E2619CDCC003EF5D7 /* CustomPageControl.swift */; };
+		313742C2261CE29200E56FB1 /* NSItemSubject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313742C1261CE29200E56FB1 /* NSItemSubject.swift */; };
 		3137B897253C45D3004CBA8F /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137B896253C45D3004CBA8F /* EndPoint.swift */; };
 		3137B89B253C5266004CBA8F /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137B89A253C5266004CBA8F /* HTTP.swift */; };
 		3137B89D253C52A2004CBA8F /* Encode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137B89C253C52A2004CBA8F /* Encode.swift */; };
@@ -50,6 +51,7 @@
 		3139C78525D7FB62006AEEA2 /* SunView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3139C78425D7FB62006AEEA2 /* SunView.swift */; };
 		313AB10B2609034A00694E51 /* Charts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313AB10A2609034A00694E51 /* Charts.swift */; };
 		313B510D2469E5070059161C /* PagesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313B510C2469E5070059161C /* PagesViewCell.swift */; };
+		31488135261F9A7200C52176 /* LayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31488134261F9A7200C52176 /* LayerViewController.swift */; };
 		31519F27261B446700844B8C /* 12HoursForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31519F26261B446600844B8C /* 12HoursForecast.swift */; };
 		31612F552528E87D00FA72EE /* Injector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31612F542528E87D00FA72EE /* Injector.swift */; };
 		317C707C258D3A0700CEE84E /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317C707B258D3A0700CEE84E /* GradientButton.swift */; };
@@ -99,6 +101,7 @@
 		3133B83F2434E15A00C4EE93 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		3133B8412435134A00C4EE93 /* LocationManagerSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerSaver.swift; sourceTree = "<group>"; };
 		3135D61E2619CDCC003EF5D7 /* CustomPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPageControl.swift; sourceTree = "<group>"; };
+		313742C1261CE29200E56FB1 /* NSItemSubject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSItemSubject.swift; sourceTree = "<group>"; };
 		3137B896253C45D3004CBA8F /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
 		3137B89A253C5266004CBA8F /* HTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		3137B89C253C52A2004CBA8F /* Encode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encode.swift; sourceTree = "<group>"; };
@@ -111,6 +114,7 @@
 		3139C78425D7FB62006AEEA2 /* SunView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunView.swift; sourceTree = "<group>"; };
 		313AB10A2609034A00694E51 /* Charts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Charts.swift; sourceTree = "<group>"; };
 		313B510C2469E5070059161C /* PagesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesViewCell.swift; sourceTree = "<group>"; };
+		31488134261F9A7200C52176 /* LayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerViewController.swift; sourceTree = "<group>"; };
 		31519F26261B446600844B8C /* 12HoursForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 12HoursForecast.swift; sourceTree = "<group>"; };
 		31612F542528E87D00FA72EE /* Injector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injector.swift; sourceTree = "<group>"; };
 		317C707B258D3A0700CEE84E /* GradientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
@@ -221,6 +225,7 @@
 				31324A70240EF3960077C339 /* MainViewController.swift */,
 				3131C5DE2460749800953D6D /* PageViewController.swift */,
 				31324AB9240F14C90077C339 /* CitySelector.swift */,
+				31488134261F9A7200C52176 /* LayerViewController.swift */,
 				312C6ACC24618033007AAC03 /* PagesViewController.swift */,
 			);
 			path = View;
@@ -240,6 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				31B7F71624166E3500BCB7C9 /* CoreDataManager.swift */,
+				313742C1261CE29200E56FB1 /* NSItemSubject.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -498,6 +504,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31488135261F9A7200C52176 /* LayerViewController.swift in Sources */,
 				31168F8725A7C60800A0271E /* UniSansHeavyCaps.otf in Sources */,
 				31E76AD425896C88006ED18A /* CitySelectorViewModel.swift in Sources */,
 				3130A99D246335A5007A4B90 /* Extensions.swift in Sources */,
@@ -534,6 +541,7 @@
 				31E76ADC25896D81006ED18A /* SimpleModel.swift in Sources */,
 				3139C78525D7FB62006AEEA2 /* SunView.swift in Sources */,
 				313917F42471C2660011EFCD /* PagesMainView.swift in Sources */,
+				313742C2261CE29200E56FB1 /* NSItemSubject.swift in Sources */,
 				3131917325685A1700CF06EC /* CollectionViewCell.swift in Sources */,
 				3137B89D253C52A2004CBA8F /* Encode.swift in Sources */,
 				312B3F3B25A78FF5008F7427 /* AirQualityView.swift in Sources */,
@@ -678,13 +686,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 77T4VKGUNC;
+				DEVELOPMENT_TEAM = 92B6XR6628;
 				INFOPLIST_FILE = "$(SRCROOT)/123/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = a.123;
+				PRODUCT_BUNDLE_IDENTIFIER = a.123a;
 				PRODUCT_NAME = 123;
 				SWIFT_ENFORCE_EXCLUSIVE_ACCESS = off;
 				SWIFT_VERSION = 5.0;
@@ -699,13 +707,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 77T4VKGUNC;
+				DEVELOPMENT_TEAM = 92B6XR6628;
 				INFOPLIST_FILE = "$(SRCROOT)/123/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = a.123;
+				PRODUCT_BUNDLE_IDENTIFIER = a.123a;
 				PRODUCT_NAME = 123;
 				SWIFT_ENFORCE_EXCLUSIVE_ACCESS = off;
 				SWIFT_VERSION = 5.0;

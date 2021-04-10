@@ -7,14 +7,31 @@
 //
 
 import UIKit
+import SwinjectStoryboard
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    var coredata: CoreDataProtocol!
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-    guard let _ = (scene as? UIWindowScene) else { return }
-    }
+    guard let scene = (scene as? UIWindowScene) else { return }
+     self.coredata = SwinjectStoryboard.defaultContainer.resolve(CoreDataProtocol.self)
+     let window = UIWindow(windowScene: scene)
+     var viewController: UIViewController
+     var navigator: UINavigationController
+     let storyboard = UIStoryboard(name: "Main", bundle: nil)
+     if coredata.checker() {
+     viewController = storyboard.instantiateViewController(withIdentifier: "CitySelector")
+     navigator = UINavigationController(rootViewController: viewController)
+     } else {
+    viewController = storyboard.instantiateViewController(withIdentifier: "PageViewController")
+    navigator = UINavigationController(rootViewController: viewController)
+     }
+     self.window = window
+     self.window?.rootViewController = navigator
+     self.window?.makeKeyAndVisible()
+   }
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

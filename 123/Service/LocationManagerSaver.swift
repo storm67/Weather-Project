@@ -88,7 +88,6 @@ extension LocationManager: CLLocationManagerDelegate {
             }
         }
     }
-    
 }
 
 protocol LocationManagerProtocol: class {
