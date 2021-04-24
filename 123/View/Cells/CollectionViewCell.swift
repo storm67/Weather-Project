@@ -61,10 +61,8 @@ class CollectionViewCell: UICollectionViewCell {
         didSet {
             guard let viewModel = viewModel else { return }
             DispatchQueue.main.async {
-                let back = BackgroundView()
                 self.tempLabel.text = "\(viewModel.temperature)°"
-                self.imgView.image = back.switchImage(self.imgView, viewModel.dayIconPhrase)
-                print(self.viewModel?.dayIconPhrase as Any)
+                self.imgView.switchImage(viewModel.dayIconPhrase)
             }
         }
     }

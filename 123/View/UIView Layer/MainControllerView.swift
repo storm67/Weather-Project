@@ -9,7 +9,6 @@ import UIKit
 
 final class MainControllerView: UIView {
     
-    fileprivate let back = BackgroundView()
     fileprivate var letters = [String.SubSequence]()
     fileprivate lazy var sunlightStatus = SunView()
     fileprivate var color: UIColor = .black
@@ -53,7 +52,7 @@ final class MainControllerView: UIView {
     var tableView: UITableView = {
         var tableView = UITableView()
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 65, bottom: 0, right: 0)
-        tableView.separatorColor = .none
+        tableView.separatorColor = .white
         tableView.tableFooterView = UIView(frame: .zero)
         tableView.rowHeight = 90.0
         tableView.register(CustomCell.self, forCellReuseIdentifier: "cell")
@@ -294,7 +293,7 @@ final class MainControllerView: UIView {
             headerOfMainView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
             headerOfMainView.centerXAnchor.constraint(equalTo: centerXAnchor),
             headerOfMainView.heightAnchor.constraint(equalToConstant: 80),
-            headerOfMainView.widthAnchor.constraint(equalToConstant: 420),
+            headerOfMainView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             secondView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             secondView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 60),
             secondView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
@@ -355,7 +354,7 @@ final class MainControllerView: UIView {
     }
     
     
-    func updateData(_ state: String,_ city: String,_ value: String,_ image: UIImage,_ air: Int,_ index: Int,_ indexMain: Int,_ sun: CGFloat, _ sunrise: Int, _ sunset: Int, _ timeZone: Int, wind: Int,pressure: Int, humidity: Int, direction: String) {
+    func updateData(_ state: String,_ city: String,_ value: String,_ air: Int,_ index: Int,_ indexMain: Int, _ sunrise: Int, _ sunset: Int, _ timeZone: Int,_ wind: Int,_ pressure: Int,_ humidity: Int,_ direction: String) {
         self.letters = state.split { !$0.isLetter }
         DispatchQueue.main.async {
             if self.letters.count == 1 {
@@ -371,27 +370,26 @@ final class MainControllerView: UIView {
             self.circle.frame = CGRect(x: 0 + index, y: 108, width: 12, height: 12)
             self.indexNumber.textColor = UIColor().switcher(index)
             self.sunlightStatus.setNeedsDisplay()
-            self.sunlightStatus.firstTime.text = "Восход \(sunrise.returnTime(time: timeZone))"
-            self.sunlightStatus.secondTime.text = "Закат \(sunset.returnTime(time: timeZone))"
+            self.sunlightStatus.firstTime.text = "Восход \(sunrise.returnTime(time: timeZone, interval: .since1970))"
+            self.sunlightStatus.secondTime.text = "Закат \(sunset.returnTime(time: timeZone, interval: .since1970))"
             self.setUp(sunrise, sunset, timeZone)
             self.fiveDaysWeather.update(wind: wind, direction: direction, pressure: pressure, humidity: humidity)
         }
     }
     
     func setUp(_ f: Int, _ s: Int, _ timeZone: Int) {
-        let angle: CGFloat = 0.031
         let now = Int.now(timeOffset: timeZone)
         let start = f.convertToHours(time: timeZone)
         let finish = s.convertToHours(time: timeZone)
-        let value = 3.1 - ((CGFloat(now) / CGFloat(finish)) * 100) * angle
+        let value: Double = Double((now * 100 / finish)) / 100
         let less = now < start ? true : false
         let more = now > finish ? true : false
-        sunlightStatus.endAngle = -value
+        sunlightStatus.endAngle = CGFloat(value)
         if less || more {
         if less {
-        sunlightStatus.endAngle = -3.1
-        } else {
         sunlightStatus.endAngle = 0
+        } else {
+        sunlightStatus.endAngle = 1
         }
         }
     }

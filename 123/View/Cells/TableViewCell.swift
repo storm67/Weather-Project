@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 final class CustomCell: UITableViewCell {
-    let back = BackgroundView()
     
     let backView: UIView = {
         let View = UIView()
@@ -82,6 +81,7 @@ final class CustomCell: UITableViewCell {
         ])
         backgroundColor = .clear
         contentView.backgroundColor = .clear
+        selectionStyle = .none
         createCircle()
         setNeedsDisplay()
     }
@@ -98,9 +98,7 @@ final class CustomCell: UITableViewCell {
                 self.tempLabel.text = "\(viewModel.temperatureMax)°"
                 self.secondTemp.text = "\(viewModel.temperature)°"
                 self.detailTextLabel?.text = viewModel.standardDate
-                self.imgView.image = self.back.switchImage(self.imgView, viewModel.dayIconPhrase)
-                print(self.viewModel?.dayIconPhrase as Any)
-                self.imgView.sizeToFit()
+                self.imgView.switchImage(viewModel.dayIconPhrase)
             }
         }
     }
@@ -110,12 +108,8 @@ final class CustomCell: UITableViewCell {
         let shapeLayer = CAShapeLayer()
         shapeLayer.opacity = 0.2
         shapeLayer.path = circlePath.cgPath
-        // Change the fill color
         shapeLayer.fillColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
-        // You can change the stroke color
-        // You can change the line width
         shapeLayer.lineWidth = 3.0
-            
         backView.layer.insertSublayer(shapeLayer, at: 0)
         return circlePath
     }

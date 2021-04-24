@@ -15,7 +15,16 @@ protocol GetEdit: class {
     func getNewCity()
 }
 
+protocol DataTransfer: class {
+    func sender(_ temp: Int)
+}
+
 final class PagesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GetEdit {
+    
+    func sender(_ temp: Int) {
+        print(temp)
+    }
+    
     
     fileprivate func view() -> PagesMainView {
         return view as! PagesMainView
@@ -29,15 +38,14 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addPrimitiveData()
         navigationController?.isNavigationBarHidden = true
         view().delegate = self
         view().tableView.dataSource = self
         view().tableView.delegate = self
-        modalPresentationStyle = .fullScreen
         view().tableView.dragDelegate = self
         view().tableView.dropDelegate = self
         view().tableView.dragInteractionEnabled = true
+
     }
     
     func getNewCity() {
@@ -47,12 +55,9 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
         controller.pushViewController(vc, animated: true)
     }
     
-    func addPrimitiveData() {
-        viewModel.add()
-        viewModel.rearrange {
-            DispatchQueue.main.async {
-                self.view().tableView.reloadData()
-            }
+    @objc func addPrimitiveData(notification: Notification) {
+        viewModel.loader(notification: notification) {
+            self.view().tableView.reloadData()
         }
     }
 
@@ -69,6 +74,11 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PagesViewCell
         cell.viewModel = viewModel.cellViewModel(indexPath.row)
+        if indexPath.row == 0 {
+            if viewModel.extractor() {
+            cell.detailTextLabel?.text = "Текущее местоположение"
+            }
+        }
         return cell
     }
     
@@ -79,7 +89,7 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func dragItem(for indexPath: IndexPath) -> UIDragItem {
-        let prefectureName = viewModel.pages[indexPath.row]
+        guard let prefectureName = viewModel.pages[indexPath.row] else { return UIDragItem(itemProvider: NSItemProvider() )}
         let itemProvider = NSItemProvider(object: prefectureName)
         return UIDragItem(itemProvider: itemProvider)
     }
@@ -88,6 +98,7 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
 
 extension PagesViewController: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard indexPath.row != 0 else { return [] }
         return [dragItem(for: indexPath)]
     }
 }
@@ -98,6 +109,7 @@ extension PagesViewController: UITableViewDropDelegate {
     }
 
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+        
         guard let item = coordinator.items.first,
             let destinationIndexPath = coordinator.destinationIndexPath,
             let sourceIndexPath = item.sourceIndexPath else { return }

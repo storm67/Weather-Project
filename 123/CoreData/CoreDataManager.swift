@@ -17,7 +17,6 @@ class CoreDataManager: CoreDataProtocol {
     let background = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.newBackgroundContext()
     var city: [City] = []
     
-    @discardableResult
     func createData(name: String, key: Double?, lat: Double?, lon: Double?, timeZoneOffset: Int) -> Bool {
         let object = City(context: context)
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = City.fetchRequest()
@@ -52,7 +51,6 @@ class CoreDataManager: CoreDataProtocol {
             let result = try context.fetch(request) as! [City]
             city = result
             var item = [SimpleModel]()
-            print(result)
             for data in city {
                 guard let name = data.name else { return }
                 item.append(SimpleModel(name: name, key: Int(data.cityId), lat: data.lat, lon: data.lon, position: Int(data.position), timeZone: Int(data.timeZoneOffset))
@@ -79,6 +77,7 @@ class CoreDataManager: CoreDataProtocol {
     func deleteData(indexPath: IndexPath) {
         self.context.delete(self.city[indexPath.row])
         context.mergePolicy = NSMergePolicy.overwrite
+        context.processPendingChanges()
         context.refreshAllObjects()
         do {
             try context.save()
@@ -108,7 +107,6 @@ class CoreDataManager: CoreDataProtocol {
         do {
             let result = try context.fetch(request) as! [City]
             city = result
-            print(city)
         } catch {
             print("Failed")
         }

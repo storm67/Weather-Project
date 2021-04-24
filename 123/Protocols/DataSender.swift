@@ -32,5 +32,6 @@ protocol ViewModelProtocol {
     func cellViewModel(index: Int) -> Convertible?
     func weatherFiveDayRequest(key: Int,completion: @escaping (Completion))
     var weather: [Convertible] { get set }
+    var pageViewModel: PageManagerProtocol! { get set }
 }
 

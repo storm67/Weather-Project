@@ -19,11 +19,15 @@ class Injector: Assembly {
         container.register(CoreDataProtocol.self) { r in
             CoreDataManager()
         }.inObjectScope(.container)
-        container.register(PageManagerProtocol.self) { r in
-            PageManagerViewModel(manager: r.resolve(CoreDataProtocol.self)!)
-        }.inObjectScope(.container)
         container.register(ViewModelProtocol.self) { r in
             MainControllerViewModel(networkService: Routing<WeatherAPI>())
+        }.inObjectScope(.container)
+         .initCompleted { (r, v) in
+            let vm = v as! MainControllerViewModel
+            vm.pageViewModel = r.resolve(PageManagerProtocol.self)!
+        }
+        container.register(PageManagerProtocol.self) { r in
+            PageManagerViewModel(manager: r.resolve(CoreDataProtocol.self)!)
         }.inObjectScope(.container)
         container.register(PageViewModelProtocol.self) { r in
             PagerViewModel(cdp: r.resolve(CoreDataProtocol.self)!, manager: r.resolve(PageManagerProtocol.self)!)

@@ -28,7 +28,8 @@ final class CitySelector: UIViewController, UITableViewDelegate, UISearchBarDele
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+    let controller = ClearNavigationController()
+    let panel = TransitionController()
     let locationButton: UILabel = {
         let button = UILabel()
         button.text = "Популярные города"
@@ -42,12 +43,12 @@ final class CitySelector: UIViewController, UITableViewDelegate, UISearchBarDele
         configureSearchController()
         addTag()
         layout()
-        view.backgroundColor = .white
     }
     
    required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
 }
 
 extension CitySelector: UITableViewDataSource {
@@ -57,7 +58,7 @@ extension CitySelector: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: CitySelectorViewModel.cellID) as? CellView {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as? CellView {
             cell.viewModel = self.viewModel.cellViewModel(index: indexPath.row)
             return cell
         }
@@ -125,7 +126,7 @@ extension CitySelector: UITableViewDataSource {
         tagListView.cornerRadius = 5
         tagListView.imageEdge = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
         tagListView.delegate = self
-        tagListView.addTagWithImage("  Location  ", image).onTap = { [weak self] _ in
+        tagListView.addTagWithImage("  Локация  ", image).onTap = { [weak self] _ in
         self?.getLocation()
         }
         tagListView.paddingX = 4
@@ -162,8 +163,8 @@ extension CitySelector: UITableViewDataSource {
         self?.viewModel.createFromLocation(name: name, lat: location?.latitude, lon: location?.longitude, timeZone: timeZoneOffset)
         guard let access = self?.viewModel.checkAccess(access: true) else { return }
         if access {
-            let view = self?.storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
-            self?.navigationController?.pushViewController(view, animated: true)
+        let view = self?.storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
+        self?.navigationController?.pushViewController(view, animated: true)
         }
     }
 }

@@ -11,24 +11,27 @@ import UIKit
 
 class PageControl: UIControl {
     
+    fileprivate var circles = [Circle]()
+    fileprivate var image = UIImageView()
     var pages = 0
     var currentPage: Int = 0
-    fileprivate var circle = [Circle]() 
-    fileprivate var image = UIImageView()
+    var circle: Circle
+    var width = CGFloat(12)
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    required init(circle: Circle) {
+        self.circle = circle
+        super.init(frame: .null)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func pagesCounter(offset: CGPoint, width: CGFloat) {
         var lastPage: Int = 0
         if currentPage == 0 {
             image.tintColor = .black
-            circle[0].fillColor = .lightGray
+            circles[0].fillColor = .lightGray
         } else { image.tintColor = .lightGray }
         if offset.x == 0 {
             lastPage = currentPage
@@ -39,47 +42,42 @@ class PageControl: UIControl {
             currentPage += 1
         }
         if currentPage >= 1 {
-        circle[currentPage - 1].fillColor = .black
+        circles[currentPage - 1].fillColor = .black
         if lastPage >= 1 {
-        circle[lastPage - 1].fillColor = .lightGray
+        circles[lastPage - 1].fillColor = .lightGray
         }
         update()
         }
     }
     
     func update() {
-        for i in 0..<circle.count {
-            circle[i].setNeedsDisplay()
-            layoutIfNeeded()
+        for i in 0..<circles.count {
+            circles[i].setNeedsDisplay()
         }
-//        let bool = circle.count == pages ? true : false
-//        if !bool {
-//        for i in circle.count..<pages {
-//        circle[i - 1].removeFromSuperview()
-//        circle[i - 1].setNeedsDisplay()
-//        }
-//        }
-    }
-
-    func delete(_ diff: Int) {
-        
     }
     
-    func addCircle() {
+    func addCircle(_ bool: Bool) {
         subviews.forEach { $0.removeFromSuperview() }
+        circles = []
         self.image.image = UIImage(systemName: "location.fill")?.withRenderingMode(.alwaysTemplate)
+        if !bool {
         self.image.tintColor = UIColor.black
+        } else { image.tintColor = .lightGray
         addSubview(self.image)
-        var x = bounds.minX
-        image.frame = CGRect(x: x + 5, y: bounds.midY - 1, width: 10, height: 10)
-        circle.removeAll()
+        let xMargin = CGFloat(pages) * (width / 1.7)
+        var x = bounds.minX - xMargin
+        image.frame = CGRect(x: x, y: bounds.midY - 1, width: 10, height: 10)
+        circles.removeAll()
+        x -= width / 2
         for v in 0..<pages - 1 {
-        circle.append(Circle(frame: .zero, strokeColor: .clear, fillColor: .lightGray))
-        addSubview(circle[v])
-        x += 5 * 2.5
-        circle[v].frame = CGRect(x: Int(x), y: Int(bounds.midY), width: 10, height: 5)
-        circle[v].setNeedsDisplay()
-        layoutIfNeeded()
+        circles.append(Circle(frame: .zero, strokeColor: .clear, fillColor: .lightGray))
+        addSubview(circles[v])
+        x += width / 2 * 2.5
+        circles[v].frame = CGRect(x: Int(x), y: Int(bounds.midY), width: 10, height: 5)
+        circles[v].setNeedsDisplay()
+        circles[0].fillColor = .black
+            }
         }
+        print(pages)
     }
 }

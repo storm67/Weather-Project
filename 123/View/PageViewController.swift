@@ -14,7 +14,7 @@ import SideMenu
 final class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate, SideMenuNavigationControllerDelegate {
     
     fileprivate var pageControl = UIPageControl()
-    fileprivate var customPageControl = PageControl()
+    fileprivate var customPageControl: PageControl!
     fileprivate var pages = [UIViewController]()
     
     fileprivate var blurEffect: UIVisualEffectView! {
@@ -22,14 +22,14 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         self.blurEffect.layer.opacity = 0
         }
     }
-    
+    fileprivate var count = 0
     fileprivate var currentPage: Int {
         get {
             pageControl.currentPage
         }
     }
     
-    fileprivate var citySelector: SideMenuNavigationController {
+    fileprivate var sideMenuController: SideMenuNavigationController {
         get {
             let menu = storyboard?.instantiateViewController(withIdentifier: "PagesViewController") as! PagesViewController
             let nav = SideMenuNavigationController(rootViewController: menu)
@@ -61,19 +61,18 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     }()
     
     func setupPageControl() {
-        var count = 0
         if count == 0 {
         self.pageControl.numberOfPages = pages.count
         self.pageControl.currentPage = 0
+        customPageControl = PageControl(circle: Circle(frame: .zero, strokeColor: .clear, fillColor: .lightGray))
         view.addSubview(customPageControl)
         customPageControl.translatesAutoresizingMaskIntoConstraints = false
         customPageControl.backgroundColor = .red
         customPageControl.pages = pages.count
-        customPageControl.addCircle()
+        customPageControl.addCircle(manager.extractor())
         NSLayoutConstraint.activate([
         customPageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         customPageControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-        customPageControl.widthAnchor.constraint(equalToConstant: 60)
         ])
         }
         count += 1
@@ -81,9 +80,11 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(notifyHandler(notification:)), name: Notification.Name.notify, object: nil)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationController?.isNavigationBarHidden = true
         self.navigationController?.navigationBar.isHidden = true
+        view.backgroundColor = .white
         layout()
         let blur = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
         blurEffect = UIVisualEffectView(effect: blur)
@@ -92,14 +93,10 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         delegate = self
         self.navigationController?.navigationBar.isTranslucent = false
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         toStart()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
     }
     
     override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
@@ -108,6 +105,11 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     
     required init?(coder: NSCoder) {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: .none)
+    }
+       
+    @objc func notifyHandler(notification: Notification) {
+        guard let controller = sideMenuController.topViewController as? PagesViewController else { return }
+        controller.addPrimitiveData(notification: notification)
     }
     
     func setUp() {
@@ -120,7 +122,20 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         pages = []
         setUp()
         setupPageControl()
-        setViewControllers([pages[0]], direction: .forward, animated: true, completion: nil)
+        if self.manager.extractor() {
+        setViewControllers([pages[1]], direction: .forward, animated: true, completion: { _ in
+        self.pageControl.currentPage = 1
+        self.customPageControl.currentPage = 1
+        self.customPageControl.setNeedsDisplay()
+        })} else {
+        setViewControllers([pages[currentPage]], direction: .forward, animated: true, completion: { _ in
+        self.pageControl.currentPage = 0
+        self.customPageControl.currentPage = 0
+        self.customPageControl.setNeedsDisplay()
+        })}
+//        for views in self.pages {
+//        views.loadViewIfNeeded()
+//        }
         for subview in self.view.subviews {
             if let scrollView = subview as? UIScrollView {
                 scrollView.delegate = self
@@ -132,23 +147,25 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     func layout() {
         view.addSubview(searchIcon)
         view.addSubview(menu)
-        searchIcon.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 6).isActive = true
-        searchIcon.topAnchor.constraint(equalTo: menu.topAnchor, constant: 3).isActive = true
-        searchIcon.widthAnchor.constraint(equalToConstant: 28).isActive = true
-        searchIcon.heightAnchor.constraint(equalToConstant: 28).isActive = true
-        menu.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -5).isActive = true
-        menu.leadingAnchor.constraint(lessThanOrEqualTo: view.leadingAnchor, constant: 380).isActive = true
-        menu.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
-        menu.widthAnchor.constraint(equalToConstant: 35).isActive = true
-        menu.heightAnchor.constraint(equalToConstant: 35).isActive = true
-        let widthConstraint = menu.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 10)
-        widthConstraint.priority = UILayoutPriority(rawValue: 999)
-        widthConstraint.isActive = true
+        NSLayoutConstraint.activate([
+        searchIcon.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 6),
+        searchIcon.topAnchor.constraint(equalTo: menu.topAnchor, constant: 3),
+        searchIcon.widthAnchor.constraint(equalToConstant: 28),
+        searchIcon.heightAnchor.constraint(equalToConstant: 28),
+        menu.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -5),
+        menu.leadingAnchor.constraint(lessThanOrEqualTo: view.leadingAnchor, constant: 380),
+        menu.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+        menu.widthAnchor.constraint(equalToConstant: 35),
+        menu.heightAnchor.constraint(equalToConstant: 35),
+        ])
+        let constraint = menu.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 10)
+        constraint.priority = UILayoutPriority(999)
+        constraint.isActive = true
     }
     
     @objc fileprivate func sideMenuAction() {
         guard let window = self.view.window, let root = window.rootViewController else { return }
-        root.present(citySelector, animated: true, completion: nil)
+        root.present(sideMenuController, animated: true, completion: nil)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -173,6 +190,13 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         if let viewControllers = pageViewController.viewControllers {
             if let viewControllerIndex = self.pages.firstIndex(of: viewControllers[0]) {
                 self.pageControl.currentPage = viewControllerIndex
+                if viewControllerIndex == 0 {
+                let nav = ClearNavigationController()
+                let trans = TransitionController()
+                nav.transitioningDelegate = trans
+                nav.modalPresentationStyle = .custom
+                present(nav, animated: true)
+                }
             }
         }
     }
@@ -198,10 +222,12 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         if manager.check() {
             DispatchQueue.global().sync {
             self.setUp()
+            if manager.extractor() {
             self.customPageControl.pages = self.pages.count
-            self.setViewControllers([self.pages[0]], direction: .forward, animated: false, completion: nil)
+            }
+            self.toStart()
             self.customPageControl.currentPage = 0
-            self.customPageControl.addCircle()
+            self.customPageControl.addCircle(manager.extractor())
             }
         }
     }
@@ -221,5 +247,10 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
             self.blurEffect.layer.opacity = 0.3
         }
     }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
 }
 

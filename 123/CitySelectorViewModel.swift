@@ -12,11 +12,10 @@ import CoreLocation
 
 final class CitySelectorViewModel: CitySelectorProtocol {
     
+    private(set) var searchElements = [CellViewModel]()
     private(set) var coreDataManager: CoreDataProtocol
     private(set) var locationManager: LocationManagerProtocol
-    private(set) var searchElements = [CellViewModel]()
-    private(set) var networkManager: Routing<WeatherAPI>
-    static let cellID = "cell"
+    private(set) var networkManager: Routing<WeatherAPI>    
 
     func checkCity(by searchText: String, completion: @escaping () -> Void) {
         networkManager.request(.getCityData(text: searchText)) { [weak self] data in
@@ -83,7 +82,7 @@ final class CitySelectorViewModel: CitySelectorProtocol {
         }
     }
 
-    protocol CitySelectorProtocol {
+protocol CitySelectorProtocol {
         func checkCity(by searchText: String, completion: @escaping () -> Void)
         func cellViewModel(index: Int) -> CellViewModel?
         func createData(name: String, key: Int, timeZone: Int) -> Bool

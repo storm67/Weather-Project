@@ -11,17 +11,19 @@ import UIKit
 
 class PagesViewCell: UITableViewCell {
     
-    var name: UILabel = {
-    let text = UILabel()
-    text.textColor = .black
-    text.translatesAutoresizingMaskIntoConstraints = false
-    return text
+    var mainImage: UIImageView = {
+    let imageView = UIImageView()
+    imageView.translatesAutoresizingMaskIntoConstraints = false
+    imageView.contentMode = .scaleAspectFill
+    return imageView
     }()
     
-    var viewModel: SimpleModel! {
+    var viewModel: PageCellModel? {
         didSet {
-            guard let viewModel = viewModel else { return }
-            name.text = viewModel.name
+            guard let viewModel = viewModel, let temp = viewModel.temp else { return }
+            //mainImage.anotherSwitchImage(viewModel.date.current())
+            textLabel?.text = viewModel.name
+            detailTextLabel?.text = "\(Int().returnTime(time: viewModel.date, interval: .base))"
         }
     }
     
@@ -32,14 +34,14 @@ class PagesViewCell: UITableViewCell {
     }
     
     fileprivate func layout() {
-        let back = BackgroundView()
-        contentView.addSubview(name)
+        contentView.addSubview(mainImage)
         NSLayoutConstraint.activate([
-        name.rightAnchor.constraint(greaterThanOrEqualTo: contentView.rightAnchor, constant: -70),
-        name.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
-        name.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
-        name.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 30)
+        mainImage.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 0),
+        mainImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 0),
+        mainImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
+        mainImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
         ])
+        contentView.backgroundColor = .white
         contentView.layer.masksToBounds = true
         contentView.layer.cornerRadius = 3
     }

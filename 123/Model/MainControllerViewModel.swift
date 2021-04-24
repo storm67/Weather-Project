@@ -10,11 +10,13 @@ import SwiftyJSON
 import UIKit
 
 final class MainControllerViewModel: ViewModelProtocol {
+    
 
-    var completion: Completion?
-    var weather = [Convertible]()
-    var dates = [String]()
-    var networkService: Routing<WeatherAPI>
+    public var weather = [Convertible]()
+    fileprivate var completion: Completion?
+    fileprivate var dates = [String]()
+    fileprivate var networkService: Routing<WeatherAPI>
+    var pageViewModel: PageManagerProtocol!
     
     init(networkService: Routing<WeatherAPI>) {
         self.networkService = networkService
@@ -76,7 +78,6 @@ final class MainControllerViewModel: ViewModelProtocol {
         }
         return int
     }
-let group = DispatchGroup()
     func weatherFiveDayRequest(key: Int,completion: @escaping (Completion)) {
         DispatchQueue.global().sync {
             self.networkService.request(.getFiveDayWeather(city: String(key))) { [unowned self] data in
@@ -84,7 +85,7 @@ let group = DispatchGroup()
                 let quality = JSON(data)["DailyForecasts"].arrayValue[0]["AirAndPollen"].arrayValue.map { AirQuality(decoder: $0) }
                 self.getHumidity(key: key) { hd in
                 let weatherX = zip(array,self.dates).map { [unowned self] (first,second) -> Convertible in
-                    Convertible(date: self.format(data: first.date),
+                    return Convertible(date: self.format(data: first.date),
                                 temperature: first.temperature,
                                 dayIcon: first.dayIcon,
                                 dayIconPhrase: first.dayIconPhrase,
@@ -114,6 +115,7 @@ let group = DispatchGroup()
             }
         }
     }
+    
 }
 
 extension MainControllerViewModel {

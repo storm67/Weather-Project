@@ -19,7 +19,7 @@ final class PagesMainView: UIView {
         var myTableView = UITableView()
         myTableView.separatorColor = .white
         myTableView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        myTableView.rowHeight = 125
+        myTableView.rowHeight = 60
         myTableView.tableFooterView = UIView(frame: .zero)
         myTableView.register(PagesViewCell.self, forCellReuseIdentifier: "cell")
         myTableView.translatesAutoresizingMaskIntoConstraints = false

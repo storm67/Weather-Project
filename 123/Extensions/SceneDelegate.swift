@@ -25,8 +25,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
      viewController = storyboard.instantiateViewController(withIdentifier: "CitySelector")
      navigator = UINavigationController(rootViewController: viewController)
      } else {
-    viewController = storyboard.instantiateViewController(withIdentifier: "PageViewController")
-    navigator = UINavigationController(rootViewController: viewController)
+     viewController = storyboard.instantiateViewController(withIdentifier: "PageViewController")
+     navigator = UINavigationController(rootViewController: viewController)
      }
      self.window = window
      self.window?.rootViewController = navigator

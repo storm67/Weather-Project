@@ -119,8 +119,8 @@ class SunView: UIView {
         pathLayer.mask = maskLayer
         state()
         layer.addSublayer(pathLayer)
-        //animator()
-        imageView.center = path.point(at: 0.5)
+        guard let endAngle = endAngle else { return }
+        imageView.center = path.point(at: endAngle)
         updateMask(at: imageView.center)
     }
     

@@ -7,17 +7,16 @@
 //
 
 import Foundation
-import UIKit
 import MobileCoreServices
 
-extension SimpleModel: NSItemProviderWriting, NSItemProviderReading {
+extension PageCellModel: NSItemProviderWriting, NSItemProviderReading {
     
     
     static func object(withItemProviderData data: Data, typeIdentifier: String) throws -> Self {
         let decoder = JSONDecoder()
         do {
-            let subject = try decoder.decode(SimpleModel.self, from: data)
-            return SimpleModel(name: subject.name, key: subject.key, lat: subject.lat, lon: subject.lon, position: subject.position, timeZone: subject.timeZone) as! Self
+            let subject = try decoder.decode(PageCellModel.self, from: data)
+            return PageCellModel(name: subject.name, date: subject.date, phrase: subject.phrase, temp: subject.temp) as! Self
         } catch {
             fatalError(error as! String)
         }

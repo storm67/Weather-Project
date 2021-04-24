@@ -23,7 +23,6 @@ class Routing<P: EndPoint>: NetworkRouter {
         do {
             let request = try self.buildRequest(from: route)
             URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
-                print(request)
                 if let response = response as? HTTPURLResponse {
                     let result = self.handleNetworkResponse(response)
                         switch result {

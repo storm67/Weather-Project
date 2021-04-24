@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+let cellID = "cell"
+
 extension String {
     
     func format() -> String {
@@ -19,8 +21,6 @@ extension String {
         let finish = dateFormatterPrint.string(from: Date())
         return finish
     }
-    
-    
     
 }
 
@@ -36,6 +36,16 @@ extension Int {
     return (hour * 60) + minute
     }
     
+    static func nowState(timeOffset: Int) -> String {
+    let time = timeOffset * 3600
+    let date = Date()
+    var calendar = Calendar.current
+    calendar.timeZone = TimeZone(secondsFromGMT: time)!
+    let hour = calendar.component(.hour, from: date)
+    let minute = calendar.component(.minute, from: date)
+    return "\(hour):\(minute)"
+    }
+    
     func convertToHours(time: Int) -> Int {
         let date = NSDate(timeIntervalSince1970: TimeInterval(self))
         var calendar = Calendar.current
@@ -45,9 +55,19 @@ extension Int {
         return (hour * 60) + minute
     }
     
-    //Рефакторинг
-    func returnTime(time: Int) -> String {
-        let date = NSDate(timeIntervalSince1970: TimeInterval(self))
+    enum Interval {
+        case since1970
+        case base
+    }
+    
+    func returnTime(time: Int, interval: Interval) -> String {
+        let date: NSDate
+        switch interval {
+        case .since1970:
+        date = NSDate(timeIntervalSince1970: TimeInterval(self))
+        case .base:
+        date = Date() as NSDate
+        }
         var calendar = Calendar.current
         calendar.timeZone = TimeZone(secondsFromGMT: time * 3600)!
         let hours = calendar.component(.hour, from: date as Date)
@@ -56,20 +76,60 @@ extension Int {
         return compare
     }
     
+    func current() -> Int {
+        let date = Date()
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone(secondsFromGMT: self * 3600)!
+        let hour = calendar.component(.hour, from: date as Date)
+        return hour
+    }
+    
 }
 
-extension UIImage {
+extension UIImageView {
     
-    func imageResize (sizeChange:CGSize)-> UIImage {
-        
-        let hasAlpha = true
-        let scale: CGFloat = 0.0 // Use scale factor of main screen
-        
-        UIGraphicsBeginImageContextWithOptions(sizeChange, !hasAlpha, scale)
-        self.draw(in: CGRect(origin: CGPoint.zero, size: sizeChange))
-        
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-        return scaledImage!
+    func switchImage(_ image: String) {
+        switch image.description {
+        case let str where str.contains("ив") || str.contains("ожд"):
+            self.image = UIImage(named: "12Black")!
+        case let str where str.contains("Солн"):
+            self.image = UIImage(named: "1Black")!
+        case let str where str.contains("Преимущественно облачно"):
+            self.image = UIImage(named: "6Black")!
+        case let str where str.contains("Переменная облачность") || str.contains("Небольшая облачность"):
+            self.image = UIImage(named: "4Black")!
+        case let str where str.contains("Снег"):
+            self.image = UIImage(named: "15Black")!
+        case let str where str.contains("Небольшой снег"):
+            self.image = UIImage(named: "20Black")!
+        case let str where str.contains("Холодно"):
+            self.image = UIImage(named: "snowflake")!
+        case let str where str.contains("Небольшая облачность, небольшой снег"):
+            self.image = UIImage(named: "20Black")!
+        case let str where str.contains("Преимущественно ясно"):
+            self.image = UIImage(named: "1Black")!
+        case let str where str.contains("Облачно"):
+            self.image = UIImage(named: "4Black")!
+        case let str where str.contains("Грозы"):
+            self.image = UIImage(named: "23Black")!
+        default:
+            self.image = UIImage()
+        }
+    }
+    
+    func anotherSwitchImage(_ time: Int) {
+        switch time {
+         case 21...23:
+         self.image = UIImage(named: "Night")
+         case 0...4:
+         self.image = UIImage(named: "Night")
+         case 4...10:
+         self.image = UIImage(named: "Sunset")
+         case 10...21:
+         self.image = UIImage(named: "Sunny")
+         default:
+        break
+         }
     }
     
 }
@@ -100,7 +160,7 @@ extension UIColor {
         case 0...35:
        return .green
         case 35...75:
-        return .yellow
+        return #colorLiteral(red: 1, green: 0.6484332681, blue: 0.4392920136, alpha: 1)
         case 75...105:
         return .orange
         case 105...140:
@@ -143,8 +203,43 @@ extension UIView {
         self.layer.addSublayer(gradientLayer)
         
     }
+    
+    func snapshot() -> UIImage {
+
+        // Begin context
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
+
+        // Draw view in that context
+        drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+
+        // And finally, get image
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        if (image != nil)
+        {
+            return image!
+        }
+        return UIImage()
+    }
 }
 
+extension Notification.Name {
+    public static let notify = Notification.Name(rawValue: "notify")
+}
 
-
-
+extension UIImage {
+    
+    func imageResize (sizeChange:CGSize)-> UIImage {
+        
+        let hasAlpha = true
+        let scale: CGFloat = 0.0 // Use scale factor of main screen
+        
+        UIGraphicsBeginImageContextWithOptions(sizeChange, !hasAlpha, scale)
+        self.draw(in: CGRect(origin: CGPoint.zero, size: sizeChange))
+        
+        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+        return scaledImage!
+    }
+    
+}
