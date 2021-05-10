@@ -12,6 +12,7 @@ final class PageManagerViewModel: PageManagerProtocol {
     
     var manager: CoreDataProtocol
     var index = 0
+    var another = 0
     var pages = [PageCellModel?]()
     
     func model() -> [PageCellModel?] {
@@ -42,7 +43,7 @@ final class PageManagerViewModel: PageManagerProtocol {
         manager.fetchData { (md) in
             dto = md.first ?? nil
         }
-        return Int(dto?.lat ?? 0) >= 0 ? true : false
+        return Int(dto?.lat ?? 0) == 0 ? true : false
     }
     
     func cellViewModel(_ index: Int) -> PageCellModel? {
@@ -70,21 +71,26 @@ final class PageManagerViewModel: PageManagerProtocol {
     
     @objc func loader(notification: Notification, completion: @escaping () -> Void) {
         guard let notify = notification.userInfo as? [String : Convertible], let phrase = notify["path"]?.dayIconPhrase, let temp = notify["path"]?.temperature else { return }
-            manager.fetchData { [weak self] (smp) in
-            for core in smp {
-                guard self?.index == 0, self?.pages.count != smp.count else { break }
-                self?.pages.append(PageCellModel(name: core.name, date: core.timeZone, phrase: nil, temp: nil))
+        self.manager.fetchData { [weak self] (smp) in
+            for (index,core) in smp.enumerated() {
+                if self?.pages.indices.firstIndex(of: index) == nil {
+                    guard self?.another == 0, self?.pages.count != smp.count else { break }
+                    self?.pages.insert(PageCellModel(name: core.name, date: core.timeZone, phrase: nil, temp: nil), at: index)
+                }
             }
-            guard let item = self?.pages[self?.index ?? 0] else { return }
+            guard let pages = self?.pages else { return }
+            for index in 0..<pages.count {
+            guard let item = self?.pages[index] else { return }
             if item.phrase == nil && item.temp == nil {
                 item.phrase = phrase
                 item.temp = temp
-                self?.index += 1
-                }
-            if self?.index == self?.pages.count { self?.index == 0 }
-                completion()
+                self?.another += 1
+            }
+            }
+            if self?.another == pages.count { self?.another = 0 }
+            completion()
+        }
     }
-}
     
     init(manager: CoreDataProtocol) {
         self.manager = manager

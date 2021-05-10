@@ -14,7 +14,7 @@ class PageControl: UIControl {
     fileprivate var circles = [Circle]()
     fileprivate var image = UIImageView()
     var pages = 0
-    var currentPage: Int = 0
+    var currentPage: Int = 0 
     var circle: Circle
     var width = CGFloat(12)
     
@@ -30,9 +30,11 @@ class PageControl: UIControl {
     func pagesCounter(offset: CGPoint, width: CGFloat) {
         var lastPage: Int = 0
         if currentPage == 0 {
-            image.tintColor = .black
+            change(color: .black)
+            if pages > 1 {
             circles[0].fillColor = .lightGray
-        } else { image.tintColor = .lightGray }
+            }
+        } else { change(color: .lightGray) }
         if offset.x == 0 {
             lastPage = currentPage
             currentPage -= 1
@@ -56,17 +58,36 @@ class PageControl: UIControl {
         }
     }
     
+    func change(color: UIColor) {
+        let imager = image.image?.tint(with: color)
+        image.image = imager
+    }
+    func checkColor(bool: Bool) {
+        if !bool {
+        change(color: .black)
+        }
+        if !bool && pages > 1 {
+        image.tintColor = UIColor.black
+        //circles[0].fillColor = .lightGray
+        } else {
+        image.tintColor = UIColor.lightGray
+        //circles[0].fillColor = .black
+        }
+        setNeedsDisplay()
+        update()
+    }
+    
     func addCircle(_ bool: Bool) {
         subviews.forEach { $0.removeFromSuperview() }
         circles = []
-        self.image.image = UIImage(systemName: "location.fill")?.withRenderingMode(.alwaysTemplate)
-        if !bool {
-        self.image.tintColor = UIColor.black
-        } else { image.tintColor = .lightGray
         addSubview(self.image)
+        self.image.image = UIImage(systemName: "location.fill")?.withRenderingMode(.alwaysTemplate)
         let xMargin = CGFloat(pages) * (width / 1.7)
         var x = bounds.minX - xMargin
+        self.image.tintColor = UIColor.black
+        image.frame = CGRect(x: bounds.minX, y: bounds.midY - 1, width: 10, height: 10)
         image.frame = CGRect(x: x, y: bounds.midY - 1, width: 10, height: 10)
+        image.tintColor = .lightGray
         circles.removeAll()
         x -= width / 2
         for v in 0..<pages - 1 {
@@ -75,9 +96,7 @@ class PageControl: UIControl {
         x += width / 2 * 2.5
         circles[v].frame = CGRect(x: Int(x), y: Int(bounds.midY), width: 10, height: 5)
         circles[v].setNeedsDisplay()
-        circles[0].fillColor = .black
             }
         }
-        print(pages)
     }
-}
+

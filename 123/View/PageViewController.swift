@@ -15,13 +15,15 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     
     fileprivate var pageControl = UIPageControl()
     fileprivate var customPageControl: PageControl!
-    fileprivate var pages = [UIViewController]()
-    
+    var pages = [UIViewController]()
     fileprivate var blurEffect: UIVisualEffectView! {
         didSet {
         self.blurEffect.layer.opacity = 0
         }
     }
+    
+    let transitionController = TransitionController()
+    
     fileprivate var count = 0
     fileprivate var currentPage: Int {
         get {
@@ -41,7 +43,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         }
     }
 
-    var manager: PageViewModelProtocol!
+    var viewModel: PageViewModelProtocol!
     
     let menu: UIButton = {
         let button = UIButton()
@@ -64,12 +66,12 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         if count == 0 {
         self.pageControl.numberOfPages = pages.count
         self.pageControl.currentPage = 0
-        customPageControl = PageControl(circle: Circle(frame: .zero, strokeColor: .clear, fillColor: .lightGray))
+        customPageControl = PageControl(circle: Circle(frame: .zero, strokeColor: .clear, fillColor: .black))
         view.addSubview(customPageControl)
         customPageControl.translatesAutoresizingMaskIntoConstraints = false
         customPageControl.backgroundColor = .red
         customPageControl.pages = pages.count
-        customPageControl.addCircle(manager.extractor())
+        customPageControl.addCircle(viewModel.extractor())
         NSLayoutConstraint.activate([
         customPageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         customPageControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
@@ -80,18 +82,18 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(notifyHandler(notification:)), name: Notification.Name.notify, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notifyHandler(notification:)), name: .notify, object: nil)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationController?.isNavigationBarHidden = true
         self.navigationController?.navigationBar.isHidden = true
+        self.navigationController?.navigationBar.isTranslucent = false
         view.backgroundColor = .white
         layout()
         let blur = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
         blurEffect = UIVisualEffectView(effect: blur)
-        self.view.addSubview(blurEffect)
-        self.dataSource = self
+        view.addSubview(blurEffect)
+        dataSource = self
         delegate = self
-        self.navigationController?.navigationBar.isTranslucent = false
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -113,7 +115,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     }
     
     func setUp() {
-        manager.fetchData { [weak self] (md) in
+        viewModel.fetchData { [weak self] (md) in
             self?.pages = md
         }
     }
@@ -122,26 +124,29 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         pages = []
         setUp()
         setupPageControl()
-        if self.manager.extractor() {
+        self.pageControl.currentPage = 0
+        self.customPageControl.currentPage = 0
+        self.customPageControl.setNeedsDisplay()
+        if self.viewModel.extractor() {
         setViewControllers([pages[1]], direction: .forward, animated: true, completion: { _ in
         self.pageControl.currentPage = 1
         self.customPageControl.currentPage = 1
         self.customPageControl.setNeedsDisplay()
         })} else {
-        setViewControllers([pages[currentPage]], direction: .forward, animated: true, completion: { _ in
-        self.pageControl.currentPage = 0
-        self.customPageControl.currentPage = 0
-        self.customPageControl.setNeedsDisplay()
-        })}
-//        for views in self.pages {
-//        views.loadViewIfNeeded()
-//        }
+        setViewControllers([pages[currentPage]], direction: .forward, animated: true, completion: nil )}
+        for views in self.pages {
+        views.loadViewIfNeeded()
+        }
         for subview in self.view.subviews {
             if let scrollView = subview as? UIScrollView {
                 scrollView.delegate = self
                 break;
             }
         }
+        if viewModel.extractor() {
+            pages[0].hide()
+        }
+        self.customPageControl.checkColor(bool: viewModel.extractor())
     }
     
     func layout() {
@@ -185,17 +190,16 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         }
         return nil
     }
-    
+        
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if let viewControllers = pageViewController.viewControllers {
             if let viewControllerIndex = self.pages.firstIndex(of: viewControllers[0]) {
                 self.pageControl.currentPage = viewControllerIndex
-                if viewControllerIndex == 0 {
-                let nav = ClearNavigationController()
-                let trans = TransitionController()
-                nav.transitioningDelegate = trans
-                nav.modalPresentationStyle = .custom
-                present(nav, animated: true)
+                if viewControllerIndex == 0 && viewModel.extractor() {
+                let emptyLocation = self.storyboard?.instantiateViewController(withIdentifier: "ClearNavigationController") as! ClearNavigationController
+                emptyLocation.transitioningDelegate = transitionController
+                emptyLocation.modalPresentationStyle = .custom
+                present(emptyLocation, animated: true)
                 }
             }
         }
@@ -219,15 +223,15 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
     }
     
     func sideMenuDidDisappear(menu: SideMenuNavigationController, animated: Bool) {
-        if manager.check() {
+        if viewModel.check() {
             DispatchQueue.global().sync {
             self.setUp()
-            if manager.extractor() {
+            if viewModel.extractor() {
             self.customPageControl.pages = self.pages.count
             }
             self.toStart()
             self.customPageControl.currentPage = 0
-            self.customPageControl.addCircle(manager.extractor())
+            self.customPageControl.addCircle(viewModel.extractor())
             }
         }
     }
@@ -246,10 +250,6 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         UIView.animate(withDuration: 0.4) {
             self.blurEffect.layer.opacity = 0.3
         }
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
     
 }

@@ -8,6 +8,7 @@
 //
 import Foundation
 import Swinject
+import CoreLocation
 
 class PagerViewModel: PageViewModelProtocol {
 
@@ -34,7 +35,7 @@ class PagerViewModel: PageViewModelProtocol {
             controllers.append(MainViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon, position: item.position, timeZone: item.timeZone), viewModel: viewModel))
             }
             if self.extractor() {
-            controllers.insert(ClearController(), at: 0)
+            controllers.insert(MainViewController(model: SimpleModel(name: "Текущее местоположение", key: 0, lat: 0, lon: 0, position: 0, timeZone: 0), viewModel: viewModel), at: 0)
             }
             completion(controllers)
         }
@@ -45,7 +46,7 @@ class PagerViewModel: PageViewModelProtocol {
         coreData.fetchData { (md) in
             dto = md.first ?? nil
         }
-        return Int(dto?.lat ?? 0) >= 0 ? true : false
+        return Int(dto?.lat ?? 0) == 0 ? true : false
     }
     
 }

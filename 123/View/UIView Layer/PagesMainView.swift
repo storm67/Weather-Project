@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import SwiftChart
 
 final class PagesMainView: UIView {
     

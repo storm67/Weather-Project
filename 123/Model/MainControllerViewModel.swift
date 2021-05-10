@@ -16,10 +16,12 @@ final class MainControllerViewModel: ViewModelProtocol {
     fileprivate var completion: Completion?
     fileprivate var dates = [String]()
     fileprivate var networkService: Routing<WeatherAPI>
+    fileprivate var coreDataManager: CoreDataProtocol
     var pageViewModel: PageManagerProtocol!
     
-    init(networkService: Routing<WeatherAPI>) {
+    init(networkService: Routing<WeatherAPI>, coreDataManager: CoreDataProtocol) {
         self.networkService = networkService
+        self.coreDataManager = coreDataManager
         returnit()
     }
 
@@ -70,7 +72,6 @@ final class MainControllerViewModel: ViewModelProtocol {
         return weather[index]
     }
 
-    @discardableResult
     func formation(_ get: [Convertible]) -> [Int] {
         var int = [Int]()
         get.forEach { item in
@@ -78,8 +79,10 @@ final class MainControllerViewModel: ViewModelProtocol {
         }
         return int
     }
-    func weatherFiveDayRequest(key: Int,completion: @escaping (Completion)) {
-        DispatchQueue.global().sync {
+    
+    func weatherFiveDayRequest(key: Int,completion:
+        @escaping (Completion)) {
+        DispatchQueue.global().async {
             self.networkService.request(.getFiveDayWeather(city: String(key))) { [unowned self] data in
                 let array = JSON(data)["DailyForecasts"].arrayValue.map { DailyForecast(dictionary: $0) }
                 let quality = JSON(data)["DailyForecasts"].arrayValue[0]["AirAndPollen"].arrayValue.map { AirQuality(decoder: $0) }
@@ -107,8 +110,16 @@ final class MainControllerViewModel: ViewModelProtocol {
         }
     }
     
+    func extractor() -> Bool {
+        var dto: SimpleModel?
+        coreDataManager.fetchData { (md) in
+            dto = md.first ?? nil
+        }
+        return Int(dto?.lat ?? 0) >= 0 ? true : false
+    }
+    
     func getHumidity(key: Int, void: @escaping (Int) -> Void) {
-        DispatchQueue.global().sync {
+        DispatchQueue.global().async {
             self.networkService.request(.get12Hours(city: String(key))) { data in
             let array = JSON(data).arrayValue.map { DailyForecast(dictionary: $0) }
             void(array[0].humidity)

@@ -46,6 +46,8 @@ final class MainControllerView: UIView {
         let charts = Charts()
         charts.translatesAutoresizingMaskIntoConstraints = false
         charts.backgroundColor = .white
+        charts.layer.masksToBounds = true
+        charts.layer.cornerRadius = 5
         return charts
     }()
     
@@ -169,6 +171,7 @@ final class MainControllerView: UIView {
         let button = UIButton()
         button.setTitleColor(.black, for: .normal)
         button.setTitle("", for: .normal)
+        button.tag = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -225,7 +228,7 @@ final class MainControllerView: UIView {
         let view = StatsView()
         view.backgroundColor = #colorLiteral(red: 0.9610655904, green: 0.9612262845, blue: 0.9610444903, alpha: 1)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.masksToBounds = false
+        view.layer.masksToBounds = true
         view.layer.cornerRadius = 5
         return view
     }()
@@ -244,8 +247,6 @@ final class MainControllerView: UIView {
         let view = AirQualityView()
         view.backgroundColor = .clear
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.masksToBounds = false
-        view.layer.cornerRadius = 5
         return view
     }()
     
@@ -258,6 +259,7 @@ final class MainControllerView: UIView {
         layout()
         backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     }
+
     
     func layout() {
         addSubview(scrollView)
@@ -321,10 +323,10 @@ final class MainControllerView: UIView {
             day.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -15),
             charts.topAnchor.constraint(equalTo: fiveDaysWeather.bottomAnchor, constant: 35),
             charts.heightAnchor.constraint(equalToConstant: 150),
-            charts.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.89),
+            charts.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
             charts.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
             tableView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            tableView.topAnchor.constraint(equalTo: charts.topAnchor, constant: 150),
+            tableView.topAnchor.constraint(equalTo: charts.topAnchor, constant: 180),
             tableView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             tableView.heightAnchor.constraint(equalToConstant: 450),
             scrollView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
@@ -354,7 +356,7 @@ final class MainControllerView: UIView {
     }
     
     
-    func updateData(_ state: String,_ city: String,_ value: String,_ air: Int,_ index: Int,_ indexMain: Int, _ sunrise: Int, _ sunset: Int, _ timeZone: Int,_ wind: Int,_ pressure: Int,_ humidity: Int,_ direction: String) {
+    func updateData(_ state: String,_ city: String,_ value: String,_ air: Int,_ index: Int,_ indexMain: Int, _ sunrise: Int, _ sunset: Int, _ timeZone: Int,_ wind: Int,_ pressure: Int,_ humidity: Int,_ direction: String, _ charts: [Int]) {
         self.letters = state.split { !$0.isLetter }
         DispatchQueue.main.async {
             if self.letters.count == 1 {
@@ -374,6 +376,7 @@ final class MainControllerView: UIView {
             self.sunlightStatus.secondTime.text = "Закат \(sunset.returnTime(time: timeZone, interval: .since1970))"
             self.setUp(sunrise, sunset, timeZone)
             self.fiveDaysWeather.update(wind: wind, direction: direction, pressure: pressure, humidity: humidity)
+            self.charts.data = charts
         }
     }
     
@@ -393,4 +396,19 @@ final class MainControllerView: UIView {
         }
         }
     }
+    
+    func startAnimating() {
+        for view in subviews {
+            view.isSkeletonable = true
+            view.showGradientSkeleton()
+        }
+    }
+    
+    func stopAnimating() {
+        for view in subviews {
+            view.isSkeletonable = true
+            view.hideSkeleton()
+        }
+    }
+    
 }

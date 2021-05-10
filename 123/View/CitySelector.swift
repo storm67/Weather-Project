@@ -28,8 +28,7 @@ final class CitySelector: UIViewController, UITableViewDelegate, UISearchBarDele
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    let controller = ClearNavigationController()
-    let panel = TransitionController()
+    
     let locationButton: UILabel = {
         let button = UILabel()
         button.text = "Популярные города"
@@ -45,7 +44,7 @@ final class CitySelector: UIViewController, UITableViewDelegate, UISearchBarDele
         layout()
     }
     
-   required init?(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
     
@@ -69,8 +68,8 @@ extension CitySelector: UITableViewDataSource {
         let selected = viewModel.searchElements[indexPath.row]
         searchController.searchBar.text = nil
         if viewModel.createData(name: selected.name, key: selected.key, timeZone: selected.timeZone) {
-        let view = storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
-        navigationController?.pushViewController(view, animated: true)
+            let view = storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
+            navigationController?.pushViewController(view, animated: true)
         }
     }
     
@@ -86,18 +85,18 @@ extension CitySelector: UITableViewDataSource {
     func tagPressed(_ title: String, _ number: Int, tagView: TagView, sender: TagListView) {
         guard number != 0 else { return }
         viewModel.getTimeZone(title, completion: {
-        if self.viewModel.createDataFromTag(name: title, key: number, timeZone: $0) {
-        DispatchQueue.main.async {
-        let view = self.storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
-        self.navigationController?.pushViewController(view, animated: true)
-        }
-    }
-})
+            if self.viewModel.createDataFromTag(name: title, key: number, timeZone: $0) {
+                DispatchQueue.main.async {
+                    let view = self.storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
+                    self.navigationController?.pushViewController(view, animated: true)
+                }
+            }
+        })
         tagView.isSelected = !tagView.isSelected
     }
     
     override var prefersStatusBarHidden: Bool {
-            return true
+        return true
     }
     
     func checkActive() {
@@ -127,7 +126,7 @@ extension CitySelector: UITableViewDataSource {
         tagListView.imageEdge = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
         tagListView.delegate = self
         tagListView.addTagWithImage("  Локация  ", image).onTap = { [weak self] _ in
-        self?.getLocation()
+            self?.getLocation()
         }
         tagListView.paddingX = 4
         tagListView.imagePaddingX = 0
@@ -156,18 +155,19 @@ extension CitySelector: UITableViewDataSource {
     
     func getLocation() {
         viewModel.getLocation()
-        //поправить
-        viewModel.setLocation { [weak self] (location, name, error, _) in
-        guard location != nil else { return }
-        let timeZoneOffset = TimeZone.current.secondsFromGMT() / 3600
-        self?.viewModel.createFromLocation(name: name, lat: location?.latitude, lon: location?.longitude, timeZone: timeZoneOffset)
-        guard let access = self?.viewModel.checkAccess(access: true) else { return }
-        if access {
-        let view = self?.storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
-        self?.navigationController?.pushViewController(view, animated: true)
-        }
+               //поправить
+               viewModel.setLocation { [weak self] (location, name, error, _) in
+                   guard location != nil else { return }
+                   let timeZoneOffset = TimeZone.current.secondsFromGMT() / 3600
+                   Defaults.locationTag = true
+                   self?.viewModel.createFromLocation(name: name, lat: location?.latitude, lon: location?.longitude, timeZone: timeZoneOffset)
+                   guard let access = self?.viewModel.checkAccess(access: true) else { return }
+                   if access {
+                       let view = self?.storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
+                       self?.navigationController?.pushViewController(view, animated: true)
+                   }
+               }
     }
-}
     
     func reload() {
         DispatchQueue.main.async {

@@ -21,7 +21,6 @@ class PagesViewCell: UITableViewCell {
     var viewModel: PageCellModel? {
         didSet {
             guard let viewModel = viewModel, let temp = viewModel.temp else { return }
-            //mainImage.anotherSwitchImage(viewModel.date.current())
             textLabel?.text = viewModel.name
             detailTextLabel?.text = "\(Int().returnTime(time: viewModel.date, interval: .base))"
         }

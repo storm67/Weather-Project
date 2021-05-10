@@ -14,9 +14,9 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1B21BE347520B188560DE2C550FC4322"
-               BuildableName = "MLLineChart.framework"
-               BlueprintName = "MLLineChart"
+               BlueprintIdentifier = "8CEEFD1CB630CA790F0396E2E24A4C8C"
+               BuildableName = "SkeletonView.framework"
+               BlueprintName = "SkeletonView"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

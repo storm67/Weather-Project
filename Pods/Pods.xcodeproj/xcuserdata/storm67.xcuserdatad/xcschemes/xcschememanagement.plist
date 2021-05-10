@@ -4,11 +4,6 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>MLLineChart.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Pods-123.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -19,7 +14,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>SwiftChart.xcscheme</key>
+		<key>SkeletonView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

@@ -42,7 +42,7 @@
         <!--Clear Navigation Controller-->
         <scene sceneID="A3d-Kb-SV6">
             <objects>
-                <viewController id="nTY-Nk-Qmk" customClass="ClearNavigationController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ClearNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="nTY-Nk-Qmk" customClass="ClearNavigationController" customModule="_23" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZeH-XJ-2DH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

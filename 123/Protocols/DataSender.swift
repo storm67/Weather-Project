@@ -9,20 +9,8 @@
 import Foundation
 import SwiftyJSON
 
-protocol DataSender {
-    func set(completion: @escaping ([CellViewModel]) -> Void)
-}
-
-protocol MyViewDelegate: class {
-    func didTapButton()
-}
-
 protocol getLocation: class {
     func getLocation()
-}
-
-protocol SelectRow: class {
-    func sendModel(_ model: CellViewModel)
 }
 
 protocol ViewModelProtocol {
@@ -33,5 +21,9 @@ protocol ViewModelProtocol {
     func weatherFiveDayRequest(key: Int,completion: @escaping (Completion))
     var weather: [Convertible] { get set }
     var pageViewModel: PageManagerProtocol! { get set }
+    func extractor() -> Bool
 }
 
+protocol Reciever: class {
+    func getTrigger()
+}

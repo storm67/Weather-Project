@@ -13,10 +13,10 @@ import Swinject
 
 class CoreDataManager: CoreDataProtocol {
     
-    var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    let background = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.newBackgroundContext()
+    fileprivate lazy var context = container.viewContext
+    fileprivate var container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+    fileprivate let background = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.newBackgroundContext()
     var city: [City] = []
-    
     func createData(name: String, key: Double?, lat: Double?, lon: Double?, timeZoneOffset: Int) -> Bool {
         let object = City(context: context)
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = City.fetchRequest()
@@ -25,14 +25,25 @@ class CoreDataManager: CoreDataProtocol {
         object.setValue(key, forKey: "cityId")
         object.setValue(lat, forKey: "lat")
         object.setValue(lon, forKey: "lon")
-        object.setValue(count, forKey: "position")
-        object.setValue(timeZoneOffset, forKey: "timeZoneOffset")
+        if Defaults.locationTag {
+            object.setValue(0, forKey: "position")
+        } else {
+            object.setValue(count, forKey: "position")
+            object.setValue(timeZoneOffset, forKey: "timeZoneOffset")
+        }
         //let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         background.perform {
             do {
-                self.city.append(object)
-                try self.context.save()
-                //try self.context.execute(deleteRequest)
+                print(Defaults.locationTag)
+                if Defaults.locationTag {
+                    self.city.insert(object, at: 0)
+                    self.hasUpdatedLocation()
+                    try self.context.save()
+                } else {
+                    self.city.append(object)
+                    try self.context.save()
+                    //try self.context.execute(deleteRequest)
+                }
             }
             catch {
                 print("Failed saving")
@@ -42,7 +53,6 @@ class CoreDataManager: CoreDataProtocol {
     }
     
     func fetchData(completion:@escaping ([SimpleModel]) -> Void) {
-        
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "City")
         request.returnsObjectsAsFaults = false
         let sortDescriptor = NSSortDescriptor(key: "position", ascending: true)
@@ -59,6 +69,22 @@ class CoreDataManager: CoreDataProtocol {
         } catch {
             print("Failed")
         }
+    }
+    
+    func hasUpdatedLocation() {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "City")
+        request.returnsObjectsAsFaults = false
+        let sortDescriptor = NSSortDescriptor(key: "position", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+        do {
+            let result = try context.fetch(request) as! [City]
+            city = result
+            for (index,data) in city.enumerated() {
+                if index == 0 { continue }
+                city[index].position += 1
+            }
+            try context.save()
+        } catch { print(error) }
     }
     
     func resetable(completion:@escaping () -> Void) {
@@ -88,18 +114,18 @@ class CoreDataManager: CoreDataProtocol {
     }
     
     func move(_ index: Int, _ dest: Int) {
-            let item = city[index]
-            city.remove(at: index)
-            city.insert(item, at: dest)
-            for (index, name) in city.enumerated() {
-                name.position = Double(index)
-            }
-            do {
-                try self.context.save()
-            } catch {
-                print("Failed to move data: ", error.localizedDescription)
-            }
+        let item = city[index]
+        city.remove(at: index)
+        city.insert(item, at: dest)
+        for (index, name) in city.enumerated() {
+            name.position = Double(index)
         }
+        do {
+            try self.context.save()
+        } catch {
+            print("Failed to move data: ", error.localizedDescription)
+        }
+    }
     
     func checker() -> Bool {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "City")

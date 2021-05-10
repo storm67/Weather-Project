@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Swinject
+import SkeletonView
 
 final class MainViewController: UIViewController {
     
@@ -46,6 +46,7 @@ final class MainViewController: UIViewController {
         guard let model = simpleModel else { return }
         viewModel.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one, quality in
             DispatchQueue.main.async {
+//                self?.view().startAnimating()
                 var pvc = [String : Convertible]()
                 pvc = ["path" : one]
                 self?.weather = weather
@@ -63,16 +64,21 @@ final class MainViewController: UIViewController {
                     one.wind,
                     3,
                     one.humidity,
-                    one.direction)
+                    one.direction,
+                    [3,5,1,6,3])
                 self?.view().locationIcon.isHidden = true
                 self?.view().tableView.reloadData()
+//                self?.view().stopAnimating()
             }
             }
         )}
     
+    
 }
 
-extension MainViewController: UITableViewDelegate, UITableViewDataSource {
+
+
+extension MainViewController: SkeletonTableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.weather.count
@@ -81,7 +87,34 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
         cell.viewModel = viewModel.cellViewModel(index: indexPath.row)
+        guard let simple = simpleModel else { return cell }
+        if simple.key == 0 && simple.key == nil && simple.name.isEmpty {
+        cell.showAnimatedGradientSkeleton()
+        cell.layoutSkeletonIfNeeded()
+        }
         return cell
     }
     
+    func numSections(in collectionSkeletonView: UITableView) -> Int {
+         return 3
+    }
+
+    func collectionSkeletonView(_ skeletonView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+    func collectionSkeletonView(_ skeletonView: UITableView, cellIdentifierForRowAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return "cell"
+    }
+    
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//           return viewModel.weather.count
+//       }
+//
+//       func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//           let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
+//           cell.viewModel = viewModel.cellViewModel(index: indexPath.row)
+//           return cell
+//       }
+    
+
 }

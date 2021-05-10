@@ -15,16 +15,7 @@ protocol GetEdit: class {
     func getNewCity()
 }
 
-protocol DataTransfer: class {
-    func sender(_ temp: Int)
-}
-
 final class PagesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GetEdit {
-    
-    func sender(_ temp: Int) {
-        print(temp)
-    }
-    
     
     fileprivate func view() -> PagesMainView {
         return view as! PagesMainView
@@ -45,7 +36,11 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
         view().tableView.dragDelegate = self
         view().tableView.dropDelegate = self
         view().tableView.dragInteractionEnabled = true
-
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        view().tableView.reloadData()
     }
     
     func getNewCity() {
@@ -55,9 +50,10 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
         controller.pushViewController(vc, animated: true)
     }
     
+    
     @objc func addPrimitiveData(notification: Notification) {
-        viewModel.loader(notification: notification) {
-            self.view().tableView.reloadData()
+        viewModel.loader(notification: notification) { [weak self] in
+            self?.view().tableView.reloadData()
         }
     }
 

@@ -8,11 +8,13 @@
 
 import UIKit
 
-class ClearNavigationController: UIViewController {
+class ClearNavigationController: UIViewController, Reciever {
     
     func view() -> GradientView {
         return view as! GradientView
     }
+    
+    var viewModel: LocationInterfaceProtocol!
     
     override func loadView() {
         super.loadView()
@@ -21,12 +23,30 @@ class ClearNavigationController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view().delegate = self
     }
     
+    func getTrigger() {
+        viewModel.getLocation()
+        viewModel.setLocation { [weak self] (location, name, error, _) in
+            guard location != nil else { return }
+            let timeZoneOffset = TimeZone.current.secondsFromGMT() / 3600
+            self?.viewModel.createFromLocation(name: name, lat: location?.latitude, lon: location?.longitude, timeZone: timeZoneOffset)
+            guard let access = self?.viewModel.checkAccess(access: true) else { return }
+            if access {
+                self?.dismiss(animated: true) {
+                    guard let present = self?.navigationController?.presentedViewController as? PageViewController else { return }
+                    present.toStart()
+                    present.pages[0].unhide()
+                }
+            }
+        }
+    }
     
 }
 
 class ClearController: UIViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let label = UILabel()
@@ -35,8 +55,9 @@ class ClearController: UIViewController {
         label.textColor = .black
         view.addSubview(label)
         NSLayoutConstraint.activate([
-        label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ])
     }
+    
 }

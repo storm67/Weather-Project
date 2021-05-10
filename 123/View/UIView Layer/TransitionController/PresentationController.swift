@@ -11,28 +11,38 @@ import UIKit
 
 class PresentationController: UIPresentationController {
     
+    var touchModule: TransitionTouchModule!
+    
     override var shouldPresentInFullscreen: Bool {
         return false
     }
     
     override var frameOfPresentedViewInContainerView: CGRect {
         let bounds = containerView!.bounds
-        let halfHeight = bounds.height / 3
         return CGRect(x: 0,
-                      y: halfHeight,
+                      y: bounds.height / 2.4,
                       width: bounds.width,
                       height: bounds.height)
     }
     
     override func presentationTransitionWillBegin() {
         super.presentationTransitionWillBegin()
+        
         containerView?.addSubview(presentedView!)
+        
     }
     
     override func containerViewDidLayoutSubviews() {
         super.containerViewDidLayoutSubviews()
+        
         presentedView?.frame = frameOfPresentedViewInContainerView
     }
     
- 
+    override func presentationTransitionDidEnd(_ completed: Bool) {
+        super.presentationTransitionDidEnd(completed)
+        
+        if completed {
+            touchModule.direction = .dismiss
+        }
+    }
 }

@@ -8,8 +8,7 @@ pod 'SwiftyJSON', '~> 4.0'
 pod 'TagListView', '~> 1.0'
 pod 'Swinject'
 pod 'SwinjectStoryboard'
-pod "SwiftChart"
 pod 'SideMenu'
-pod "MLLineChart"
+pod 'SkeletonView'
 
 end

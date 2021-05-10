@@ -84,6 +84,7 @@ final class CustomCell: UITableViewCell {
         selectionStyle = .none
         createCircle()
         setNeedsDisplay()
+        isSkeletonable = true
     }
     
     required init?(coder: NSCoder) {

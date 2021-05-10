@@ -13,14 +13,18 @@ class Charts: UIView {
     
     var labelTemp = [UILabel]()
     var labelHour = [UILabel]()
-    var data: [Int] = [2,3,8,1,4]
+    var data: [Int] = [] {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
     var labels: [String] = ["13°","15°","14°","11°","12°"]
     var hourLabels: [String] = ["Сейчас","10:00","15:00","20:00","24:00"]
     var count = 0
     
     override func draw(_ rect: CGRect) {
         drawer()
-        backgroundColor = .black
+        setNeedsDisplay()
     }
     
     func score() -> [Int] {
@@ -33,7 +37,6 @@ class Charts: UIView {
         return empty
     }
     
-    //Сделать под контекст
     func drawer() {
         for _ in 0...5 {
         let label = UILabel()
@@ -41,14 +44,14 @@ class Charts: UIView {
         self.labelTemp.append(label)
         self.labelHour.append(hour)
         }
+        guard !data.isEmpty else { return }
         let path = UIBezierPath()
         let substract = subtraction(height: Int(bounds.maxY))
-        let xBounds = (frame.width) / CGFloat(data.count - 1)
-        var x: CGFloat = 0
+        let xBounds = (frame.width - 30) / CGFloat(data.count - 1)
+        var x: CGFloat = 10
         var y: CGFloat = CGFloat(substract[0])
         path.lineWidth = 2
-        path.move(to: CGPoint(x: 0, y: y))
-        yAxis(x: 0)
+        path.move(to: CGPoint(x: x, y: y))
         for (key,_) in substract.enumerated() {
             y = CGFloat(substract[key])
             if count <= 0 {
@@ -125,6 +128,13 @@ class Charts: UIView {
             addSubview(labelTemp[key])
             labelTemp[key].frame = CGRect(x: x - 5.5, y: bounds.height - 45, width: 30, height: 15)
         }
+    
+    func removeAll() {
+        for views in subviews {
+            views.isHidden = true
+        }
+    }
+    
 }
 
 class CircleCharts: UIView {

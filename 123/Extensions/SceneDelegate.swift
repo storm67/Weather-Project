@@ -26,7 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
      navigator = UINavigationController(rootViewController: viewController)
      } else {
      viewController = storyboard.instantiateViewController(withIdentifier: "PageViewController")
-     navigator = UINavigationController(rootViewController: viewController)
+    navigator = UINavigationController(rootViewController: viewController)
      }
      self.window = window
      self.window?.rootViewController = navigator

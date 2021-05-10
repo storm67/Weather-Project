@@ -10,36 +10,47 @@ import UIKit
 
 class BackgroundTransitionController: PresentationController {
     
-    var transparencyView: UIView = {
-        let uiview = UIView()
-        uiview.alpha = 0
-        return uiview
-    }()
-    
-    override func presentationTransitionWillBegin() {
+   override func presentationTransitionWillBegin() {
         super.presentationTransitionWillBegin()
-        transitionAnimator {
+        
+        containerView?.insertSubview(transparencyView, at: 0)
+        
+        
+        performAlongsideTransitionIfPossible { [unowned self] in
             self.transparencyView.alpha = 1
         }
     }
     
+    override func containerViewDidLayoutSubviews() {
+        super.containerViewDidLayoutSubviews()
+        transparencyView.frame = containerView!.frame
+    }
+    
     override func presentationTransitionDidEnd(_ completed: Bool) {
-        super.presentationTransitionWillBegin()
-        if completed {
-            transparencyView.removeFromSuperview()
+        super.presentationTransitionDidEnd(completed)
+        
+        if !completed {
+            self.transparencyView.removeFromSuperview()
         }
     }
     
     override func dismissalTransitionWillBegin() {
         super.dismissalTransitionWillBegin()
+        
+        performAlongsideTransitionIfPossible { [unowned self] in
+            self.transparencyView.alpha = 0
+        }
     }
     
-    override func containerViewDidLayoutSubviews() {
-        super.containerViewDidLayoutSubviews()
-        containerView?.addSubview(transparencyView)
+    override func dismissalTransitionDidEnd(_ completed: Bool) {
+        super.dismissalTransitionDidEnd(completed)
+        
+        if completed {
+            self.transparencyView.removeFromSuperview()
+        }
     }
     
-    private func transitionAnimator(_ block: @escaping () -> Void) {
+    private func performAlongsideTransitionIfPossible(_ block: @escaping () -> Void) {
         guard let coordinator = self.presentedViewController.transitionCoordinator else {
             block()
             return
@@ -49,5 +60,12 @@ class BackgroundTransitionController: PresentationController {
             block()
         }, completion: nil)
     }
+    
+    private lazy var transparencyView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0, alpha: 0.3)
+        view.alpha = 0
+        return view
+    }()
     
 }
