@@ -23,6 +23,22 @@ extension String {
         return finish
     }
     
+    static var clearNavigationController: String {
+        "ClearNavigationController"
+    }
+    
+    static var citySelector: String {
+        "CitySelector"
+    }
+    
+    static var pagesViewController: String {
+        "PagesViewController"
+    }
+    
+    static var pageViewController: String {
+        "PageViewController"
+    }
+    
 }
 
 extension Int {
@@ -92,27 +108,27 @@ extension UIImageView {
     func switchImage(_ image: String) {
         switch image.description {
         case let str where str.contains("ив") || str.contains("ожд"):
-            self.image = UIImage(named: "12Black")!
+            self.image = UIImage(named: "12")!
         case let str where str.contains("Солн"):
-            self.image = UIImage(named: "1Black")!
+            self.image = UIImage(named: "1")!
         case let str where str.contains("Преимущественно облачно"):
-            self.image = UIImage(named: "6Black")!
+            self.image = UIImage(named: "6")!
         case let str where str.contains("Переменная облачность") || str.contains("Небольшая облачность"):
-            self.image = UIImage(named: "4Black")!
+            self.image = UIImage(named: "4")!
         case let str where str.contains("Снег"):
-            self.image = UIImage(named: "15Black")!
+            self.image = UIImage(named: "15")!
         case let str where str.contains("Небольшой снег"):
-            self.image = UIImage(named: "20Black")!
+            self.image = UIImage(named: "20")!
         case let str where str.contains("Холодно"):
             self.image = UIImage(named: "snowflake")!
         case let str where str.contains("Небольшая облачность, небольшой снег"):
-            self.image = UIImage(named: "20Black")!
+            self.image = UIImage(named: "20")!
         case let str where str.contains("Преимущественно ясно"):
-            self.image = UIImage(named: "1Black")!
+            self.image = UIImage(named: "1")!
         case let str where str.contains("Облачно"):
-            self.image = UIImage(named: "4Black")!
+            self.image = UIImage(named: "4")!
         case let str where str.contains("Грозы"):
-            self.image = UIImage(named: "23Black")!
+            self.image = UIImage(named: "23")!
         default:
             self.image = UIImage()
         }
@@ -255,7 +271,7 @@ extension CGPoint {
 extension CGFloat { // Velocity value
     func projectedOffset(decelerationRate: UIScrollView.DecelerationRate) -> CGFloat {
         // Magic formula from WWDC
-        let multiplier = 1 / (1 - decelerationRate.rawValue) / 1000
+        let multiplier = 1 / (1 - decelerationRate.rawValue) / 400
         return self * multiplier
     }
 }
@@ -290,9 +306,8 @@ extension UIViewController {
     }
     
     func unhide() {
-        guard let first = view.subviews[1].subviews[0] as? UIButton else { return }
         view.subviews[0].subviews.forEach { item in
-            item.isSkeletonable = true
+            item.isSkeletonable = false
             DispatchQueue.main.async {
             item.hideSkeleton()
             }

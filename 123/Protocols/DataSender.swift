@@ -9,8 +9,20 @@
 import Foundation
 import SwiftyJSON
 
-protocol getLocation: class {
+protocol getLocation: AnyObject {
     func getLocation()
+}
+
+protocol OpenSelectorManager: AnyObject {
+    func open()
+}
+
+protocol NavigationBackDetector: AnyObject {
+    var isMoveToParent: Bool { get set }
+}
+
+protocol TransitionCurrentSizeManager: AnyObject {
+    var height: CGFloat { get set }
 }
 
 protocol ViewModelProtocol {

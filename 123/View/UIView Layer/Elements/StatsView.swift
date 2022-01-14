@@ -38,7 +38,6 @@ class StatsView: UIView {
     var windLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "15 км/ч"
         label.font = UIFont(name: "DINAlternate-Bold", size: 17)
         label.textColor = .black
         return label
@@ -46,7 +45,6 @@ class StatsView: UIView {
     var humidityLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "15 км"
         label.font = UIFont(name: "DINAlternate-Bold", size: 17)
         label.textColor = .black
         return label
@@ -54,7 +52,6 @@ class StatsView: UIView {
     var pressureLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "15 бар"
         label.font = UIFont(name: "DINAlternate-Bold", size: 17)
         label.textColor = .black
         return label
@@ -69,7 +66,7 @@ class StatsView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    //фикс верстка
+
     func layout() {
         addSubview(wind)
         addSubview(humidity)
@@ -88,14 +85,14 @@ class StatsView: UIView {
         humidity.topAnchor.constraint(equalTo: topAnchor, constant: 20),
         humidity.rightAnchor.constraint(equalTo: pressure.rightAnchor, constant: 0),
         humidityLabel.topAnchor.constraint(equalTo: humidity.topAnchor, constant: 10),
-        humidityLabel.leftAnchor.constraint(equalTo: windLabel.leftAnchor, constant: 155),
+        humidityLabel.leftAnchor.constraint(equalTo: windLabel.leftAnchor, constant: 152.5),
         humidityLabel.rightAnchor.constraint(equalTo: pressureLabel.rightAnchor, constant: -70),
         humidityLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
         pressure.leftAnchor.constraint(equalTo: humidity.leftAnchor, constant: 145),
         pressure.topAnchor.constraint(equalTo: topAnchor, constant: 20),
         pressure.rightAnchor.constraint(equalTo: rightAnchor, constant: -5),
         pressureLabel.topAnchor.constraint(equalTo: wind.topAnchor, constant: 10),
-        pressureLabel.leftAnchor.constraint(equalTo: humidityLabel.leftAnchor, constant: 145),
+        pressureLabel.leftAnchor.constraint(equalTo: humidityLabel.leftAnchor, constant: 140),
         pressureLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -5),
         pressureLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
         ])
@@ -105,7 +102,7 @@ class StatsView: UIView {
         DispatchQueue.main.async {
             self.wind.text = "Ветер \(direction)"
             self.windLabel.text = "\(wind) км/ч"
-            self.pressureLabel.text = "\(pressure)"
+            self.pressureLabel.text = "\(pressure) бар"
             self.humidityLabel.text = "\(humidity)%"
         }
     }

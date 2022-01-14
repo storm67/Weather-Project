@@ -21,21 +21,18 @@ class PagerViewModel: PageViewModelProtocol {
     }
 
     func check() -> Bool {
-        if manager.enabled() {
-            return true
-        }
-        return false
+        manager.enabled() ? true : false
     }
 
     func fetchData(completion:@escaping ([UIViewController]) -> Void) {
         coreData.fetchData { (md) in
             var controllers = [UIViewController]()
-            let viewModel = Assembler.sharedAssembler.resolver.resolve(ViewModelProtocol.self)!
+            guard let viewModel = Assembler.sharedAssembler.resolver.resolve(ViewModelProtocol.self) else { return }
             for item in md {
-            controllers.append(MainViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon, position: item.position, timeZone: item.timeZone), viewModel: viewModel))
+            controllers.append(MainViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon, position: item.position, timeZone: item.timeZone)))
             }
             if self.extractor() {
-            controllers.insert(MainViewController(model: SimpleModel(name: "Текущее местоположение", key: 0, lat: 0, lon: 0, position: 0, timeZone: 0), viewModel: viewModel), at: 0)
+            controllers.insert(MainViewController(model: SimpleModel(name: "Текущее местоположение", key: 0, lat: 0, lon: 0, position: 0, timeZone: 0)), at: 0)
             }
             completion(controllers)
         }
@@ -46,13 +43,14 @@ class PagerViewModel: PageViewModelProtocol {
         coreData.fetchData { (md) in
             dto = md.first ?? nil
         }
-        return Int(dto?.lat ?? 0) == 0 ? true : false
+        guard let lat = dto?.lat else { return false }
+        return lat == .zero ? true : false
     }
     
 }
 
 protocol PageViewModelProtocol {
-    func fetchData(completion:@escaping ([UIViewController]) -> Void)
+    func fetchData(completion: @escaping ([UIViewController]) -> Void)
     func check() -> Bool
     func extractor() -> Bool
 }

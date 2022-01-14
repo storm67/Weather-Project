@@ -13,10 +13,20 @@ import Swinject
 
 class CoreDataManager: CoreDataProtocol {
     
-    fileprivate lazy var context = container.viewContext
+    fileprivate lazy var context = container.viewContext {
+        didSet {
+        context.mergePolicy = NSMergePolicy.overwrite
+        }
+        willSet {
+        context.processPendingChanges()
+        context.refreshAllObjects()
+        }
+    }
+    
     fileprivate var container = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     fileprivate let background = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.newBackgroundContext()
     var city: [City] = []
+    
     func createData(name: String, key: Double?, lat: Double?, lon: Double?, timeZoneOffset: Int) -> Bool {
         let object = City(context: context)
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = City.fetchRequest()
@@ -31,10 +41,8 @@ class CoreDataManager: CoreDataProtocol {
             object.setValue(count, forKey: "position")
             object.setValue(timeZoneOffset, forKey: "timeZoneOffset")
         }
-        //let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         background.perform {
             do {
-                print(Defaults.locationTag)
                 if Defaults.locationTag {
                     self.city.insert(object, at: 0)
                     self.hasUpdatedLocation()
@@ -42,7 +50,6 @@ class CoreDataManager: CoreDataProtocol {
                 } else {
                     self.city.append(object)
                     try self.context.save()
-                    //try self.context.execute(deleteRequest)
                 }
             }
             catch {
@@ -102,9 +109,6 @@ class CoreDataManager: CoreDataProtocol {
     
     func deleteData(indexPath: IndexPath) {
         self.context.delete(self.city[indexPath.row])
-        context.mergePolicy = NSMergePolicy.overwrite
-        context.processPendingChanges()
-        context.refreshAllObjects()
         do {
             try context.save()
             print("Data Deleted")

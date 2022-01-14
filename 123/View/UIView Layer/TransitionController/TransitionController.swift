@@ -19,6 +19,7 @@ func presentationController(forPresented presented: UIViewController, presenting
     let presentationController = BackgroundTransitionController(presentedViewController: presented,
                                                             presenting: presenting ?? source)
     presentationController.touchModule = driver
+
     return presentationController
 }
 

@@ -10,11 +10,12 @@ import UIKit
 
 class DismissAnimation: NSObject {
     let duration: TimeInterval = 0.3
+    weak var sizeManager: TransitionCurrentSizeManager?
     
     private func animator(using transitionContext: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
         let from = transitionContext.view(forKey: .from)!
         let initialFrame = transitionContext.initialFrame(for: transitionContext.viewController(forKey: .from)!)
-        
+        sizeManager?.height = initialFrame.height
         let animator = UIViewPropertyAnimator(duration: duration, curve: .easeOut) {
             from.frame = initialFrame.offsetBy(dx: 0, dy: initialFrame.height)
         }

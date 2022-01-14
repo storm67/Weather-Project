@@ -18,7 +18,9 @@ final class CitySelector: UIViewController, UITableViewDelegate, UISearchBarDele
     
     fileprivate let searchController = UISearchController(searchResultsController: nil)
     
+    weak var manager: NavigationBackDetector?
     var viewModel: CitySelectorProtocol! 
+    var isHide = true
     
     let tagListView: TagListView = {
         let view = TagListView()
@@ -42,6 +44,14 @@ final class CitySelector: UIViewController, UITableViewDelegate, UISearchBarDele
         configureSearchController()
         addTag()
         layout()
+        navigationController?.navigationBar.isHidden = isHide
+        navigationController?.navigationBar.isTranslucent = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if isMovingFromParent {
+            manager?.isMoveToParent = true
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -87,16 +97,12 @@ extension CitySelector: UITableViewDataSource {
         viewModel.getTimeZone(title, completion: {
             if self.viewModel.createDataFromTag(name: title, key: number, timeZone: $0) {
                 DispatchQueue.main.async {
-                    let view = self.storyboard?.instantiateViewController(withIdentifier: "PageViewController") as! PageViewController
+                    let view = self.storyboard?.instantiateViewController(withIdentifier: .pageViewController) as! PageViewController
                     self.navigationController?.pushViewController(view, animated: true)
                 }
             }
         })
         tagView.isSelected = !tagView.isSelected
-    }
-    
-    override var prefersStatusBarHidden: Bool {
-        return true
     }
     
     func checkActive() {
@@ -112,8 +118,8 @@ extension CitySelector: UITableViewDataSource {
     
     func addTag() {
         view.addSubview(tagListView)
-        view.addSubview(locationButton)
-        guard let image = UIImage(named: "nav")?.imageResize(sizeChange: CGSize(width: 16, height: 16)) else { return }
+        guard let image = UIImage(systemName: "location.fill")?.imageResize(sizeChange: CGSize(width: 16, height: 16)) else { return }
+        let tint = image.withTintColor(.white)
         tagListView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 11).isActive = true
         tagListView.topAnchor.constraint(equalTo: locationButton.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
         tagListView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -7).isActive = true
@@ -125,7 +131,7 @@ extension CitySelector: UITableViewDataSource {
         tagListView.cornerRadius = 5
         tagListView.imageEdge = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
         tagListView.delegate = self
-        tagListView.addTagWithImage("  Локация  ", image).onTap = { [weak self] _ in
+        tagListView.addTagWithImage("  Локация  ", tint).onTap = { [weak self] _ in
             self?.getLocation()
         }
         tagListView.paddingX = 4
@@ -135,6 +141,7 @@ extension CitySelector: UITableViewDataSource {
     func configureSearchController() {
         self.tableView.tableHeaderView = searchController.searchBar
         searchController.searchBar.barTintColor = .white
+        searchController.searchBar.clipsToBounds = true
         searchController.searchBar.backgroundColor = .white
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -145,12 +152,13 @@ extension CitySelector: UITableViewDataSource {
     }
     
     func layout() {
+        navigationController?.isNavigationBarHidden = false
+        self.navigationController?.navigationBar.barStyle = .default
         tableView.clipsToBounds = true
         tableView.rowHeight = 52
         locationButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 46).isActive = true
         locationButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         locationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 11).isActive = true
-        navigationController?.isNavigationBarHidden = true
     }
     
     func getLocation() {

@@ -360,9 +360,9 @@ open class TagListView: UIView {
         tagView.image = true
         tagView.imagePaddingX = imagePaddingX
         tagView.imageEdge = imageEdge
-        tagView.textColor = textColor
+        tagView.textColor = .white
         tagView.selectedTextColor = selectedTextColor
-        tagView.tagBackgroundColor = tagBackgroundColor
+        tagView.tagBackgroundColor = #colorLiteral(red: 0.3263927698, green: 0.4388744235, blue: 0.9984564185, alpha: 1)
 //        tagView.highlightedBackgroundColor = tagHighlightedBackgroundColor
 //        tagView.selectedBackgroundColor = tagSelectedBackgroundColor
         tagView.titleLineBreakMode = tagLineBreakMode

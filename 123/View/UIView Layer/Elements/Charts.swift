@@ -13,11 +13,13 @@ class Charts: UIView {
     
     var labelTemp = [UILabel]()
     var labelHour = [UILabel]()
+    
     var data: [Int] = [] {
         didSet {
             setNeedsDisplay()
         }
     }
+    
     var labels: [String] = ["13°","15°","14°","11°","12°"]
     var hourLabels: [String] = ["Сейчас","10:00","15:00","20:00","24:00"]
     var count = 0
@@ -37,39 +39,41 @@ class Charts: UIView {
         return empty
     }
     
-    func drawer() {
-        for _ in 0...5 {
-        let label = UILabel()
-        let hour = UILabel()
-        self.labelTemp.append(label)
-        self.labelHour.append(hour)
+    private func drawCurvedChart() {
+        if let path = CurveAlgorithm.shared.createCurvedPath(new()) {
+            let lineLayer = CAShapeLayer()
+            lineLayer.path = path.cgPath
+            lineLayer.strokeColor = UIColor.red.cgColor
+            lineLayer.fillColor = UIColor.red.cgColor
+            layer.addSublayer(lineLayer)
         }
-        guard !data.isEmpty else { return }
-        let path = UIBezierPath()
-        let substract = subtraction(height: Int(bounds.maxY))
-        let xBounds = (frame.width - 30) / CGFloat(data.count - 1)
-        var x: CGFloat = 10
-        var y: CGFloat = CGFloat(substract[0])
-        path.lineWidth = 2
-        path.move(to: CGPoint(x: x, y: y))
-        for (key,_) in substract.enumerated() {
-            y = CGFloat(substract[key])
-            if count <= 0 {
-                addCircle(x: x, y: y, color: .systemBlue)
-                addLabels(x: x, color: .systemBlue, key: key)
-                addHourLabels(x: x, key: key)
-            } else {
-                addCircle(x: x, y: y)
-                addTempLabels(x: x, key: key)
-                addHourLabels(x: x, key: key)
-                path.addLine(to: CGPoint(x: x, y: y))
+    }
+    
+    func YPoint(_ array: [Int], _ iterrator: Int) -> CGFloat {
+        if let max = array.max(), let min = array.min() {
+        if array[iterrator] == max {
+            return bounds.minY
+        } else if array[iterrator] == min {
+            return bounds.maxY
+        } else { return bounds.height * (1 - (CGFloat(data[iterrator]) / CGFloat(max))) }
+        }
+        return 0
+    }
+    
+    func new() -> [CGPoint] {
+        var array = [CGPoint]()
+        guard !data.isEmpty else { return [] }
+            for i in 0..<data.count {
+                let x = CGFloat(Int(bounds.width) / data.count * (i + 1))
+                let y = YPoint(data, i)
+                let point = CGPoint(x: x, y: y)
+                array.append(point)
             }
-            yAxis(x: x)
-            x += xBounds
-            count += 1
-        }
-        UIColor.lightGray.setStroke()
-        path.stroke()
+            return array
+    }
+    
+    func drawer() {
+        drawCurvedChart()
     }
     
     func subtraction(height: Int) -> [Int] {
@@ -107,27 +111,27 @@ class Charts: UIView {
     }
     
     func addTempLabels(x: CGFloat, key: Int) {
-            labelTemp[key].text = labels[key]
-            labelTemp[key].textColor = .black
-            addSubview(labelTemp[key])
-            labelTemp[key].frame = CGRect(x: x - 7.5, y: bounds.height - 45, width: 30, height: 15)
+        labelTemp[key].text = labels[key]
+        labelTemp[key].textColor = .black
+        addSubview(labelTemp[key])
+        labelTemp[key].frame = CGRect(x: x - 7.5, y: bounds.height - 45, width: 30, height: 15)
     }
     
     func addHourLabels(x: CGFloat, key: Int) {
-            labelHour[key].text = hourLabels[key]
-            labelHour[key].textColor = #colorLiteral(red: 0.7502692342, green: 0.7503965497, blue: 0.7502524853, alpha: 1)
-            labelHour[key].font = UIFont(name: "ArialMT", size: 10)
-            addSubview(labelHour[key])
-            labelHour[key].frame = CGRect(x: x - 10.5, y: bounds.height - 25, width: 50, height: 15)
-
+        labelHour[key].text = hourLabels[key]
+        labelHour[key].textColor = #colorLiteral(red: 0.7502692342, green: 0.7503965497, blue: 0.7502524853, alpha: 1)
+        labelHour[key].font = UIFont(name: "ArialMT", size: 10)
+        addSubview(labelHour[key])
+        labelHour[key].frame = CGRect(x: x - 10.5, y: bounds.height - 25, width: 50, height: 15)
+        
     }
     
     func addLabels(x: CGFloat, color: UIColor, key: Int) {
-            labelTemp[key].text = labels[key]
-            labelTemp[key].textColor = color
-            addSubview(labelTemp[key])
-            labelTemp[key].frame = CGRect(x: x - 5.5, y: bounds.height - 45, width: 30, height: 15)
-        }
+        labelTemp[key].text = labels[key]
+        labelTemp[key].textColor = color
+        addSubview(labelTemp[key])
+        labelTemp[key].frame = CGRect(x: x - 5.5, y: bounds.height - 45, width: 30, height: 15)
+    }
     
     func removeAll() {
         for views in subviews {
@@ -139,13 +143,13 @@ class Charts: UIView {
 
 class CircleCharts: UIView {
     let fillLayer = CAShapeLayer()
-    var strokeColor: UIColor
-    var fillColor: UIColor = .white
+    var strokeColor: UIColor = .blue
+    var fillColor: UIColor = #colorLiteral(red: 0.6117964387, green: 0.7582360506, blue: 1, alpha: 1)
     lazy var float: CGFloat = frame.height / 2
     lazy var circlePath = UIBezierPath(arcCenter: CGPoint(x: frame.width, y: frame.height), radius: float, startAngle: CGFloat(0), endAngle: CGFloat.pi * 2, clockwise: true)
     
     
-    init(frame: CGRect, strokeColor: UIColor, fillColor: UIColor = .white) {
+    init(frame: CGRect, strokeColor: UIColor, fillColor: UIColor = #colorLiteral(red: 0.6117964387, green: 0.7582360506, blue: 1, alpha: 1)) {
         self.strokeColor = strokeColor
         self.fillColor = fillColor
         super.init(frame: frame)

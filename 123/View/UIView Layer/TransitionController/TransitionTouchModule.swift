@@ -8,19 +8,19 @@
 
 import UIKit
 
-class TransitionTouchModule: UIPercentDrivenInteractiveTransition {
+class TransitionTouchModule: UIPercentDrivenInteractiveTransition, TransitionCurrentSizeManager {
+    
+    var height: CGFloat = 0.0
     
     // MARK: - Linking
     func link(to controller: UIViewController) {
         presentedController = controller
-        
         panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handle(recognizer:)))
         presentedController?.view.addGestureRecognizer(panRecognizer!)
     }
     
     private weak var presentedController: UIViewController?
     private var panRecognizer: UIPanGestureRecognizer?
-    
     
     // MARK: - Override
     override var wantsInteractiveStart: Bool {
@@ -33,7 +33,6 @@ class TransitionTouchModule: UIPercentDrivenInteractiveTransition {
                 return gestureIsActive
             }
         }
-        
         set { }
     }
     
@@ -60,17 +59,14 @@ extension TransitionTouchModule {
         case .changed:
             let increment = -r.incrementToBottom(maxTranslation: maxTranslation)
             update(percentComplete + increment)
-            
         case .ended, .cancelled:
             if r.isProjectedToDownHalf(maxTranslation: maxTranslation) {
                 cancel()
             } else {
                 finish()
             }
-            
         case .failed:
             cancel()
-            
         default:
             break
         }
@@ -79,22 +75,18 @@ extension TransitionTouchModule {
     private func handleDismiss(recognizer r: UIPanGestureRecognizer) {
         switch r.state {
         case .began:
-            pause() // Pause allows to detect isRunning
-            
+            pause()
             if !isRunning {
-                presentedController?.dismiss(animated: true) // Start the new one
+                presentedController?.dismiss(animated: true)
             }
-        
         case .changed:
             update(percentComplete + r.incrementToBottom(maxTranslation: maxTranslation))
-            
         case .ended, .cancelled:
-            if r.isProjectedToDownHalf(maxTranslation: maxTranslation) {
+            if r.isProjectedToDownHalf(maxTranslation: maxTranslation) || percentComplete > 0.15 {
                 finish()
             } else {
-                cancel()
+                pause()
             }
-
         case .failed:
             cancel()
             
@@ -104,7 +96,8 @@ extension TransitionTouchModule {
     }
     
     var maxTranslation: CGFloat {
-        return presentedController?.view.frame.height ?? 0
+        guard let height = presentedController?.view.frame.height else { return 0 }
+        return height
     }
     
     /// `pause()` before call `isRunning`
@@ -114,10 +107,10 @@ extension TransitionTouchModule {
 }
 
 private extension UIPanGestureRecognizer {
+    
     func isProjectedToDownHalf(maxTranslation: CGFloat) -> Bool {
         let endLocation = projectedLocation(decelerationRate: .fast)
         let isPresentationCompleted = endLocation.y > maxTranslation / 2
-        
         return isPresentationCompleted
     }
     

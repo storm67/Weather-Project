@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreData
 
-protocol GetEdit: class {
+protocol GetEdit: AnyObject {
     func getBack()
     func getNewCity()
 }
@@ -20,8 +20,8 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
     fileprivate func view() -> PagesMainView {
         return view as! PagesMainView
     }
-    
     public var viewModel: PageManagerProtocol!
+    public var manager: OpenSelectorManager?
     
     override func loadView() {
         view = PagesMainView()
@@ -30,6 +30,7 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = true
+        navigationController?.navigationBar.isTranslucent = true
         view().delegate = self
         view().tableView.dataSource = self
         view().tableView.delegate = self
@@ -44,10 +45,9 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func getNewCity() {
-        let vc = storyboard?.instantiateViewController(identifier: "CitySelector") as! CitySelector
         guard let controller = self.navigationController, let topView = controller.topViewController else { return }
         topView.dismiss(animated: true, completion: nil)
-        controller.pushViewController(vc, animated: true)
+        manager?.open()
     }
     
     
@@ -101,7 +101,7 @@ extension PagesViewController: UITableViewDragDelegate {
 
 extension PagesViewController: UITableViewDropDelegate {
     func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
-        return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+       UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
     }
 
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
@@ -109,7 +109,7 @@ extension PagesViewController: UITableViewDropDelegate {
         guard let item = coordinator.items.first,
             let destinationIndexPath = coordinator.destinationIndexPath,
             let sourceIndexPath = item.sourceIndexPath else { return }
-
+        guard !destinationIndexPath.contains(0) else { return }
         tableView.performBatchUpdates({ [weak self] in
             self?.viewModel.refresh(sourceIndexPath, destinationIndexPath)
             tableView.deleteRows(at: [sourceIndexPath], with: .automatic)

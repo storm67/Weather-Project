@@ -16,8 +16,7 @@ final class MainViewController: UIViewController {
     }
     
     fileprivate var simpleModel: SimpleModel?
-    fileprivate var weather = [Convertible]()
-    public var viewModel: ViewModelProtocol!
+    public var viewModel = MainControllerViewModel(networkService: Routing<WeatherAPI>(), coreDataManager: CoreDataManager())
     
     override func loadView() {
         view = MainControllerView()
@@ -29,12 +28,13 @@ final class MainViewController: UIViewController {
         view().tableView.dataSource = self
         view().tableView.delegate = self
         update()
+//        view().charts.data = [10,11,6,0]
     }
     
-    convenience init(model: SimpleModel, viewModel: ViewModelProtocol) {
+    convenience init(model: SimpleModel) {
         self.init()
         self.simpleModel = model
-        self.viewModel = viewModel
+//        self.viewModel = viewModel
     }
     
     override func viewDidLayoutSubviews() {
@@ -46,10 +46,9 @@ final class MainViewController: UIViewController {
         guard let model = simpleModel else { return }
         viewModel.newDebug(key: model.key, lat: model.lat, lon: model.lon, completion: { [weak self] weather, one, quality in
             DispatchQueue.main.async {
-//                self?.view().startAnimating()
                 var pvc = [String : Convertible]()
                 pvc = ["path" : one]
-                self?.weather = weather
+                self?.viewModel.weather = weather
                 self?.view().tableView.reloadData()
                 NotificationCenter.default.post(name: NSNotification.Name.notify, object: nil, userInfo: pvc)
                 self?.view().updateData(one.dayIconPhrase,
@@ -65,15 +64,12 @@ final class MainViewController: UIViewController {
                     3,
                     one.humidity,
                     one.direction,
-                    [3,5,1,6,3])
+                    [10,11,6,3])
                 self?.view().locationIcon.isHidden = true
-                self?.view().tableView.reloadData()
-//                self?.view().stopAnimating()
+                }
             }
-            }
-        )}
-    
-    
+        )
+    }
 }
 
 

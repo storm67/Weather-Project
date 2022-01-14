@@ -42,10 +42,11 @@ final class MainControllerView: UIView {
         return state
     }()
     
-    var charts: Charts = {
-        let charts = Charts()
+    var charts: LineChart = {
+        let charts = LineChart()
+        charts.isCurved = true
         charts.translatesAutoresizingMaskIntoConstraints = false
-        charts.backgroundColor = .white
+        charts.backgroundColor = .clear
         charts.layer.masksToBounds = true
         charts.layer.cornerRadius = 5
         return charts
@@ -56,7 +57,7 @@ final class MainControllerView: UIView {
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 65, bottom: 0, right: 0)
         tableView.separatorColor = .white
         tableView.tableFooterView = UIView(frame: .zero)
-        tableView.rowHeight = 90.0
+        tableView.rowHeight = 75.0
         tableView.register(CustomCell.self, forCellReuseIdentifier: "cell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.layer.cornerRadius = 5
@@ -226,11 +227,16 @@ final class MainControllerView: UIView {
     
     let fiveDaysWeather: StatsView = {
         let view = StatsView()
-        view.backgroundColor = #colorLiteral(red: 0.9610655904, green: 0.9612262845, blue: 0.9610444903, alpha: 1)
+        view.backgroundColor = #colorLiteral(red: 0.9043619633, green: 0.9659909606, blue: 0.9911366105, alpha: 1)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 5
         return view
+    }()
+    
+    let segmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl()
+        return segmentedControl
     }()
     
     let scrollView: UIScrollView = {
@@ -259,7 +265,6 @@ final class MainControllerView: UIView {
         layout()
         backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     }
-
     
     func layout() {
         addSubview(scrollView)
@@ -303,7 +308,7 @@ final class MainControllerView: UIView {
             fiveDaysWeather.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             fiveDaysWeather.topAnchor.constraint(equalTo: secondView.bottomAnchor, constant: 25),
             fiveDaysWeather.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
-            fiveDaysWeather.heightAnchor.constraint(equalToConstant: 100),
+            fiveDaysWeather.heightAnchor.constraint(equalToConstant: 90),
             weatherStatusImage.leftAnchor.constraint(equalTo: secondView.leftAnchor, constant: 25),
             weatherStatusImage.topAnchor.constraint(equalTo: secondView.topAnchor, constant: 25),
             weatherStatusImage.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -300),
@@ -322,21 +327,20 @@ final class MainControllerView: UIView {
             day.rightAnchor.constraint(equalTo: secondView.rightAnchor, constant: -40),
             day.bottomAnchor.constraint(equalTo: secondView.bottomAnchor, constant: -15),
             charts.topAnchor.constraint(equalTo: fiveDaysWeather.bottomAnchor, constant: 35),
-            charts.heightAnchor.constraint(equalToConstant: 150),
+            charts.heightAnchor.constraint(equalToConstant: 200),
             charts.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
             charts.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
             tableView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            tableView.topAnchor.constraint(equalTo: charts.topAnchor, constant: 180),
-            tableView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            tableView.heightAnchor.constraint(equalToConstant: 450),
+            tableView.topAnchor.constraint(equalTo: charts.bottomAnchor, constant: 30),
+            tableView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
+            tableView.heightAnchor.constraint(equalToConstant: 400),
             scrollView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
             scrollView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
             scrollView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
             location.centerXAnchor.constraint(equalTo: headerOfMainView.centerXAnchor),
-            location.topAnchor.constraint(equalTo: headerOfMainView.safeAreaLayoutGuide.topAnchor, constant: -10),
             location.bottomAnchor.constraint(equalTo: headerOfMainView.safeAreaLayoutGuide.bottomAnchor, constant: -5),
-            airIndicatorView.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 470),
+            airIndicatorView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 25),
             airIndicatorView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
             airIndicatorView.heightAnchor.constraint(equalToConstant: 151),
             airIndicatorView.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
@@ -376,7 +380,8 @@ final class MainControllerView: UIView {
             self.sunlightStatus.secondTime.text = "Закат \(sunset.returnTime(time: timeZone, interval: .since1970))"
             self.setUp(sunrise, sunset, timeZone)
             self.fiveDaysWeather.update(wind: wind, direction: direction, pressure: pressure, humidity: humidity)
-            self.charts.data = charts
+            let points = charts.map { PointEntry(value: $0, label: "") }
+            self.charts.dataEntries = points
         }
     }
     

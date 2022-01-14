@@ -18,11 +18,11 @@ class PresentationController: UIPresentationController {
     }
     
     override var frameOfPresentedViewInContainerView: CGRect {
-        let bounds = containerView!.bounds
+        guard let containerView = containerView else { return CGRect() }
         return CGRect(x: 0,
-                      y: bounds.height / 2.4,
-                      width: bounds.width,
-                      height: bounds.height)
+                      y: containerView.bounds.height / 2.4,
+                      width: containerView.bounds.width,
+                      height: containerView.bounds.height)
     }
     
     override func presentationTransitionWillBegin() {

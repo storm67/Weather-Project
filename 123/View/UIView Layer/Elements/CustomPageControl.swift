@@ -30,7 +30,7 @@ class PageControl: UIControl {
     func pagesCounter(offset: CGPoint, width: CGFloat) {
         var lastPage: Int = 0
         if currentPage == 0 {
-            change(color: .black)
+            change(color: .blue)
             if pages > 1 {
             circles[0].fillColor = .lightGray
             }
@@ -39,7 +39,7 @@ class PageControl: UIControl {
             lastPage = currentPage
             currentPage -= 1
         }
-        if offset.x == width * 2  {
+        if offset.x == width * 2 {
             lastPage = currentPage
             currentPage += 1
         }
@@ -62,32 +62,29 @@ class PageControl: UIControl {
         let imager = image.image?.tint(with: color)
         image.image = imager
     }
+    
     func checkColor(bool: Bool) {
         if !bool {
         change(color: .black)
         }
         if !bool && pages > 1 {
-        image.tintColor = UIColor.black
-        //circles[0].fillColor = .lightGray
+        image.tintColor = UIColor.blue
         } else {
         image.tintColor = UIColor.lightGray
-        //circles[0].fillColor = .black
+        circles[0].fillColor = .black
         }
         setNeedsDisplay()
         update()
     }
     
     func addCircle(_ bool: Bool) {
+        let xMargin = CGFloat(pages) * (width / 1.7)
+        var x = bounds.minX - xMargin
         subviews.forEach { $0.removeFromSuperview() }
         circles = []
         addSubview(self.image)
         self.image.image = UIImage(systemName: "location.fill")?.withRenderingMode(.alwaysTemplate)
-        let xMargin = CGFloat(pages) * (width / 1.7)
-        var x = bounds.minX - xMargin
-        self.image.tintColor = UIColor.black
-        image.frame = CGRect(x: bounds.minX, y: bounds.midY - 1, width: 10, height: 10)
         image.frame = CGRect(x: x, y: bounds.midY - 1, width: 10, height: 10)
-        image.tintColor = .lightGray
         circles.removeAll()
         x -= width / 2
         for v in 0..<pages - 1 {

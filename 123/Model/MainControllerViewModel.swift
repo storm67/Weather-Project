@@ -10,7 +10,6 @@ import SwiftyJSON
 import UIKit
 
 final class MainControllerViewModel: ViewModelProtocol {
-    
 
     public var weather = [Convertible]()
     fileprivate var completion: Completion?
@@ -36,7 +35,7 @@ final class MainControllerViewModel: ViewModelProtocol {
         DispatchQueue.global().async {
             if key != nil && key != 0 {
                 guard let key = key else { return }
-                self.weatherFiveDayRequest(key: key) { (first, second, quality)  in
+                self.weatherFiveDayRequest(key: key) { first, second, quality in
                     completion(first,second, quality)
                 }
             } else {
@@ -44,9 +43,7 @@ final class MainControllerViewModel: ViewModelProtocol {
                 self.networkService.request(.getCityByLocation(lat: lat, lon: lon)) { [weak self] data in
                     if let key = JSON(data)["Key"].string {
                         guard let int = Int(key) else { return }
-                        self?.weatherFiveDayRequest(key: int) { [weak self] item, one, quality  in
-                            self?.weather = item
-                            self?.formation(item)
+                        self?.weatherFiveDayRequest(key: int) { item, one, quality  in
                             completion(item,one, quality)
                         }
                     }
@@ -80,15 +77,14 @@ final class MainControllerViewModel: ViewModelProtocol {
         return int
     }
     
-    func weatherFiveDayRequest(key: Int,completion:
-        @escaping (Completion)) {
+    func weatherFiveDayRequest(key: Int,completion: @escaping (Completion)) {
         DispatchQueue.global().async {
             self.networkService.request(.getFiveDayWeather(city: String(key))) { [unowned self] data in
                 let array = JSON(data)["DailyForecasts"].arrayValue.map { DailyForecast(dictionary: $0) }
                 let quality = JSON(data)["DailyForecasts"].arrayValue[0]["AirAndPollen"].arrayValue.map { AirQuality(decoder: $0) }
                 self.getHumidity(key: key) { hd in
-                let weatherX = zip(array,self.dates).map { [unowned self] (first,second) -> Convertible in
-                    return Convertible(date: self.format(data: first.date),
+                let weatherX = zip(array,dates).map { [unowned self] (first,second) -> Convertible in
+                Convertible(date: self.format(data: first.date),
                                 temperature: first.temperature,
                                 dayIcon: first.dayIcon,
                                 dayIconPhrase: first.dayIconPhrase,
@@ -103,7 +99,6 @@ final class MainControllerViewModel: ViewModelProtocol {
                                 humidity: hd,
                                 direction: first.direction)
                 }
-                self.weather = weatherX
                 completion(weatherX, weatherX[0], quality)
                 }
             }

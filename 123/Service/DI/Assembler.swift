@@ -10,8 +10,8 @@ import Foundation
 import Swinject
 
 extension Assembler {
+    static let container = Container()
     static let sharedAssembler: Assembler = {
-        let container = Container()
 
         let assembler = Assembler(
             [
