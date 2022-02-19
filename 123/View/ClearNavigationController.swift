@@ -15,6 +15,7 @@ class ClearNavigationController: UIViewController, Reciever {
     }
     
     var viewModel: LocationInterfaceProtocol!
+    weak var detector: NavigationBackDetector?
     
     override func loadView() {
         super.loadView()
@@ -25,6 +26,7 @@ class ClearNavigationController: UIViewController, Reciever {
         super.viewDidLoad()
         view().delegate = self
     }
+    
     
     func getTrigger() {
         viewModel.getLocation()

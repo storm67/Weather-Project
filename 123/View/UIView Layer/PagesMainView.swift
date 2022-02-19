@@ -28,9 +28,9 @@ final class PagesMainView: UIView {
     
     let toolbar: UIToolbar = {
         let toolbar = UIToolbar()
-        toolbar.barTintColor = .white
-        toolbar.backgroundColor = .orange
-        toolbar.tintColor = .white
+        toolbar.barTintColor = #colorLiteral(red: 0.321555078, green: 0.4889855981, blue: 1, alpha: 1)
+        toolbar.tintColor = #colorLiteral(red: 0.321555078, green: 0.4889855981, blue: 1, alpha: 1)
+        toolbar.alpha = 0
         toolbar.translatesAutoresizingMaskIntoConstraints = false
         toolbar.sizeToFit()
         return toolbar
@@ -38,7 +38,7 @@ final class PagesMainView: UIView {
     
     let editingButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .black
+        button.tintColor = .white
         button.setImage(UIImage.init(systemName:"ellipsis")?.withTintColor(.black, renderingMode: .alwaysTemplate), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear
@@ -48,7 +48,7 @@ final class PagesMainView: UIView {
     
     let addButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .black
+        button.tintColor = .white
         button.setImage(UIImage.init(systemName:"plus")?.withTintColor(.black, renderingMode: .alwaysTemplate), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear
@@ -58,7 +58,7 @@ final class PagesMainView: UIView {
     
     let getBackButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .black
+        button.tintColor = .white
         button.setImage(UIImage.init(systemName:"arrow.left")?.withTintColor(.black, renderingMode: .alwaysTemplate), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear

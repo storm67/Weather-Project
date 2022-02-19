@@ -139,6 +139,7 @@ extension PointEntry: Comparable {
 
 class LineChart: UIView {
     
+    let gifManager = SwiftyGifManager(memoryLimit: 60)
     /// gap between each point
     let lineGap: CGFloat = 60.0
     
@@ -374,7 +375,7 @@ class LineChart: UIView {
                                                     at: 0)
                 let rect = CGRect(x: point.x, y: point.y + mainLayer.frame.height/3 - 6, width: 6, height: 6)
                 let textLayer = CATextLayer()
-                textLayer.frame = CGRect(x: point.x - 2, y: point.y + mainLayer.frame.height/3 - 24, width: 17, height: 16)
+                textLayer.frame = CGRect(x: point.x - 2, y: point.y + mainLayer.frame.height/3 - 24, width: 23, height: 16)
                 textLayer.foregroundColor = #colorLiteral(red: 0.346722424, green: 0.4321926832, blue: 0.8210842013, alpha: 1).cgColor
                 textLayer.backgroundColor = UIColor.clear.cgColor
                 textLayer.contentsScale = UIScreen.main.scale
@@ -382,6 +383,16 @@ class LineChart: UIView {
                 textLayer.alignmentMode = .center
                 textLayer.fontSize = 16
                 if 1...4 ~= i {
+//                do {
+//                    let gif = try UIImage(gifName: "snowy-1")
+//                    let imageview = UIImageView(gifImage: gif, loopCount: -1) // Will loop 3 times
+//                    imageview.frame = CGRect(x: point.x, y: point.y + mainLayer.frame.height/3 + 25, width: 56, height: 56)
+//                    imageview.setImage(gif, manager: gifManager, loopCount: -1)
+//                    imageview.startAnimatingGif()
+//                    addSubview(imageview)
+//                } catch {
+//                    print(error)
+//                }
                 textLayer.string = "\(dataEntries[i - 1].value)°"
                 }
                 gridLayer.addSublayer(textLayer)
@@ -400,13 +411,13 @@ class LineChart: UIView {
         var added = false
             for value in 0...1 {
                 let value = CGFloat(value)
-                let height = value * gridLayer.frame.size.height
-                let width = dataLayer.frame.width / 4
+//                let height = value * gridLayer.frame.size.height
+//                let width = dataLayer.frame.width / 4
                 let path = UIBezierPath()
                 if !added {
-                path.move(to: CGPoint(x: value * width + 1, y: 0))
-                path.addLine(to: CGPoint(x: value * width + 1, y: dataLayer.frame.size.height - 1))
-                path.addLine(to: CGPoint(x: dataLayer.frame.size.width, y: dataLayer.frame.size.height - 1))
+//                path.move(to: CGPoint(x: value * width + 1, y: 0))
+//                path.addLine(to: CGPoint(x: value * width + 1, y: dataLayer.frame.size.height - 1))
+//                path.addLine(to: CGPoint(x: dataLayer.frame.size.width, y: dataLayer.frame.size.height - 1))
                 added.toggle()
                 }
                 let lineLayer = CAShapeLayer()
@@ -420,13 +431,13 @@ class LineChart: UIView {
                 
                 gridLayer.addSublayer(lineLayer)
                 
-                var minMaxGap:CGFloat = 0
-                var lineValue:Int = 0
-                if let max = dataEntries.max()?.value,
-                    let min = dataEntries.min()?.value {
-                    minMaxGap = CGFloat(max - min) * topHorizontalLine
-                    lineValue = Int((1-value) * minMaxGap) + Int(min)
-                }
+//                var minMaxGap:CGFloat = 0
+//                var lineValue:Int = 0
+//                if let max = dataEntries.max()?.value,
+//                    let min = dataEntries.min()?.value {
+//                    minMaxGap = CGFloat(max - min) * topHorizontalLine
+//                    lineValue = Int((1-value) * minMaxGap) + Int(min)
+//                }
                 
         }
     }

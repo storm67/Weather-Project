@@ -23,19 +23,14 @@ enum WeatherAPI {
     case getFiveDayWeather(city: String)
     case getCityByLocation(lat: Double, lon: Double)
     case get12Hours(city: String)
+    case getKeyByLocation(lat: Double, lon: Double)
 }
 
 extension WeatherAPI: EndPoint {
     
     var environmentBaseURL : String {
         switch self {
-        case .getFiveDayWeather:
-            return "http://dataservice.accuweather.com"
-        case .getCityData:
-            return "http://dataservice.accuweather.com"
-        case .getCityByLocation:
-            return "http://dataservice.accuweather.com"
-        case .get12Hours:
+        case .getFiveDayWeather,.getCityData, .getCityByLocation, .get12Hours, .getKeyByLocation:
             return "http://dataservice.accuweather.com"
         }
     }
@@ -55,6 +50,8 @@ extension WeatherAPI: EndPoint {
             return "locations/v1/cities/geoposition/search"
         case .get12Hours(let text):
             return "forecasts/v1/hourly/12hour/\(text)"
+        case .getKeyByLocation:
+            return "locations/v1/cities/geoposition/search"
         }
     }
     
@@ -89,6 +86,11 @@ extension WeatherAPI: EndPoint {
                             "details":"true",
                             "metric":"true",
                             "apikey":NetworkManager.MovieAPIKey])
+        case .getKeyByLocation(lat: let lat, lon: let lon):
+            return .requestParameters(bodyParameters: nil,
+                                      bodyEncoding: .urlEncoding,
+                                      urlParameters: ["apikey":NetworkManager.MovieAPIKey,
+                                                      "q":"\(lat),\(lon)"])
         }
     }
     

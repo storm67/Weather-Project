@@ -24,6 +24,7 @@ final class DailyForecast: Codable {
     var sunset: Int
     var humidity: Int
     var direction: String
+    
     init(dictionary: JSON) {
         date = dictionary["Date"].stringValue
         temperature = dictionary["Temperature"]["Minimum"]["Value"].intValue
@@ -39,5 +40,22 @@ final class DailyForecast: Codable {
         sunset = dictionary["Sun"]["EpochSet"].intValue
         humidity = dictionary["RelativeHumidity"].intValue
         direction = dictionary["Day"]["Wind"]["Direction"]["Localized"].stringValue
+    }
+    
+    init(alternativeDictionary: JSON) {
+        date = alternativeDictionary["DateTime"].stringValue
+        temperature = alternativeDictionary["RealFeelTemperature"]["Value"].intValue
+        temperatureMax = alternativeDictionary["Temperature"]["Maximum"]["Value"].intValue
+        dayIcon = alternativeDictionary["Day"]["Icon"].intValue
+        nightIcon = alternativeDictionary["Night"]["Icon"].intValue
+        dayIconPhrase = alternativeDictionary["Day"]["IconPhrase"].stringValue
+        nightIconPhrase = alternativeDictionary["Night"]["IconPhrase"].stringValue
+        realFeel = alternativeDictionary["RealFeelTemperature"]["Minimum"]["Value"].intValue
+        wind = alternativeDictionary["Day"]["Wind"]["Speed"]["Value"].intValue
+        airQuality = 3
+        sunRise = alternativeDictionary["Sun"]["EpochRise"].intValue
+        sunset = alternativeDictionary["Sun"]["EpochSet"].intValue
+        humidity = alternativeDictionary["RelativeHumidity"].intValue
+        direction = alternativeDictionary["Day"]["Wind"]["Direction"]["Localized"].stringValue
     }
 }

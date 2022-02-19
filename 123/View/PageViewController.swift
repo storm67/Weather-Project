@@ -11,17 +11,16 @@ import UIKit
 import Swinject
 import SideMenu
 
-final class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate, SideMenuNavigationControllerDelegate, OpenSelectorManager, NavigationBackDetector {
+final class PageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate, OpenSelectorManager, NavigationBackDetector {
     
     var isMoveToParent = false
     var pages = [UIViewController]()
     var viewModel: PageViewModelProtocol!
-
+    
     fileprivate var pageControl = UIPageControl()
     fileprivate var customPageControl: PageControl!
     fileprivate var count = 0
-    fileprivate let transitionController = TransitionController()
-
+    
     fileprivate var blurEffect: UIVisualEffectView = {
         let blur = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
         let effect = UIVisualEffectView(effect: blur)
@@ -48,7 +47,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         }
     }
     
-    let menu: UIButton = {
+    fileprivate let menu: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "slider"), for: .normal)
         button.tintColor = .black
@@ -57,7 +56,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         return button
     }()
     
-    let searchIcon: UIButton = {
+    fileprivate let searchIcon: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "search"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -65,7 +64,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         return button
     }()
     
-    func setupPageControl() {
+    fileprivate func setupPageControl() {
         if count == 0 {
         self.pageControl.numberOfPages = pages.count
         self.pageControl.currentPage = 0
@@ -114,7 +113,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         controller.addPrimitiveData(notification: notification)
     }
     
-    func setUp() {
+    fileprivate func setUp() {
         viewModel.fetchData { [weak self] (md) in
             self?.pages = md
         }
@@ -126,16 +125,8 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         setupPageControl()
         self.customPageControl.currentPage = 0
         self.customPageControl.setNeedsDisplay()
-        if self.viewModel.extractor() {
-        self.pageControl.currentPage = 1
-        setViewControllers([pages[1]], direction: .forward, animated: false, completion: { _ in
-        self.customPageControl.currentPage = 1
-        self.customPageControl.setNeedsDisplay()
-        self.pages[0].hide()
-        })} else {
         self.pageControl.currentPage = 0
         setViewControllers([pages[currentPage]], direction: .forward, animated: true, completion: nil)
-        }
         for views in self.pages {
         views.loadViewIfNeeded()
         }
@@ -148,7 +139,7 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         self.customPageControl.checkColor(bool: viewModel.extractor())
     }
     
-    func layout() {
+    fileprivate func layout() {
         view.backgroundColor = .white
         view.addSubview(menu)
         view.addSubview(blurEffect)
@@ -198,12 +189,6 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
         if let viewControllers = pageViewController.viewControllers {
             if let viewControllerIndex = self.pages.firstIndex(of: viewControllers[0]) {
                 self.pageControl.currentPage = viewControllerIndex
-                if viewControllerIndex == 0 && viewModel.extractor() {
-                let emptyLocation = self.storyboard?.instantiateViewController(withIdentifier: .clearNavigationController) as! ClearNavigationController
-                emptyLocation.transitioningDelegate = transitionController
-                emptyLocation.modalPresentationStyle = .custom
-                present(emptyLocation, animated: true)
-                }
             }
         }
     }
@@ -224,6 +209,10 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
             targetContentOffset.pointee = CGPoint(x: scrollView.bounds.size.width, y: 0);
         }
     }
+    
+}
+
+extension PageViewController: SideMenuNavigationControllerDelegate {
     
     func sideMenuDidDisappear(menu: SideMenuNavigationController, animated: Bool) {
         if viewModel.check() {
@@ -254,6 +243,5 @@ final class PageViewController: UIPageViewController, UIPageViewControllerDataSo
             self.blurEffect.layer.opacity = 0.3
         }
     }
-    
-}
 
+}

@@ -10,12 +10,14 @@ import UIKit
 import CoreLocation
 
 final class CellView: UITableViewCell {
+    
     var viewModel: CellViewModel? {
         didSet {
             guard let viewModel = viewModel else { return }
             textLabel?.text = viewModel.name
             detailTextLabel?.text = viewModel.country
         }
-}
+    }
+    
 }
 

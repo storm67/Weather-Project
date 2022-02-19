@@ -32,7 +32,7 @@ class LocationInterface: LocationInterfaceProtocol {
         locationManager.requestLocation()
     }
     
-    func setLocation(onCompletion:@escaping (_ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?, _ timeZone: TimeZone) ->()) {
+    func setLocation(onCompletion:@escaping ( _ locations: CLLocationCoordinate2D?,_ name: String, _ error: Error?, _ timeZone: TimeZone)->()) {
         locationManager.getLocation { (coord, name, err, timeZone) in
             onCompletion(coord,name,err, timeZone)
         }

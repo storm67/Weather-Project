@@ -11,12 +11,12 @@ import SkeletonView
 
 final class MainViewController: UIViewController {
     
-    fileprivate func view() -> MainControllerView {
+    func view() -> MainControllerView {
         return view as! MainControllerView
     }
-    
+        
     fileprivate var simpleModel: SimpleModel?
-    public var viewModel = MainControllerViewModel(networkService: Routing<WeatherAPI>(), coreDataManager: CoreDataManager())
+    public var viewModel: ViewModelProtocol!
     
     override func loadView() {
         view = MainControllerView()
@@ -27,14 +27,18 @@ final class MainViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
         view().tableView.dataSource = self
         view().tableView.delegate = self
+        view().scrollView.delegate = self
         update()
 //        view().charts.data = [10,11,6,0]
+        DispatchQueue.main.async {
+            self.view().hasUnloaded()
+        }
     }
     
-    convenience init(model: SimpleModel) {
+    convenience init(model: SimpleModel, viewModel: ViewModelProtocol) {
         self.init()
         self.simpleModel = model
-//        self.viewModel = viewModel
+        self.viewModel = viewModel
     }
     
     override func viewDidLayoutSubviews() {
@@ -63,13 +67,32 @@ final class MainViewController: UIViewController {
                     one.wind,
                     3,
                     one.humidity,
-                    one.direction,
-                    [10,11,6,3])
-                self?.view().locationIcon.isHidden = true
+                    one.direction)
+                    self?.view().locationIcon.isHidden = true
+                    if model.key == .zero {
+                    guard let lat = model.lat,
+                          let lon = model.lon
+                          else { return }
+                    self?.viewModel.getKeyByLocation(lat, lon, {
+                        self?.viewModel.lastHoursWeather(key: $0, completion: { array in
+                            DispatchQueue.main.async {
+                                self?.view().chartsIntegrator(array)
+                            }
+                        })
+                    })
+                    } else {
+                    guard let key = model.key else { return }
+                        self?.viewModel.lastHoursWeather(key: key, completion: { array in
+                            DispatchQueue.main.async {
+                                self?.view().chartsIntegrator(array)
+                            }
+                        })
+                    }
                 }
             }
         )
     }
+    
 }
 
 
@@ -113,4 +136,16 @@ extension MainViewController: SkeletonTableViewDataSource, UITableViewDelegate {
 //       }
     
 
+}
+
+extension MainViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let directViewValue = view.bounds.height + scrollView.contentOffset.y
+        print(directViewValue, view().sunlightStatus.frame.origin.y)
+        if directViewValue >= view().sunlightStatus.frame.origin.y {
+//            view().sunlightStatus.setCenter()
+        }
+    }
+    
 }

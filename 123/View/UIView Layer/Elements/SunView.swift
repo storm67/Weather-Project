@@ -88,7 +88,7 @@ class SunView: UIView {
             secondTime.topAnchor.constraint(equalTo: topAnchor, constant: 95),
             secondTime.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])
-        backgroundColor = .clear
+        backgroundColor = #colorLiteral(red: 0.9043619633, green: 0.9659909606, blue: 0.9911366105, alpha: 1)
         translatesAutoresizingMaskIntoConstraints = false
         layer.masksToBounds = true
         layer.cornerRadius = 5
@@ -117,7 +117,6 @@ class SunView: UIView {
         guard let path = path else { return }
         pathLayer.path = path.path.cgPath
         pathLayer.mask = maskLayer
-        state()
         layer.addSublayer(pathLayer)
         guard let endAngle = endAngle else { return }
         imageView.center = path.point(at: endAngle)
@@ -134,7 +133,7 @@ class SunView: UIView {
         CATransaction.commit()
     }
     
-    func state() -> UIBezierPath {
+    func state() {
         let path = UIBezierPath()
         let p0 = CGPoint(x: 55, y: 95)
         let p2 = CGPoint(x: frame.size.width/2, y: 0)
@@ -146,7 +145,6 @@ class SunView: UIView {
         UIColor.black.setStroke()
         path.lineWidth = 2
         path.stroke()
-        return path
     }
     
     func setStroke() -> QuadBezier? {

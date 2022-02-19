@@ -29,10 +29,7 @@ class PagerViewModel: PageViewModelProtocol {
             var controllers = [UIViewController]()
             guard let viewModel = Assembler.sharedAssembler.resolver.resolve(ViewModelProtocol.self) else { return }
             for item in md {
-            controllers.append(MainViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon, position: item.position, timeZone: item.timeZone)))
-            }
-            if self.extractor() {
-            controllers.insert(MainViewController(model: SimpleModel(name: "Текущее местоположение", key: 0, lat: 0, lon: 0, position: 0, timeZone: 0)), at: 0)
+                controllers.append(MainViewController(model: SimpleModel(name: item.name, key: item.key, lat: item.lat, lon: item.lon, position: item.position, timeZone: item.timeZone), viewModel: viewModel))
             }
             completion(controllers)
         }

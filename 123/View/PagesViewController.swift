@@ -38,10 +38,20 @@ final class PagesViewController: UIViewController, UITableViewDelegate, UITableV
         view().tableView.dropDelegate = self
         view().tableView.dragInteractionEnabled = true
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         view().tableView.reloadData()
+        UIView.animate(withDuration: 0.25) {
+        self.view().toolbar.alpha = 1
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        UIView.animate(withDuration: 0.25) {
+        self.view().toolbar.alpha = 0
+        self.view().toolbar.barTintColor = .white
+        }
     }
     
     func getNewCity() {

@@ -52,9 +52,9 @@ class Injector: Assembly {
         container.storyboardInitCompleted(CitySelector.self) { r,c in
             c.viewModel = r.resolve(CitySelectorProtocol.self)!
         }
-//        container.storyboardInitCompleted(MainViewController.self) { r,c in
-//            c.viewModel = r.resolve(ViewModelProtocol.self)!
-//        }
+        container.storyboardInitCompleted(MainViewController.self) { r,c in
+            c.viewModel = r.resolve(ViewModelProtocol.self)!
+        }
         container.storyboardInitCompleted(PageViewController.self) { r,c in
             c.viewModel = r.resolve(PageViewModelProtocol.self)!
         }

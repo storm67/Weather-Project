@@ -177,7 +177,7 @@ extension UIColor {
         case 0...35:
        return .green
         case 35...75:
-        return #colorLiteral(red: 1, green: 0.6484332681, blue: 0.4392920136, alpha: 1)
+        return .yellow
         case 75...105:
         return .orange
         case 105...140:
@@ -187,7 +187,7 @@ extension UIColor {
         case 210...:
         return .red
         default:
-       break
+        break
         }
         return .white
     }
@@ -229,7 +229,7 @@ extension Notification.Name {
 
 extension UIImage {
     
-    func imageResize (sizeChange:CGSize)-> UIImage {
+    func imageResize(sizeChange:CGSize) -> UIImage {
         
         let hasAlpha = true
         let scale: CGFloat = 0.0 // Use scale factor of main screen
@@ -294,15 +294,17 @@ class InstantPanGestureRecognizer: UIPanGestureRecognizer {
 }
 
 extension UIViewController {
+    
     func hide() {
         guard let first = view.subviews[1].subviews[0] as? UIButton else { return }
         first.setTitle("Текущее местоположение", for: .normal)
         view.subviews[0].subviews.forEach { item in
-            item.isSkeletonable = true
-            DispatchQueue.main.async {
-            item.showAnimatedGradientSkeleton()
-            }
+            item.removeFromSuperview()
         }
+        let loader = Loader()
+        loader.frame = CGRect(x: 100, y: 100, width: 25, height: 25)
+        view.subviews[0].addSubview(loader)
+        loader.center = view.subviews[1].center
     }
     
     func unhide() {

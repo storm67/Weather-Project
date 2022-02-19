@@ -10,9 +10,8 @@ import UIKit
 final class MainControllerView: UIView {
     
     fileprivate var letters = [String.SubSequence]()
-    fileprivate lazy var sunlightStatus = SunView()
+    lazy var sunlightStatus = SunView()
     fileprivate var color: UIColor = .black
-
     
     var tempOriginal: UILabel = {
         let labelDate = UILabel()
@@ -46,7 +45,7 @@ final class MainControllerView: UIView {
         let charts = LineChart()
         charts.isCurved = true
         charts.translatesAutoresizingMaskIntoConstraints = false
-        charts.backgroundColor = .clear
+        charts.backgroundColor = #colorLiteral(red: 0.9043619633, green: 0.9659909606, blue: 0.9911366105, alpha: 1)
         charts.layer.masksToBounds = true
         charts.layer.cornerRadius = 5
         return charts
@@ -54,6 +53,7 @@ final class MainControllerView: UIView {
     
     var tableView: UITableView = {
         var tableView = UITableView()
+        tableView.backgroundColor = #colorLiteral(red: 0.9043619633, green: 0.9659909606, blue: 0.9911366105, alpha: 1)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 65, bottom: 0, right: 0)
         tableView.separatorColor = .white
         tableView.tableFooterView = UIView(frame: .zero)
@@ -251,7 +251,7 @@ final class MainControllerView: UIView {
     
     let airIndicatorView: UIView = {
         let view = AirQualityView()
-        view.backgroundColor = .clear
+        view.backgroundColor = #colorLiteral(red: 0.9043619633, green: 0.9659909606, blue: 0.9911366105, alpha: 1)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -289,10 +289,9 @@ final class MainControllerView: UIView {
         airIndicatorView.addSubview(descriptionQuality)
         circle.frame = CGRect(x: 0, y: 105, width: 12, height: 12)
         airIndicatorView.addSubview(circle)
-        tableView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         weatherStatusImage.image = UIImage(named: "test")
         NSLayoutConstraint.activate([
-            sunlightStatus.topAnchor.constraint(equalTo: airIndicatorView.topAnchor, constant: 160),
+            sunlightStatus.topAnchor.constraint(equalTo: airIndicatorView.bottomAnchor, constant: 20),
             sunlightStatus.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -25),
             sunlightStatus.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
             sunlightStatus.heightAnchor.constraint(equalToConstant: 130),
@@ -333,14 +332,14 @@ final class MainControllerView: UIView {
             tableView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             tableView.topAnchor.constraint(equalTo: charts.bottomAnchor, constant: 30),
             tableView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
-            tableView.heightAnchor.constraint(equalToConstant: 400),
+            tableView.heightAnchor.constraint(equalToConstant: 370),
             scrollView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
             scrollView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
             scrollView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
             location.centerXAnchor.constraint(equalTo: headerOfMainView.centerXAnchor),
             location.bottomAnchor.constraint(equalTo: headerOfMainView.safeAreaLayoutGuide.bottomAnchor, constant: -5),
-            airIndicatorView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 25),
+            airIndicatorView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 30),
             airIndicatorView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.95),
             airIndicatorView.heightAnchor.constraint(equalToConstant: 151),
             airIndicatorView.centerXAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.centerXAnchor),
@@ -359,8 +358,31 @@ final class MainControllerView: UIView {
         ])
     }
     
+    func hasUnloaded() {
+        scrollView.subviews.forEach {
+            if $0 == sunlightStatus && $0 == secondView && $0 == airIndicatorView && $0 == scrollView && $0 == charts && $0 == tableView && $0 == fiveDaysWeather {
+            print($0)
+            $0.subviews.forEach {  $0.layer.opacity = 0 }
+            } else {
+            scrollView.showsVerticalScrollIndicator = false
+            $0.subviews.forEach { $0.layer.opacity = 0 }
+            let loader = Loader()
+            loader.translatesAutoresizingMaskIntoConstraints = false
+            $0.addSubview(loader)
+            NSLayoutConstraint.activate([
+                loader.topAnchor.constraint(equalTo: $0.topAnchor, constant: $0.bounds.midY),
+                loader.leadingAnchor.constraint(equalTo: $0.leadingAnchor, constant: $0.bounds.midX)
+            ])
+            }
+        }
+    }
     
-    func updateData(_ state: String,_ city: String,_ value: String,_ air: Int,_ index: Int,_ indexMain: Int, _ sunrise: Int, _ sunset: Int, _ timeZone: Int,_ wind: Int,_ pressure: Int,_ humidity: Int,_ direction: String, _ charts: [Int]) {
+    func hasLoaded() {
+        sunlightStatus.state()
+    }
+    
+    
+    func updateData(_ state: String,_ city: String,_ value: String,_ air: Int,_ index: Int,_ indexMain: Int, _ sunrise: Int, _ sunset: Int, _ timeZone: Int,_ wind: Int,_ pressure: Int,_ humidity: Int,_ direction: String) {
         self.letters = state.split { !$0.isLetter }
         DispatchQueue.main.async {
             if self.letters.count == 1 {
@@ -380,10 +402,15 @@ final class MainControllerView: UIView {
             self.sunlightStatus.secondTime.text = "Закат \(sunset.returnTime(time: timeZone, interval: .since1970))"
             self.setUp(sunrise, sunset, timeZone)
             self.fiveDaysWeather.update(wind: wind, direction: direction, pressure: pressure, humidity: humidity)
-            let points = charts.map { PointEntry(value: $0, label: "") }
-            self.charts.dataEntries = points
         }
     }
+    
+    func chartsIntegrator(_ array: [DailyForecast]) {
+    DispatchQueue.main.async {
+    self.charts.dataEntries = array.map { PointEntry(value: $0.temperature, label: $0.dayIconPhrase) }
+        }
+    }
+   
     
     func setUp(_ f: Int, _ s: Int, _ timeZone: Int) {
         let now = Int.now(timeOffset: timeZone)

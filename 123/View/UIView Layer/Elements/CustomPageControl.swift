@@ -82,15 +82,15 @@ class PageControl: UIControl {
         var x = bounds.minX - xMargin
         subviews.forEach { $0.removeFromSuperview() }
         circles = []
-        addSubview(self.image)
-        self.image.image = UIImage(systemName: "location.fill")?.withRenderingMode(.alwaysTemplate)
-        image.frame = CGRect(x: x, y: bounds.midY - 1, width: 10, height: 10)
+//        addSubview(self.image)
+//        self.image.image = UIImage(systemName: "location.fill")?.withRenderingMode(.alwaysTemplate)
+//        image.frame = CGRect(x: x, y: bounds.midY - 1, width: 10, height: 10)
         circles.removeAll()
         x -= width / 2
-        for v in 0..<pages - 1 {
+        for v in 0..<pages {
         circles.append(Circle(frame: .zero, strokeColor: .clear, fillColor: .lightGray))
         addSubview(circles[v])
-        x += width / 2 * 2.5
+        x += width / 2
         circles[v].frame = CGRect(x: Int(x), y: Int(bounds.midY), width: 10, height: 5)
         circles[v].setNeedsDisplay()
             }

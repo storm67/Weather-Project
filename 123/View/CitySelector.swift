@@ -17,7 +17,8 @@ final class CitySelector: UIViewController, UITableViewDelegate, UISearchBarDele
     @IBOutlet weak var tableView: UITableView!
     
     fileprivate let searchController = UISearchController(searchResultsController: nil)
-    
+    fileprivate let transitionController = TransitionController()
+
     weak var manager: NavigationBackDetector?
     var viewModel: CitySelectorProtocol! 
     var isHide = true
@@ -93,6 +94,7 @@ extension CitySelector: UITableViewDataSource {
     
     //поправить Каиро
     func tagPressed(_ title: String, _ number: Int, tagView: TagView, sender: TagListView) {
+        print(number)
         guard number != 0 else { return }
         viewModel.getTimeZone(title, completion: {
             if self.viewModel.createDataFromTag(name: title, key: number, timeZone: $0) {
@@ -132,7 +134,11 @@ extension CitySelector: UITableViewDataSource {
         tagListView.imageEdge = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
         tagListView.delegate = self
         tagListView.addTagWithImage("  Локация  ", tint).onTap = { [weak self] _ in
-            self?.getLocation()
+            let emptyLocation = self?.storyboard?.instantiateViewController(withIdentifier: .clearNavigationController) as! ClearNavigationController
+            emptyLocation.transitioningDelegate = self?.transitionController
+            emptyLocation.modalPresentationStyle = .custom
+            self?.present(emptyLocation, animated: true)
+//            self?.getLocation()
         }
         tagListView.paddingX = 4
         tagListView.imagePaddingX = 0

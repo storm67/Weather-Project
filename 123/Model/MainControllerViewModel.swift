@@ -68,13 +68,22 @@ final class MainControllerViewModel: ViewModelProtocol {
     func cellViewModel(index: Int) -> Convertible? {
         return weather[index]
     }
-
-    func formation(_ get: [Convertible]) -> [Int] {
-        var int = [Int]()
-        get.forEach { item in
-            int.append(item.temperature)
+    
+    func lastHoursWeather(key: Int, completion: @escaping (([DailyForecast]) -> Void)) {
+        networkService.request(.get12Hours(city: String(key))) { data in
+            let json = JSON(data).arrayValue.map { DailyForecast(alternativeDictionary: $0) }
+            if !json.isEmpty {
+            let array = json.enumerated().reduce([], { $1.offset % 3 == .zero ? $0 + [$1.element] : $0 })
+            completion(array)
+            }
         }
-        return int
+    }
+    
+    func getKeyByLocation(_ lat: Double,_ lon: Double, _ completion: @escaping (Int) -> Void) {
+        networkService.request(.getKeyByLocation(lat: lat, lon: lon)) {
+            guard let avanceKey = Int(JSON($0)["Key"].stringValue) else { return }
+            completion(avanceKey)
+        }
     }
     
     func weatherFiveDayRequest(key: Int,completion: @escaping (Completion)) {

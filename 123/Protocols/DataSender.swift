@@ -34,8 +34,10 @@ protocol ViewModelProtocol {
     var weather: [Convertible] { get set }
     var pageViewModel: PageManagerProtocol! { get set }
     func extractor() -> Bool
+    func lastHoursWeather(key: Int, completion: @escaping (([DailyForecast]) -> Void))
+    func getKeyByLocation(_ lat: Double,_ lon: Double, _ completion: @escaping (Int) -> Void)
 }
 
-protocol Reciever: class {
+protocol Reciever: AnyObject {
     func getTrigger()
 }
